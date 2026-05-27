@@ -1,0 +1,60 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --color-background-obsidian: #09090b;
+  --color-charcoal-zinc: #18181b;
+  --color-gold-light: #f59e0b;
+  --color-gold: #eab308;
+  --color-gold-dark: #ca8a04;
+  --color-bronze: #ca8a04;
+
+  --animate-ledger-pulse: ledgerPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;
+  --animate-shimmer: shimmer 2.5s infinite linear;
+
+  @keyframes ledgerPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.98); }
+  }
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+}
+
+/* Premium micro-interactions and scrollbars */
+::selection {
+  background-color: rgba(234, 179, 8, 0.2);
+  color: #eab308;
+}
+
+body {
+  background-color: #09090b;
+  color: #e4e4e7;
+  font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+  overflow-x: hidden;
+}
+
+/* Custom dark wealth glassmorphism blur and scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #18181b;
+  border-radius: 3px;
+  border: 1px solid rgba(234, 179, 8, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ca8a04;
+}

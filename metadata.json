@@ -1,0 +1,6 @@
+{
+  "name": "BWS Inc. Landing Page",
+  "description": "Premium, ultra-high-end economic ecosystem and Private Trust landing platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

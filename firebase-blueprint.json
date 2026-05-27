@@ -1,0 +1,114 @@
+{
+  "entities": {
+    "Trade": {
+      "title": "Trade",
+      "description": "BWS Cooperator ledger trade or payment logged on the ledger",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique trade transaction key"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp of the trade"
+        },
+        "hash": {
+          "type": "string",
+          "description": "Secure verification hash"
+        },
+        "sourceName": {
+          "type": "string",
+          "description": "Name of the presenting sovereign entity or partner"
+        },
+        "tradeType": {
+          "type": "string",
+          "description": "Type of trade or exchange focus e.g. Sovereign Seed, Skill Exchange, Resource Vault Rent"
+        },
+        "bwsxAmount": {
+          "type": "string",
+          "description": "Value and asset token amount"
+        },
+        "customMsg": {
+          "type": "string",
+          "description": "Narrative or message details of the transaction"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Submitting user ID"
+        },
+        "email": {
+          "type": "string",
+          "description": "Submitting user email"
+        }
+      },
+      "required": ["id", "timestamp", "hash", "sourceName", "tradeType", "bwsxAmount", "customMsg", "userId", "email"]
+    },
+    "Profile": {
+      "title": "Profile",
+      "description": "User profile with sovereign balance, spending statistics, and custom parameters",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Unique User UID matching authentication record"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Chosen pseudonym or fullName for public trades"
+        },
+        "email": {
+          "type": "string",
+          "description": "Verified Google authentication email"
+        },
+        "bio": {
+          "type": "string",
+          "description": "Core cooperational bio"
+        },
+        "organization": {
+          "type": "string",
+          "description": "Associated Private Trust or Cooperative LLC"
+        },
+        "balance": {
+          "type": "number",
+          "description": "Active real BWSX credit balance"
+        },
+        "spending": {
+          "type": "number",
+          "description": "Accumulative spent BWSX credits"
+        },
+        "classesMastered": {
+          "type": "number",
+          "description": "Number of Skill Academy courses completed"
+        },
+        "role": {
+          "type": "string",
+          "description": "Internal status layer: user or admin"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO creation timestamp"
+        },
+        "savedLessons": {
+          "type": "array",
+          "description": "Array of saved or bookmarked academy lesson IDs"
+        },
+        "lessonNotes": {
+          "type": "object",
+          "description": "User-typed thoughts per lesson keys"
+        }
+      },
+      "required": ["uid", "displayName", "email", "bio", "organization", "balance", "spending", "classesMastered", "role", "createdAt"]
+    }
+  },
+  "firestore": {
+    "trades/{tradeId}": {
+      "schema": "Trade",
+      "description": "Live consensus ledger trade logs"
+    },
+    "profiles/{userId}": {
+      "schema": "Profile",
+      "description": "Sovereign user profile metrics and parameters"
+    }
+  }
+}
