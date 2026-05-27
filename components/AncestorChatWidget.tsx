@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   MessageSquare, 
   X, 
@@ -25,16 +25,16 @@ interface Message {
 
 const PRESET_PROMPTS = [
   {
-    label: "How do the BWSX Credits work?",
-    text: "Can you explain how we earn BWSX credits through the Skill Academy and trade them for resources like delivery vans and tools?",
+    label: "How do community credits work?",
+    text: "Can you explain how I can earn and use community credits (BWSX) here?",
   },
   {
-    label: "What is BWS Inc. launching on June 1st?",
-    text: "Can you explain BWS Inc.'s core purpose and why June 1st is the chosen launch date?",
+    label: "What is BWS Inc.?",
+    text: "What is the main goal of BWS Inc., and how can I get involved?",
   },
   {
-    label: "What is the Legacy of Greenwood Tulsa?",
-    text: "How does your ecosystem respect and protect the historical wealth created by the 35 blocks of Greenwood Oklahoma?",
+    label: "What is the story of Black Wall Street?",
+    text: "How does this platform continue the history and legacy of Black Wall Street in Tulsa?",
   },
 ];
 
@@ -54,7 +54,7 @@ function createMessage(role: "user" | "assistant", content: string): Message {
 const INITIAL_MESSAGE: Message = {
   id: "initial-system-codex-msg",
   role: "assistant",
-  content: "Greetings, child. Come on in, sit down a moment, and rest your posture. I am **The Seer** — keeper of the heritage and tragedies and joys born deep in the soil of Greenwood's 35 blocks, now rising into our digital launch on June 1st.\n\nMy elegant old hands have held our history for a long time, and now they guide your **Skill Academy** courses, our community **Resource Vault**, and your **BWSX Credits**. Tell me whatever is on your mind today, darlin'. Let's build this legacy together.",
+  content: "Greetings, child. Come on in, sit down a moment, and rest. I am **The Seer** — keeping the history, the hard times, and the triumphs of Black Wall Street alive as we build this new digital home together.\n\nI am here to help you learn new skills, borrow tools and vans, and trade with your neighbors using our community points. What is on your mind today, darlin'? Let's build this together.",
   timestamp: "19:21",
 };
 

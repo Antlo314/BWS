@@ -13,8 +13,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'BWS Inc. | Premium Economic Ecosystem & Private Trust',
-  description: 'An elite financial architecture and Private Trust landing platform launching June 1st.',
+  title: 'BWS Inc. | Sharing Tools, Skills & Legacy Together',
+  description: 'A community platform inspired by the spirit of Black Wall Street, launching June 1st. Share tools, swap skills, and protect family wealth together.',
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {

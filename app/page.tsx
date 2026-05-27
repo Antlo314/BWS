@@ -45,7 +45,7 @@ import {
   Download,
   Upload
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { auth, googleProvider, meetGoogleProvider, db, handleFirestoreError, OperationType } from '@/lib/firebase';
 import { signInWithPopup, signOut, onAuthStateChanged, User, GoogleAuthProvider } from 'firebase/auth';
 import { collection, query, where, doc, setDoc, onSnapshot, getDocFromServer, limit, getDoc, updateDoc, getDocs, orderBy, deleteDoc } from 'firebase/firestore';
@@ -434,57 +434,57 @@ export default function Page() {
   const [academyLessons, setAcademyLessons] = useState<Lesson[]>([
     {
       id: 'lesson-1',
-      title: 'Home Repair, Carpentry & Sanctuary Framing',
+      title: 'Home Repair & Basic Carpentry',
       category: 'Applied Trades',
       progress: 67,
       creditsReward: 80,
       completed: false,
-      steps: ['Assess structural foundation lines', 'Structure timber framing & wall alignment', 'Verify electrical safety & system checks']
+      steps: ['Inspect house foundations for cracks and damage', 'Build wooden wall frames and check alignment', 'Check wiring, outlets, and switches to make sure they are safe']
     },
     {
       id: 'lesson-2',
-      title: 'Automotive Mechanics & Family Fleet Care',
+      title: 'Car Mechanics & Fleet Care',
       category: 'Applied Trades',
       progress: 0,
       creditsReward: 100,
       completed: false,
-      steps: ['Diagnose engine code errors & alternators', 'Perform hydraulic brake & suspension restoration', 'Rebuild community logistics cargo fleet parts']
+      steps: ['Check engine warning lights and test the alternator', 'Fix brakes and suspension parts for a smooth ride', 'Repair shared community delivery vans and trucks']
     },
     {
       id: 'lesson-3',
-      title: 'Art of Adornment: Natural Cosmetology & Nail Tech',
+      title: 'Hair Care, Styling & Nail Technology',
       category: 'Wellness & Aesthetics',
       progress: 0,
       creditsReward: 75,
       completed: false,
-      steps: ['Formulate organic moisture wraps & hot-oil therapy', 'Apply premium structural gel underlays safely', 'Optimize salon booking cycles & direct pricing']
+      steps: ['Create natural hair creams and hot oil treatments', 'Apply safe gel nail layers without harming natural nails', 'Set up appointment calendars and price services fairly']
     },
     {
       id: 'lesson-4',
-      title: 'Threads of Heritage: Master Tailoring & Cloth Making',
+      title: 'Tailoring & Clothes Making',
       category: 'Heritage Crafts',
       progress: 0,
       creditsReward: 90,
       completed: false,
-      steps: ['Draft custom pattern blocks from blueprint outlines', 'Cut & match premium raw cotton & flax fiber blends', 'Stitch high-end double seams with bespoke detailing']
+      steps: ['Draw custom sewing patterns based on body measurements', 'Select and cut cotton or linen fabric carefully', 'Sew strong double seams and add custom finishing touches']
     },
     {
       id: 'lesson-5',
-      title: 'Apothecary Craft: Soap Making & Botanical Infusions',
+      title: 'Soap Making & Natural Herbal Remedies',
       category: 'Heritage Crafts',
       progress: 0,
       creditsReward: 85,
       completed: false,
-      steps: ['Calculate safe cold-process lye & oil ratios', 'Incorporate raw local honey & medicinal botanicals', 'Batch, cure for six weeks, and stamp trade soap bars']
+      steps: ['Measure the right mix of plant oils and lye to make soap safely', 'Mix in local honey and dried healing herbs', 'Pour soap, let it dry for 6 weeks, and stamp it with your brand']
     },
     {
       id: 'lesson-6',
-      title: 'Ecosystem Wealth: Heritage Trusts & LLC Structures',
-      category: 'Sovereign Trusts',
+      title: 'Family Asset Protection & Business Setup',
+      category: 'Family Trusts',
       progress: 0,
       creditsReward: 110,
       completed: false,
-      steps: ['Draft private family trust covenants', 'Establish a General Syndicate LLC structure', 'Secure deeds in our community asset directory']
+      steps: ['Write agreements to protect family property and money', 'Register a community-owned small business (LLC)', 'Add property deeds to the shared community record']
     }
   ]);
 
@@ -492,106 +492,106 @@ export default function Page() {
   const [classrooms, setClassrooms] = useState<ClassroomSession[]>([
     {
       id: 'class-1',
-      title: 'Structural Home Carpentry & Foundation Inspection',
-      instructor: 'Master Builder Jesse Alston',
+      title: 'Home Carpentry & Foundation Checking',
+      instructor: 'Jesse Alston (Master Builder)',
       dateTime: 'Today at 6:00 PM EST',
       meetLink: 'https://meet.google.com/qxw-vzyu-mjx',
-      description: 'Hands-on live demonstration identifying structural joists, leveling foundation points, and timber framing reinforcement.',
+      description: 'A live, step-by-step class on how to find wall support beams, check if a house foundation is level, and strengthen wood framing.',
       category: 'Applied Trades',
       status: 'LIVE',
       bwsxFee: 15,
       attachedFiles: [
         {
           id: 'f-1',
-          name: 'Greenwood_Timber_Framing_Standard.pdf',
+          name: 'House_Framing_Guide.pdf',
           size: '1.8 MB',
-          type: 'Blueprints Guide',
+          type: 'Building Guide',
           uploadedAt: '1 day ago',
-          uploader: 'Master Builder Jesse Alston'
+          uploader: 'Jesse Alston (Master Builder)'
         }
       ]
     },
     {
       id: 'class-2',
-      title: 'Botanical Herb Infusions & Cold-Process Soap Building',
-      instructor: 'Healer Sandra Greenwood',
+      title: 'Soap Making & Healing Herbal Mixtures',
+      instructor: 'Sandra Greenwood (Healer)',
       dateTime: 'Tomorrow at 2:00 PM EST',
       meetLink: 'https://meet.google.com/zkb-hwnf-rtp',
-      description: 'Live workshop weighing lye, melting high-temp plant oils, and infusing healing local lavender & tea-tree botanicals.',
+      description: 'A live workshop on how to measure soap ingredients, melt plant-based oils, and mix in healing lavender and tea-tree herbs.',
       category: 'Heritage Crafts',
       status: 'SCHEDULED',
       bwsxFee: 10,
       attachedFiles: [
         {
           id: 'f-2',
-          name: 'Saponification_Ratio_Apothecary_Formula.xlsx',
+          name: 'Soap_Recipe_Calculator.xlsx',
           size: '240 KB',
-          type: 'Formulas Sheet',
+          type: 'Recipe Sheet',
           uploadedAt: '2 days ago',
-          uploader: 'Healer Sandra Greenwood'
+          uploader: 'Sandra Greenwood (Healer)'
         }
       ]
     },
     {
       id: 'class-3',
-      title: 'Automotive Electric Systems & Brake Line Rebuilds',
-      instructor: 'Donald "Skip" Garrett, Lead Mech',
+      title: 'Car Electrical Systems & Brake Repair',
+      instructor: 'Donald "Skip" Garrett (Lead Mechanic)',
       dateTime: 'May 28th at 11:00 AM EST',
       meetLink: 'https://meet.google.com/pmo-hsvb-fws',
-      description: 'Troubleshooting battery dropcodes, replacing cylinder pads, and maintaining direct control of logistics vehicles.',
+      description: 'Learn how to troubleshoot battery problems, replace worn-out brake pads, and keep community delivery vans running smoothly.',
       category: 'Applied Trades',
       status: 'SCHEDULED',
       bwsxFee: 20,
       attachedFiles: [
         {
           id: 'f-3',
-          name: 'Hydraulic_Calipers_Bleeding_Protocol.pdf',
+          name: 'Brake_Repair_Guide.pdf',
           size: '890 KB',
           type: 'Maintenance Manual',
           uploadedAt: '3 days ago',
-          uploader: 'Donald "Skip" Garrett, Lead Mech'
+          uploader: 'Donald "Skip" Garrett (Lead Mechanic)'
         }
       ]
     },
     {
       id: 'class-4',
-      title: 'Textile Blueprinting & Double-Stitching Tailoring',
-      instructor: 'Cheryl Thompson, Couture Tailor',
+      title: 'Pattern Making & Double-Stitching Tailoring',
+      instructor: 'Cheryl Thompson (Couture Tailor)',
       dateTime: 'June 2nd at 3:00 PM EST',
       meetLink: 'https://meet.google.com/abc-tail-bws',
-      description: 'Sizing fabric structures, adjusting seam allowances, and drafting custom patterns from vintage African American heritage wardrobes.',
+      description: 'Learn how to measure fabrics, leave room for seams, and draw custom patterns inspired by historic African American styles.',
       category: 'Heritage Crafts',
       status: 'SCHEDULED',
       bwsxFee: 12,
       attachedFiles: [
         {
           id: 'f-4',
-          name: 'Double_Seam_Draft_Patterns.pdf',
+          name: 'Bespoke_Sewing_Patterns.pdf',
           size: '2.5 MB',
           type: 'Pattern Blueprint',
           uploadedAt: '4 days ago',
-          uploader: 'Cheryl Thompson, Couture Tailor'
+          uploader: 'Cheryl Thompson (Couture Tailor)'
         }
       ]
     },
     {
       id: 'class-5',
-      title: 'Elite Manures, Cuticle Care & Structural Gel Tech',
-      instructor: 'Maya Du Bois, Master Esthetician',
+      title: 'Elite Manicures, Cuticle Care & Gel Nails',
+      instructor: 'Maya Du Bois (Master Esthetician)',
       dateTime: 'June 5th at 7:00 PM EST',
       meetLink: 'https://meet.google.com/xyz-nail-bws',
-      description: 'Advanced masterclass on healthy natural nail building, gel overlays without damage, and local cosmetology scaling secrets.',
+      description: 'A class on how to care for natural nails, apply gel nail layers safely, and grow a local beauty salon business.',
       category: 'Wellness & Aesthetics',
       status: 'SCHEDULED',
       bwsxFee: 15,
       attachedFiles: [
         {
           id: 'f-5',
-          name: 'Structural_Gel_Adhesion_Anatomy.pdf',
+          name: 'Nail_Anatomy_Health_Guide.pdf',
           size: '1.2 MB',
-          type: 'Pediological Anatomy',
+          type: 'Health Guide',
           uploadedAt: '12 hours ago',
-          uploader: 'Maya Du Bois, Master Esthetician'
+          uploader: 'Maya Du Bois (Master Esthetician)'
         }
       ]
     }
@@ -601,9 +601,9 @@ export default function Page() {
   const [materialResources, setMaterialResources] = useState<MaterialResource[]>([
     {
       id: 'res-1',
-      name: 'High-Roof Cargo Freight Van',
+      name: 'High-Roof Cargo Van',
       category: 'Transport',
-      description: 'Fully fueled cargo delivery van with 3,500lb payload space. Ideal for business supply shipping and moving.',
+      description: 'A clean, fully fueled van with plenty of space. Great for moving equipment or delivering goods for your business.',
       creditCost: 40,
       ownerName: 'Atlas Logistics',
       isCustom: false,
@@ -613,7 +613,7 @@ export default function Page() {
       id: 'res-2',
       name: 'Sony FX3 Cinema Camera Kit',
       category: 'Media Gear',
-      description: 'Includes a pristine cinematic camera body, vintage Zeiss lenses, dual lapel mics, and robust stabilizers.',
+      description: 'A complete camera package with lenses, microphones, and hand stabilizers. Perfect for filming high-quality videos for your business.',
       creditCost: 150,
       ownerName: 'Neo Design Lab',
       isCustom: false,
@@ -623,7 +623,7 @@ export default function Page() {
       id: 'res-3',
       name: 'High-Speed Commercial Laser Printer',
       category: 'Physical Tools',
-      description: 'Laser printer situated at community hub block 3. Prints over 80 copies per min, including pamphlet folders.',
+      description: 'A fast printer located at Greenwood Community Hub (Block 3). Perfect for printing flyers, brochures, and documents quickly.',
       creditCost: 10,
       ownerName: 'Greenwood Printing',
       isCustom: false,
@@ -631,9 +631,9 @@ export default function Page() {
     },
     {
       id: 'res-4',
-      name: 'Shared Kitchen Space & Commercial Ovens',
+      name: 'Shared Kitchen Space & Ovens',
       category: 'Office/Space',
-      description: 'Fully licensed culinary kitchen block with sub-zero freezer, prep tabletops, and triple commercial ovens.',
+      description: 'A fully certified kitchen with stainless steel prep tables, a deep freezer, and large ovens. Perfect for catering or baking businesses.',
       creditCost: 80,
       ownerName: 'Community Catering Guild',
       isCustom: false,
@@ -645,47 +645,47 @@ export default function Page() {
   const TIER_BRACKETS: SupportTier[] = useMemo(() => [
     {
       price: '$5.00',
-      credits: '10 BWSX Credits',
+      credits: '10 Community Credits',
       name: 'Show Some Love 💛',
-      desc: 'Sponsor the server infrastructure and seed your profile directory forever as an active participant of the coalition code.',
+      desc: 'Help keep our servers running and create your permanent community profile today.',
       perks: [
-        'Permanent status Founding Member listing on the Shared Ledger',
-        'Preloaded with 10 BWSX credits to spend instantly',
-        'Access to standard skill trade directories and story voiceovers'
+        'Listed forever as a Founding Member on our community board',
+        'Get 10 community credits in your wallet to spend right away',
+        'Access the member list and listen to audio legacy stories'
       ]
     },
     {
       price: '$25.00',
-      credits: '50 BWSX Credits',
+      credits: '50 Community Credits',
       name: "I'm With the Movement ✊",
-      desc: 'Deeper commitment to keeping cash inside households by enabling robust trading pipelines with fellow artisans.',
+      desc: 'Help neighbors trade directly with each other and keep our hard-earned money inside local households.',
       perks: [
-        'All Show Some Love benefits matched',
-        '50 starting BWSX credits pre-loaded into your active wallet',
-        'Unlocks entire direct services marketplace and secure trade messaging'
+        'All Show Some Love perks included',
+        'Get 50 community credits in your wallet to start trading',
+        'Unlock the full direct service marketplace and chat with other members'
       ]
     },
     {
       price: '$50.00',
-      credits: '90 BWSX Credits',
+      credits: '90 Community Credits',
       name: 'Building Together 🏗️',
-      desc: 'Unlocks complete administrative access to all premium Skill Academy courses, including Family Trust classes.',
+      desc: 'Unlock full access to all Skill Academy classes, including family trust and asset protection courses.',
       perks: [
-        'All Movement level permissions verified',
-        '90 starting BWSX credits pre-loaded into your active wallet',
-        'Full entry to Advanced Academy suites and Google Meet class slots'
+        'All perks from the I\'m With the Movement tier',
+        'Get 90 community credits in your wallet to start trading',
+        'Join advanced classes and live video workshops'
       ]
     },
     {
       price: '$100.00',
-      credits: '180 BWSX Credits',
+      credits: '180 Community Credits',
       name: 'Academy Leader 👑',
-      desc: 'Premium strategic tier supporting LLC setups and resource acquisitions. You receive advanced project coordination roles.',
+      desc: 'Our top tier support level to help acquire new shared tools and set up neighborhood business trusts.',
       perks: [
-        'All standard Academy benefits fully grandfathered',
-        '180 starting BWSX credits pre-loaded into your active wallet',
-        'Verified "Academy Leader" elite badge visible on your profile',
-        'Authority to catalog and list up to 5 material resources inside the Vault'
+        'All benefits from the Building Together tier included',
+        'Get 180 community credits in your wallet to start trading',
+        'A verified "Academy Leader" badge on your profile',
+        'List up to 5 of your own tools or resources in the shared vault to earn credits'
       ]
     }
   ], []);
@@ -736,7 +736,7 @@ export default function Page() {
   useEffect(() => {
     let unsubscribeProfile: (() => void) | null = null;
 
-    const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribeAuth = onAuthStateChanged(auth, (currentUser: User | null) => {
       if (currentUser) {
         setUser(currentUser);
         setSupportFormData(prev => ({
@@ -2720,9 +2720,9 @@ export default function Page() {
               <Activity className="w-4 h-4" />
             </span>
             <div>
-              <span className="text-[10px] font-mono uppercase text-zinc-400 tracking-wider">Cooperative Trust Registry</span>
+              <span className="text-[10px] font-mono uppercase text-zinc-400 tracking-wider">Community Trust Directory</span>
               <p className="text-xs text-white mt-0.5 uppercase font-mono tracking-widest font-black">
-                {activeNodes} Family Trusts • {totalBWSXCreditsMinted.toLocaleString()} BWSX Issued • Safe Shield ACTIVE
+                {activeNodes} Shared Trusts • {totalBWSXCreditsMinted.toLocaleString()} Credits Issued • Secure Network Active
               </p>
             </div>
           </div>
@@ -2730,20 +2730,20 @@ export default function Page() {
           <div className="flex items-center space-x-2 bg-black/60 border border-zinc-900 px-3 py-1 rounded text-xs gap-3">
             <div className="flex items-center gap-1.5 font-mono text-[10px] text-zinc-400 uppercase tracking-widest">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
-              <span>LIVE COOPERATIVE REGISTRY</span>
+              <span>LIVE COMMUNITY NETWORK</span>
             </div>
             {!user && (
               <span onClick={handleGuestSignIn} className="bg-[#ca8a04]/10 text-[#eab308] text-[9px] px-2 py-0.5 rounded border border-[#ca8a04]/30 hover:bg-[#ca8a04]/20 transition-all cursor-pointer font-mono uppercase">
-                GUEST BYPASS ACCESS
+                TRY AS GUEST
               </span>
             )}
             <button 
               onClick={() => { setOnboardingStep(1); setShowOnboarding(true); }}
               className="bg-zinc-900 border border-[#ca8a04]/40 text-[#eab308] hover:text-white hover:border-[#ca8a04] text-[9px] px-2.5 py-0.5 rounded hover:bg-[#ca8a04]/10 transition-all cursor-pointer font-mono uppercase font-bold tracking-wider flex items-center gap-1 shrink-0"
-              title="Review Platform Value Proposition Blueprint"
+              title="Read the vision guide"
               id="replay-onboarding-btn"
             >
-              <Sparkles className="w-2.5 h-2.5 text-[#eab308]" /> Legacy Guide
+              <Sparkles className="w-2.5 h-2.5 text-[#eab308]" /> Learn the Vision
             </button>
           </div>
         </div>
@@ -2753,7 +2753,7 @@ export default function Page() {
           <div className="p-4 bg-amber-950/15 border border-amber-500/35 text-amber-200 text-xs rounded-xl flex items-start gap-3 whitespace-pre-wrap text-left">
             <HelpCircle className="w-4 h-4 inline-block text-amber-400 shrink-0 mt-0.5" />
             <div className="flex-1">
-              <strong className="text-white uppercase font-mono text-[10px] block mb-1">Cross-Origin Frame Session Notice</strong>
+              <strong className="text-white uppercase font-mono text-[10px] block mb-1">Browser Frame Notice</strong>
               <p>{authError}</p>
             </div>
           </div>
@@ -2782,13 +2782,13 @@ export default function Page() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                 <div className="relative p-6 sm:p-8 space-y-1 z-10 max-w-2xl text-left">
                   <div className="inline-flex items-center space-x-1 px-2.5 py-0.5 bg-[#ca8a04]/15 border border-[#ca8a04]/30 rounded-full font-mono text-[8px] tracking-widest text-[#eab308] uppercase font-black">
-                    <Sparkles className="w-2.5 h-2.5 text-[#eab308] animate-pulse" /> <span>Greenwood Legacy Community Space</span>
+                    <Sparkles className="w-2.5 h-2.5 text-[#eab308] animate-pulse" /> <span>Welcome to Greenwood</span>
                   </div>
                   <h3 className="text-2xl sm:text-4xl font-extrabold text-white uppercase tracking-tight leading-none drop-shadow-md">
-                    COOPERATIVE INDEPENDENCE
+                    ECONOMIC FREEDOM TOGETHER
                   </h3>
                   <p className="text-[10px] sm:text-xs text-zinc-300 font-light tracking-wide max-w-lg drop-shadow">
-                    Honoring the 35 historic blocks of Tulsa, Oklahoma — engineered, funded, and protected by their own residents.
+                    Honoring the 35 blocks of Black Wall Street in Tulsa, Oklahoma — built, funded, and protected by the people who lived there.
                   </p>
                 </div>
               </div>
@@ -2799,26 +2799,26 @@ export default function Page() {
                 <div className="lg:col-span-7 space-y-6 text-left">
                   <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-[#ca8a04]/20 px-3 py-1 rounded-full font-mono text-[9px] tracking-widest text-[#eab308] uppercase">
                     <Sparkles className="w-3.5 h-3.5" />
-                    <span>Tulsa Ancestral Heritage Redeployment</span>
+                    <span>Continuing the Legacy of Tulsa</span>
                   </div>
                   
                   <div className="space-y-3">
                     <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight leading-none text-white">
-                      Building the Future from Greenwood&apos;s Spirit
+                      Building Our Future on Greenwood&apos;s Spirit
                     </h2>
                     <p className="text-zinc-400 text-xs sm:text-base leading-relaxed font-light font-sans max-w-2xl">
-                      Our ancestors engineered the Greenwood District in Tulsa, Oklahoma — one of the most prosperous Black communities in American history. Known globally as <strong>Black Wall Street</strong>, they established standard-building banks, boarding hotels, schools, charter hospitals, and retail hubs completely self-sustained. They kept capital circulating dynamically inside the community.
+                      Our ancestors engineered the Greenwood District in Tulsa, Oklahoma — one of the most prosperous Black communities in American history. Known globally as <strong>Black Wall Street</strong>, they established their own banks, hotels, schools, hospitals, and stores. They kept their money circulating within the community to support one another.
                     </p>
                     <p className="text-zinc-500 text-xs sm:text-sm leading-relaxed font-light">
-                      On May 31st and June 1st, 1921, physical structures were attacked and burned down. But the cooperative spirit was never reduced. BWS Inc. is our deliberate technological expansion on that foundation.
+                      In 1921, the physical buildings of Black Wall Street were destroyed, but the community&apos;s spirit of supporting one another was never broken. BWS Inc. is a modern platform to bring that very same vision back to life using today&apos;s tools.
                     </p>
                   </div>
 
                   <div className="p-4 bg-zinc-950/90 border border-zinc-900 rounded-xl space-y-3">
-                    <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-[#eab308] block font-bold">HISTORIC SOUND TRANSMISSION</span>
+                    <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-[#eab308] block font-bold">HEAR OUR STORY</span>
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <p className="text-xs text-zinc-300 font-light max-w-lg">
-                        &quot;BWS Inc. is us picking up where our ancestor visionaries left off — this time reinforced with technology, global reach, and secure community network trust.&quot;
+                        &quot;BWS Inc. is us continuing the work of our ancestors—this time using modern tools and online networks to support each other.&quot;
                       </p>
                       
                       <button 
@@ -2830,7 +2830,7 @@ export default function Page() {
                         }`}
                       >
                         {isSpeaking ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5 text-[#eab308]" />}
-                        {isSpeaking ? 'Mute' : 'Narrate Legacy'}
+                        {isSpeaking ? 'Mute' : 'Listen to Story'}
                       </button>
                     </div>
                     {ttsNotice && (
@@ -2856,7 +2856,7 @@ export default function Page() {
                       </div>
                       <h4 className="text-[11px] font-mono uppercase font-bold text-white tracking-widest">Look Out for Each Other</h4>
                       <p className="text-[10px] text-zinc-500 font-light leading-normal">
-                        Instead of paying high fees to outside operators, we swap marketing, technical systems, and business consulting hours directly.
+                        Swap skills directly. If you need marketing, web design, or business advice, you can trade your own services directly with neighbors instead of paying expensive fees to outside companies.
                       </p>
                     </div>
 
@@ -2866,7 +2866,7 @@ export default function Page() {
                       </div>
                       <h4 className="text-[11px] font-mono uppercase font-bold text-white tracking-widest">Own It Together</h4>
                       <p className="text-[10px] text-zinc-500 font-light leading-normal">
-                        Earn BWSX credits in the Academy and spend them to reserve vehicles, tooling, spaces, or design hours owned by the collective.
+                        Share tools and resources. Take classes in our Skill Academy to earn credits, then spend those credits to borrow vehicles, camera gear, commercial kitchens, or tools owned by other members.
                       </p>
                     </div>
 
@@ -2876,7 +2876,7 @@ export default function Page() {
                       </div>
                       <h4 className="text-[11px] font-mono uppercase font-bold text-white tracking-widest">Protect Our Bag</h4>
                       <p className="text-[10px] text-zinc-500 font-light leading-normal">
-                        Our consensus ledger operates as a secure haven, shielding local business transactions against outside corporate structures.
+                        Keep wealth in the community. Our community directory tracks all trades and borrows safely, keeping our neighborhood economy independent and secure.
                       </p>
                     </div>
                   </div>
@@ -2890,7 +2890,7 @@ export default function Page() {
                     <div className="absolute top-0 right-0 w-16 h-16 bg-[#ca8a04]/5 blur-lg rounded-full" />
                     
                     <div className="flex justify-between items-center mb-4">
-                      <span className="text-[8px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-bold">Official Launch Commemoration</span>
+                      <span className="text-[8px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-bold">Launch Countdown</span>
                       <span className="text-[8px] text-[#ca8a54] font-mono bg-[#ca8a04]/10 px-2 py-0.5 rounded border border-[#ca8a04]/20 font-bold">EST_CLOCK</span>
                     </div>
 
@@ -2914,11 +2914,11 @@ export default function Page() {
                     </div>
 
                     <div className="space-y-4 pt-4 border-t border-zinc-900">
-                      <h4 className="text-xs font-mono uppercase font-black tracking-widest text-[#eab308]">Phase 1 Foundation Progress</h4>
+                      <h4 className="text-xs font-mono uppercase font-black tracking-widest text-[#eab308]">Phase 1 Fundraising Goal</h4>
                       
                       <div className="space-y-1 flex-1">
                         <div className="flex justify-between items-center text-[10px] font-mono text-zinc-400">
-                          <span>Seeded Community Fund</span>
+                          <span>Community Fund Raised</span>
                           <span className="text-white">${fundingTotal.toLocaleString()} of $50,000 Goal</span>
                         </div>
                         <div className="h-2 w-full bg-black rounded-full overflow-hidden border border-zinc-900">
@@ -2931,14 +2931,14 @@ export default function Page() {
                       </div>
 
                       <p className="text-[10px] text-zinc-500 leading-relaxed font-light">
-                        Donations cover server scaling, equipment acquisition, Trust formations, and building localized Mutual BWS Credit channels before June 1st.
+                        Your contributions help buy shared equipment (like vans and tools), set up local business trusts, and build our community sharing network.
                       </p>
 
                       <button 
                         onClick={() => setActiveTab('support')}
                         className="w-full py-2.5 rounded bg-gradient-to-r from-[#ca8a04] to-[#eab308] text-black text-[9px] font-mono tracking-widest uppercase font-bold text-center block"
                       >
-                        Community Seed Deployment →
+                        Support the Movement →
                       </button>
                     </div>
                   </div>
@@ -2946,28 +2946,28 @@ export default function Page() {
                   {/* COOPERATING ROADMAP INDEX */}
                   <div className="bg-zinc-950/80 border border-zinc-900 p-5 rounded-xl space-y-4 text-left">
                     <h4 className="text-xs font-mono uppercase font-black text-[#eab308] tracking-widest flex items-center gap-1.5 border-b border-zinc-900 pb-2">
-                      <TrendingUp className="w-4 h-4" /> Strategic Milestones
+                      <TrendingUp className="w-4 h-4" /> Key Milestones
                     </h4>
                     <ul className="space-y-3.5 text-xs text-zinc-400 font-light font-mono">
                       <li className="flex items-start gap-2.5">
                         <span className="h-3.5 w-3.5 rounded-full bg-emerald-500/10 border border-emerald-500 flex items-center justify-center text-[8px] text-emerald-400 font-bold shrink-0 mt-0.5">✓</span>
                         <div>
-                          <strong className="text-white text-[11px] block">PHASE 01 — Legal Entity & Trust Structures (ACTIVE)</strong>
-                          <span className="text-[9px] text-zinc-500">Establishing proper operational and accounting safeguards. Register BWS Inc.</span>
+                          <strong className="text-white text-[11px] block">PHASE 1: Building the Foundation (Active)</strong>
+                          <span className="text-[9px] text-zinc-500">Setting up the official organization structure and business registry to protect our members.</span>
                         </div>
                       </li>
                       <li className="flex items-start gap-2.5">
                         <span className="h-3.5 w-3.5 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center text-[7px] text-[#ca8a04] font-bold shrink-0 mt-0.5">02</span>
                         <div>
-                          <strong className="text-white text-[11px] block">PHASE 02 — Skill Academy & Meet Portal (ACTIVE PROTOTYPE)</strong>
-                          <span className="text-[9px] text-zinc-500">Enable peer skills matching rooms, scheduled classrooms, and Google Meets.</span>
+                          <strong className="text-white text-[11px] block">PHASE 2: Skill Academy & Video Classes (Active Prototype)</strong>
+                          <span className="text-[9px] text-zinc-500">Launching live online classrooms, video lessons, and skills matching.</span>
                         </div>
                       </li>
                       <li className="flex items-start gap-2.5">
                         <span className="h-3.5 w-3.5 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center text-[7px] text-zinc-650 font-bold shrink-0 mt-0.5">03</span>
                         <div>
-                          <strong className="text-white text-[11px] block">PHASE 03 — Material Resource Vault & Pooling (DEPLOYED)</strong>
-                          <span className="text-[9px] text-zinc-500">Collective warehouse stocking, pooling physical, media, workspace and transportation assets.</span>
+                          <strong className="text-white text-[11px] block">PHASE 3: Shared Tool Vault (Active)</strong>
+                          <span className="text-[9px] text-zinc-500">Creating our shared warehouse where members can pool and borrow vans, cameras, tools, and workspaces.</span>
                         </div>
                       </li>
                     </ul>
@@ -2984,17 +2984,17 @@ export default function Page() {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
                       <div className="relative p-4 z-10 space-y-0.5 pointer-events-none">
-                        <span className="text-[7.5px] font-mono uppercase tracking-[0.2em] text-[#eab308] font-black">LEGACY ANCHOR</span>
+                        <span className="text-[7.5px] font-mono uppercase tracking-[0.2em] text-[#eab308] font-black">OUR ROOTS</span>
                         <h4 className="text-xs font-mono font-black text-white uppercase tracking-wider">THE 35 BLOCKS OF GREENWOOD</h4>
                       </div>
                     </div>
                     <div className="p-4 space-y-2">
                       <p className="text-[10px] text-zinc-400 font-light leading-relaxed">
-                        In the early 1900s, legendary visionaries established Greenwood — a glorious self-sustained district of standard-setting grocery stores, banks, libraries, theaters, and boarding hotels completely self-directed. Today, we re-digitize that network under mutual private trust pools.
+                        In the early 1900s, community leaders built Greenwood—a self-reliant neighborhood with its own banks, grocery stores, hotels, and schools. Today, we are bringing that same spirit online so we can support and build with each other easily.
                       </p>
                       <div className="flex justify-between items-center text-[8px] font-mono text-zinc-500 pt-1 uppercase tracking-widest">
                         <span>EST. Greenwood Tulsa</span>
-                        <span className="text-[#eab308] font-bold">Group Economic Haven</span>
+                        <span className="text-[#eab308] font-bold">Independent Local Economy</span>
                       </div>
                     </div>
                   </div>
@@ -3024,12 +3024,12 @@ export default function Page() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                 <div className="relative p-6 sm:p-8 space-y-1 z-10 max-w-xl text-left">
-                  <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#eab308] font-black">COMMUNITY KNOWLEDGE VAULT</span>
+                  <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#eab308] font-black">COMMUNITY LEARNING CENTER</span>
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-white uppercase tracking-tight leading-none drop-shadow-md">
-                    SKILL ACADEMY &amp; MASTERCLASSES
+                    SKILL ACADEMY &amp; CLASSES
                   </h3>
                   <p className="text-[10px] sm:text-xs text-zinc-300 font-light tracking-wide max-w-md drop-shadow">
-                    Acquire elite financial architecture, credit system strategies, and earn direct BWSX credits upon validation.
+                    Learn useful hands-on skills, grow your business, and earn community credits when you complete courses.
                   </p>
                 </div>
               </div>
@@ -3058,20 +3058,20 @@ export default function Page() {
                             <option value="Applied Trades">Applied Trades</option>
                             <option value="Wellness & Aesthetics">Wellness & Aesthetics</option>
                             <option value="Heritage Crafts">Heritage Crafts</option>
-                            <option value="Sovereign Trusts">Sovereign Trusts</option>
+                            <option value="Sovereign Trusts">Family Trusts</option>
                           </select>
                         </div>
                         <button 
                           onClick={handleResetLessons}
                           className="px-2.5 py-1 bg-zinc-900 border border-zinc-850 text-[8px] font-mono text-zinc-500 rounded uppercase hover:text-white transition-colors"
                         >
-                          Reset Skills Progress
+                          Reset My Progress
                         </button>
                       </div>
                     </div>
 
                     <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed font-light">
-                      Earn BWSX credits as a dynamic reward for completing course modules. Completing checklist actions represents acquiring direct knowledge which automatically &quot;mints&quot; BWSX credits into your active wallet standing!
+                      Earn BWSX credits as a reward for completing course modules. Completing the checklist steps shows you&apos;ve mastered the skill, which automatically adds credits to your community wallet!
                     </p>
 
                     <div className="space-y-4 pt-2">
@@ -3102,7 +3102,7 @@ export default function Page() {
                               
                               {/* Animated Progress Bar underneath lesson title */}
                               <div className="mt-2 text-[8px] font-mono text-zinc-400 flex items-center gap-2">
-                                <span className="text-[7.5px] uppercase tracking-wider text-zinc-500">Completion:</span>
+                                <span className="text-[7.5px] uppercase tracking-wider text-zinc-500">Progress:</span>
                                 <div 
                                   className="relative group cursor-help"
                                   role="progressbar"
@@ -3128,7 +3128,7 @@ export default function Page() {
 
                                   {/* Custom Tooltip on Hover */}
                                   <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-zinc-950 border border-zinc-800 text-white rounded text-[9px] font-bold tracking-wide shadow-2xl pointer-events-none opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out z-30 whitespace-nowrap flex flex-col items-center gap-0.5 min-w-[70px]">
-                                    <span className="text-zinc-500 text-[7.5px] uppercase font-semibold">MODULE PROGRESS</span>
+                                    <span className="text-zinc-500 text-[7.5px] uppercase font-semibold">COURSE PROGRESS</span>
                                     <span className={lesson.completed ? 'text-emerald-400' : 'text-[#eab308]'}>
                                       {lesson.progress}% Complete
                                     </span>
@@ -3145,7 +3145,7 @@ export default function Page() {
                                     ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/25' 
                                     : 'bg-amber-500/10 text-amber-500 border border-amber-500/25'
                                 }`}>
-                                  {lesson.completed ? "✓ MASTERED COMPLETE" : `REWARD: +${lesson.creditsReward} BWSX`}
+                                  {lesson.completed ? "✓ COURSE COMPLETED" : `REWARD: +${lesson.creditsReward} Credits`}
                                 </span>
                                 <button
                                   onClick={() => handleToggleBookmarkLesson(lesson.id)}
@@ -3173,7 +3173,7 @@ export default function Page() {
                                   title="Restart this lesson module from 0% progress"
                                 >
                                   <RotateCcw className="w-2.5 h-2.5" />
-                                  <span>Reset Progress</span>
+                                  <span>Restart Course</span>
                                 </button>
                               )}
                             </div>
@@ -3200,7 +3200,7 @@ export default function Page() {
                                     {step}
                                   </span>
                                   <span className="text-[8px] font-bold uppercase tracking-wider text-[#ca8a04]">
-                                    {isStepDone ? 'Verified ✓' : 'Perform Audit Step'}
+                                    {isStepDone ? 'Done ✓' : 'Mark Step Completed'}
                                   </span>
                                 </button>
                               );
@@ -3210,8 +3210,8 @@ export default function Page() {
                           {/* Progress Meter */}
                           <div className="space-y-1">
                             <div className="flex justify-between text-[7.5px] font-mono text-zinc-500">
-                              <span>Sustaining Audit Ratio</span>
-                              <span>{lesson.progress}% SECURED</span>
+                              <span>Course Completion</span>
+                              <span>{lesson.progress}% COMPLETED</span>
                             </div>
                             <div className="h-1 w-full bg-black rounded-full overflow-hidden">
                               <motion.div 
@@ -3234,7 +3234,7 @@ export default function Page() {
                                   <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse ml-0.5" title="Has saved notes" />
                                 )}
                               </span>
-                              <span className="text-[10px] text-zinc-600 font-bold">
+                              <span className="text-[10px] text-zinc-650 font-bold">
                                 {expandedNotesLessonId === lesson.id ? "▲" : "▼"}
                               </span>
                             </button>
@@ -3246,33 +3246,33 @@ export default function Page() {
                                 exit={{ opacity: 0, height: 0 }}
                                 className="mt-3 space-y-2 border-t border-zinc-900/50 pt-3"
                               >
-                                <label className="text-[7.5px] font-mono text-zinc-500 uppercase tracking-widest block">PERSONAL LESSON JOURNAL</label>
+                                <label className="text-[7.5px] font-mono text-zinc-500 uppercase tracking-widest block">MY NOTES</label>
                                 <textarea
                                   value={editingLessonNotes[lesson.id] ?? userProfile?.lessonNotes?.[lesson.id] ?? ''}
                                   onChange={(e) => {
-                                    setEditingLessonNotes(prev => ({
+                                    setEditingLessonNotes((prev: Record<string, string>) => ({
                                       ...prev,
                                       [lesson.id]: e.target.value
                                     }));
                                   }}
-                                  placeholder="Type your private study notes, strategic plans, or bartering insights here..."
-                                  className="w-full h-20 p-2 bg-zinc-950 border border-zinc-900 focus:border-amber-500/50 rounded-lg text-xs font-mono text-zinc-300 outline-none focus:ring-1 focus:ring-amber-500/10 placeholder-zinc-700 resize-none transition-all"
+                                  placeholder="Type your personal notes, business plans, or trading ideas here..."
+                                  className="w-full h-20 p-2 bg-zinc-950 border border-zinc-900 focus:border-amber-550/50 rounded-lg text-xs font-mono text-zinc-300 outline-none focus:ring-1 focus:ring-amber-500/10 placeholder-zinc-700 resize-none transition-all"
                                 />
                                 <div className="flex justify-between items-center text-[8px] font-mono">
                                   <span className="text-zinc-500">
                                     {savingNotesLessonId === lesson.id ? (
                                       <span className="text-amber-500 flex items-center gap-1">
                                         <Loader2 className="w-2 h-2 animate-spin" />
-                                        Saving thoughts to ledger...
+                                        Saving notes...
                                       </span>
                                     ) : savedFeedbackLessonId === lesson.id ? (
                                       <span className="text-emerald-400 font-bold flex items-center gap-1 animate-pulse">
-                                        ✓ Saved draft to profile!
+                                        ✓ Saved to profile!
                                       </span>
                                     ) : userProfile?.lessonNotes?.[lesson.id] ? (
-                                      <span className="text-zinc-650 italic">Draft encrypted on node</span>
+                                      <span className="text-zinc-650 italic">Saved</span>
                                     ) : (
-                                      <span className="text-zinc-650 italic">Draft unsaved</span>
+                                      <span className="text-zinc-650 italic">Not saved</span>
                                     )}
                                   </span>
                                   <button
@@ -3280,7 +3280,7 @@ export default function Page() {
                                     disabled={savingNotesLessonId === lesson.id}
                                     className="px-2 py-0.5 bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 hover:border-zinc-700 text-zinc-400 hover:text-white rounded uppercase flex items-center gap-1 cursor-pointer transition-all active:scale-95 disabled:opacity-50"
                                   >
-                                    Save Draft
+                                    Save Notes
                                   </button>
                                 </div>
                               </motion.div>
@@ -3296,26 +3296,24 @@ export default function Page() {
                 </div>
 
                 {/* GOOGLE MEET CLASSROOMS & LIVE SCHEDULER */}
-                <div className="lg:col-span-5 space-y-6">
-                  
-                  {/* MEET TIMELINE WIDGET */}
+                           {/* MEET TIMELINE WIDGET */}
                   <div className="bg-zinc-950 border border-zinc-900 p-6 rounded-2xl space-y-4">
                     <div className="flex items-center justify-between border-b border-zinc-900 pb-3">
                       <div className="flex items-center space-x-2">
                         <Video className="w-4 h-4 text-[#eab308]" />
-                        <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#ca8a04]">Google Meet Portals</span>
+                        <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#ca8a04]">Live Video Workshops</span>
                       </div>
                       
                       <button 
                         onClick={() => setIsClassroomModalOpen(true)}
                         className="p-1 px-2 rounded bg-[#ca8a04]/10 border border-[#ca8a04]/30 text-[8px] font-mono uppercase tracking-widest text-[#eab308] hover:bg-[#ca8a04]/20 transition-all cursor-pointer"
                       >
-                        + Propose Class
+                        + Propose a Class
                       </button>
                     </div>
 
                     <p className="text-zinc-400 text-xs font-light">
-                      We convene in scheduled virtual classrooms. Generate secure, high-end meeting portals to coordinate workflows, trade consultations, and share templates.
+                      Join live online workshops led by local experts. Propose new classes, learn together, and share templates or guides.
                     </p>
 
                     <div className="space-y-4 max-h-[500px] overflow-y-auto pr-1">
@@ -3347,13 +3345,13 @@ export default function Page() {
                             {/* Compensate button if fee is required & not paid */}
                             {fee > 0 && (
                               <div className="mt-2 text-[9px] font-mono flex items-center justify-between p-1.5 px-2.5 rounded bg-zinc-900/60 border border-zinc-850">
-                                <span className="text-zinc-400">Cooperative Tuition Rate:</span>
+                                <span className="text-zinc-400">Class Credit Fee:</span>
                                 {isRegistered ? (
                                   <span className="text-[#eab308] font-bold uppercase tracking-wider flex items-center gap-1 text-[8.5px]">
                                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> ACCESS UNLOCKED
                                   </span>
                                 ) : (
-                                  <span className="text-white font-bold">{fee} BWSX Credits</span>
+                                  <span className="text-white font-bold">{fee} Credits</span>
                                 )}
                               </div>
                             )}
@@ -3363,7 +3361,7 @@ export default function Page() {
                                 onClick={() => handleCompensateInstructor(cls.id)}
                                 className="mt-2.5 w-full py-1.5 rounded-lg bg-gradient-to-r from-[#ca8a04] to-[#eab308] text-black text-[9px] font-mono font-black uppercase tracking-widest transition-all hover:brightness-110 active:scale-99 shadow flex items-center justify-center gap-1.5 cursor-pointer"
                               >
-                                <Coins className="w-3.5 h-3.5 shrink-0 animate-bounce" /> Compensate Instructor ({fee} BWSX)
+                                <Coins className="w-3.5 h-3.5 shrink-0 animate-bounce" /> Pay Class Fee ({fee} Credits)
                               </button>
                             )}
 
@@ -3374,8 +3372,8 @@ export default function Page() {
                               </div>
                               
                               {!isRegistered ? (
-                                <div className="px-3 py-1 bg-zinc-950 border border-zinc-900 rounded text-[8.5px] uppercase tracking-widest text-zinc-600 flex items-center gap-1 font-bold">
-                                  <Lock className="w-2.5 h-2.5" /> Book Class
+                                <div className="px-3 py-1 bg-zinc-950 border border-zinc-900 rounded text-[8.5px] uppercase tracking-widest text-zinc-650 flex items-center gap-1 font-bold">
+                                  <Lock className="w-2.5 h-2.5" /> Locked
                                 </div>
                               ) : (
                                 <a 
@@ -3384,7 +3382,7 @@ export default function Page() {
                                   rel="noopener noreferrer"
                                   className="px-3 py-1 bg-gradient-to-r from-zinc-900 to-zinc-950 border border-[#ca8a04]/40 hover:border-[#ca8a04] hover:text-white rounded text-[8.5px] uppercase tracking-widest text-[#ca8a04] flex items-center gap-1 font-bold"
                                 >
-                                  Join Meet <ArrowUpRight className="w-2.5 h-2.5 shrink-0" />
+                                  Join Live Call <ArrowUpRight className="w-2.5 h-2.5 shrink-0" />
                                 </a>
                               )}
                             </div>
@@ -3393,7 +3391,7 @@ export default function Page() {
                             <div className="mt-3 pt-2.5 border-t border-zinc-900/60 text-left space-y-1.5">
                               <div className="flex items-center justify-between">
                                 <span className="text-[8px] font-mono uppercase tracking-wider text-zinc-500 font-bold flex items-center gap-1">
-                                  <FileText className="w-3 h-3 text-[#ca8a04]" /> Companion Materials ({cls.attachedFiles?.length || 0})
+                                  <FileText className="w-3 h-3 text-[#ca8a04]" /> Class Files ({cls.attachedFiles?.length || 0})
                                 </span>
                                 <button 
                                   onClick={() => {
@@ -3402,7 +3400,7 @@ export default function Page() {
                                   }}
                                   className="text-[7.5px] text-[#eab308] font-mono hover:underline cursor-pointer flex items-center gap-1"
                                 >
-                                  + Upload File
+                                  + Add File
                                 </button>
                               </div>
 
@@ -3422,17 +3420,17 @@ export default function Page() {
                                       
                                       {!isRegistered ? (
                                         <div className="text-[7.5px] text-zinc-650 font-mono flex items-center gap-0.5 bg-black/40 px-1 py-0.5 rounded shrink-0">
-                                          <Lock className="w-2 h-2" /> Blocked
+                                          <Lock className="w-2 h-2" /> Locked
                                         </div>
                                       ) : (
                                         <a 
                                           href="#"
                                           onClick={(e) => {
                                             e.preventDefault();
-                                            alert(`Securing download package for "${file.name}"... Initiating peer resource sync.`);
+                                            alert(`Getting the file ready for "${file.name}"... downloading now.`);
                                           }}
                                           className="p-1 text-[#eab308] hover:text-white hover:bg-[#ca8a04]/20 border border-[#ca8a04]/10 hover:border-[#ca8a04]/40 rounded transition-colors cursor-pointer shrink-0"
-                                          title="Download companion asset"
+                                          title="Download file"
                                         >
                                           <Download className="w-2.5 h-2.5" />
                                         </a>
@@ -3462,24 +3460,22 @@ export default function Page() {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
                       <div className="relative p-4 z-10 space-y-0.5 pointer-events-none">
-                        <span className="text-[7.5px] font-mono uppercase tracking-[0.2em] text-[#eab308] font-black">COMMUNITY ACADEMY UNIT</span>
-                        <h4 className="text-xs font-mono font-black text-white uppercase tracking-wider">THE GUARDIAN SCHOLAR RECORD</h4>
+                        <span className="text-[7.5px] font-mono uppercase tracking-[0.2em] text-[#eab308] font-black">ACADEMY STATEMENT</span>
+                        <h4 className="text-xs font-mono font-black text-white uppercase tracking-wider">THE LEARNING LOG</h4>
                       </div>
                     </div>
                     <div className="p-4 space-y-2">
                       <p className="text-[10px] text-zinc-400 font-light leading-relaxed">
-                        Historically, Greenwood&apos;s educational modules and accounting forums had the highest technical literacy rates during the early 1900s. Knowledge acquisition is the cornerstone of cooperative economics and self-directed community leverage.
+                        Greenwood had exceptionally high literacy and business success rates in the early 1900s. Sharing knowledge is the most powerful way to build a self-reliant community.
                       </p>
                       <div className="flex justify-between items-center text-[8px] font-mono text-zinc-500 pt-1 uppercase tracking-widest">
-                        <span>Instructional Core</span>
-                        <span className="text-[#eab308] font-bold">BWSX Reward System</span>
+                        <span>Community Learning</span>
+                        <span className="text-[#eab308] font-bold">Credits Reward System</span>
                       </div>
                     </div>
                   </div>
 
                 </div>
-
-              </div>
 
               {/* CLASSROOM PROPOSAL MODAL */}
               {isClassroomModalOpen && (
@@ -3490,37 +3486,37 @@ export default function Page() {
                     className="w-full max-w-md bg-zinc-950 border border-zinc-850 p-6 rounded-2xl text-left space-y-4"
                   >
                     <div className="flex items-center justify-between border-b border-zinc-900 pb-3">
-                      <span className="text-[10px] font-mono uppercase tracking-[0.2em] font-extrabold text-[#eab308]">Propose Live Classroom Meet</span>
+                      <span className="text-[10px] font-mono uppercase tracking-[0.2em] font-extrabold text-[#eab308]">Propose a New Live Class</span>
                       <button onClick={() => setIsClassroomModalOpen(false)} className="text-zinc-500 hover:text-white"><X className="w-4 h-4" /></button>
                     </div>
 
                     <form onSubmit={handleScheduleClassroom} className="space-y-3.5">
                       <div className="space-y-1">
-                        <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">Seminar Title</label>
+                        <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">Class Title</label>
                         <input 
                           type="text"
                           required
                           value={newClassroom.title}
                           onChange={(e) => setNewClassroom(prev => ({ ...prev, title: e.target.value }))}
-                          placeholder="e.g. Setting up direct CRM workflows with AI"
+                          placeholder="e.g. Using AI to organize your customer contacts"
                           className="w-full bg-black border border-zinc-850 rounded p-2.5 text-xs text-white focus:border-amber-500 focus:outline-none"
                         />
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">Lead Educator</label>
+                        <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">Instructor / Teacher</label>
                         <input 
                           type="text"
                           required
                           value={newClassroom.instructor}
                           onChange={(e) => setNewClassroom(prev => ({ ...prev, instructor: e.target.value }))}
-                          placeholder="e.g. Sister Nia, AI Strategist"
+                          placeholder="e.g. Sister Nia, Technology Guide"
                           className="w-full bg-black border border-zinc-850 rounded p-2.5 text-xs text-white focus:border-amber-500 focus:outline-none"
                         />
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">Class Access Fee (BWSX Credits)</label>
+                        <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">Class Fee (Credits)</label>
                         <input 
                           type="number"
                           min="0"
@@ -3530,13 +3526,13 @@ export default function Page() {
                           className="w-full bg-black border border-zinc-850 rounded p-2.5 text-xs text-white focus:border-amber-500 focus:outline-none font-mono"
                         />
                         <span className="text-[7.5px] text-zinc-500 block leading-tight font-mono -mt-0.5">
-                          Peer supporters compensate instructors in real BWSX credits to book entry.
+                          Members pay the instructor in credits to join the class.
                         </span>
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-1">
-                          <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">Topic Focus</label>
+                          <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">Category</label>
                           <select 
                             value={newClassroom.category}
                             onChange={(e) => setNewClassroom(prev => ({ ...prev, category: e.target.value as any }))}
@@ -3544,7 +3540,7 @@ export default function Page() {
                           >
                             <option value="Applied Trades">Applied Trades</option>
                             <option value="Sovereign Trusts">Family Trusts</option>
-                            <option value="Cooperative Logistics">Cooperative Logistics</option>
+                            <option value="Community Logistics">Community Logistics</option>
                             <option value="Heritage Crafts">Heritage Crafts</option>
                             <option value="Wellness & Aesthetics">Wellness & Aesthetics</option>
                             <option value="General">General</option>
@@ -3564,21 +3560,21 @@ export default function Page() {
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">Descriptive Aim</label>
+                        <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">Class Description</label>
                         <textarea 
                           rows={2}
                           value={newClassroom.description}
                           onChange={(e) => setNewClassroom(prev => ({ ...prev, description: e.target.value }))}
-                          placeholder="Brief summary of specific templates/actions to be mastered in class..."
+                          placeholder="Brief summary of what members will learn or make in class..."
                           className="w-full bg-black border border-zinc-850 rounded p-2 text-xs text-white focus:border-amber-500 focus:outline-none"
                         />
                       </div>
 
-                      {/* PROGRAMMATIC MEET LINK PROVISIONER */}
+                      {/* AUTOMATIC MEETING LINK CREATOR */}
                       <div className="space-y-2.5 p-3 bg-black/60 border border-zinc-900 rounded-xl">
                         <div className="flex items-center justify-between">
-                          <span className="text-[8px] font-mono uppercase tracking-wider text-zinc-400">Classroom Link Engine</span>
-                          <span className="text-[8px] font-sans text-zinc-500">Google Meet API</span>
+                          <span className="text-[8px] font-mono uppercase tracking-wider text-zinc-400">Meeting Link</span>
+                          <span className="text-[8px] font-sans text-zinc-500">Google Meet Link</span>
                         </div>
 
                         <div className="flex gap-4">
@@ -3593,7 +3589,7 @@ export default function Page() {
                               }}
                               className="accent-amber-500"
                             />
-                            <span>Programmatic Meet</span>
+                            <span>Generate Automatically</span>
                           </label>
                           <label className="flex items-center space-x-2 text-[10px] text-zinc-300 font-mono cursor-pointer">
                             <input 
@@ -3606,7 +3602,7 @@ export default function Page() {
                               }}
                               className="accent-amber-500"
                             />
-                            <span>Fallback Link</span>
+                            <span>Use Fallback Link</span>
                           </label>
                         </div>
 
@@ -3614,26 +3610,26 @@ export default function Page() {
                           googleAccessToken ? (
                             <div className="flex items-center space-x-2 text-[9px] text-[#eab308] font-mono mt-1.5 bg-[#ca8a04]/5 p-2 rounded border border-[#ca8a04]/20 animate-in fade-in duration-250">
                               <div className="w-1.5 h-1.5 rounded-full bg-[#eab308] animate-pulse shrink-0" />
-                              <span>Google API integration active. Programmatic space will be provisioned on submit.</span>
+                              <span>Google integration active. Meeting link will be created automatically.</span>
                             </div>
                           ) : (
                             <div className="mt-1.5 space-y-2 animate-in fade-in duration-250">
                               <p className="text-[9px] text-zinc-400 leading-snug font-sans">
-                                Programmatic generation requires authorized access to create Google Meet spaces.
+                                Authorize Google to create class meetings automatically.
                               </p>
                               <button
                                 type="button"
                                 onClick={handleMeetSignIn}
                                 className="w-full py-2 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 hover:border-[#ca8a04] text-zinc-300 text-[8.5px] font-mono uppercase tracking-wider rounded flex items-center justify-center gap-1.5 cursor-pointer transition-all active:scale-[0.99]"
                               >
-                                <Video className="w-3.5 h-3.5 text-[#eab308]" /> Sign in & Authorize Google Meet
+                                <Video className="w-3.5 h-3.5 text-[#eab308]" /> Sign in with Google
                               </button>
                             </div>
                           )
                         ) : (
                           <div className="flex items-center space-x-2 text-[9px] text-zinc-500 font-mono mt-1.5 bg-zinc-900 border border-zinc-850 p-2 rounded animate-in fade-in duration-250">
                             <CheckCircle2 className="w-3.5 h-3.5 text-zinc-650 shrink-0" />
-                            <span>An offline safe-bypass meet portal will be allocated immediately.</span>
+                            <span>A fallback meeting link will be created automatically.</span>
                           </div>
                         )}
 
@@ -3655,10 +3651,10 @@ export default function Page() {
                         {isGeneratingClassLink ? (
                           <>
                             <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                            <span>PROVISIONING SECURE PORTAL...</span>
+                            <span>CREATING LIVE CLASS...</span>
                           </>
                         ) : (
-                          <span>Schedule Google Meet Portal ✓</span>
+                          <span>Create Google Meet Workshop ✓</span>
                         )}
                       </button>
                     </form>
@@ -3677,7 +3673,7 @@ export default function Page() {
                     <div className="flex items-center justify-between border-b border-zinc-900 pb-3">
                       <div className="flex items-center gap-1.5">
                         <FileText className="w-4 h-4 text-[#ca8a04]" />
-                        <span className="text-[10px] font-mono uppercase tracking-[0.15em] font-extrabold text-[#eab308]">Upload Lesson Supplement</span>
+                        <span className="text-[10px] font-mono uppercase tracking-[0.15em] font-extrabold text-[#eab308]">Upload Class File</span>
                       </div>
                       <button onClick={() => {
                         setIsDocUploadModalOpen(false);
@@ -3703,7 +3699,7 @@ export default function Page() {
                           </div>
                           <div>
                             <span className="text-[10.5px] font-mono text-zinc-300 block">Drag & Drop file here or <span className="text-[#eab308] underline">browse</span></span>
-                            <span className="text-[8px] text-zinc-500 block font-mono mt-1">Accepts PDF, XLS Sheets, blueprints, schemas up to 10MB</span>
+                            <span className="text-[8px] text-zinc-500 block font-mono mt-1">Accepts PDFs, Spreadsheets, diagrams, or guides up to 10MB</span>
                           </div>
                         </label>
                       </div>
@@ -3711,34 +3707,34 @@ export default function Page() {
                       {/* Manual configuration inputs (populated automatically on file selection) */}
                       <div className="space-y-3 p-3 bg-zinc-900/40 rounded-xl border border-zinc-900 font-mono">
                         <div className="space-y-1">
-                          <label className="text-[8px] font-mono uppercase tracking-wider text-zinc-400 block">Resource File Title</label>
+                          <label className="text-[8px] font-mono uppercase tracking-wider text-zinc-400 block">File Name</label>
                           <input 
                             type="text"
                             required
                             value={uploadForm.name}
                             onChange={(e) => setUploadForm(prev => ({ ...prev, name: e.target.value }))}
-                            placeholder="e.g. Master_Bespoke_Framing_Guide.pdf"
+                            placeholder="e.g. House_Framing_Guide.pdf"
                             className="w-full bg-black border border-zinc-800 rounded px-2.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none"
                           />
                         </div>
 
                         <div className="grid grid-cols-2 gap-2">
                           <div className="space-y-1">
-                            <label className="text-[8px] font-mono uppercase tracking-wider text-zinc-400 block">Theme</label>
+                            <label className="text-[8px] font-mono uppercase tracking-wider text-zinc-400 block">File Type</label>
                             <select 
                               value={uploadForm.type}
                               onChange={(e) => setUploadForm(prev => ({ ...prev, type: e.target.value }))}
                               className="w-full bg-black border border-zinc-800 rounded px-2 py-1.5 text-[11px] text-zinc-300 focus:border-[#ca8a04] focus:outline-none"
                             >
                               <option value="PDF Guide">PDF Guide</option>
-                              <option value="Formula Spreadsheet">Formula Spreadsheet</option>
-                              <option value="Blueprint Assets">Blueprint Assets</option>
-                              <option value="Drawing / Schema">Drawing / Schema</option>
-                              <option value="Syllabus">Syllabus</option>
+                              <option value="Formula Spreadsheet">Spreadsheet</option>
+                              <option value="Blueprint Assets">Blueprint</option>
+                              <option value="Drawing / Schema">Image / Diagram</option>
+                              <option value="Syllabus">Syllabus / Guide</option>
                             </select>
                           </div>
                           <div className="space-y-1">
-                            <label className="text-[8px] font-mono uppercase tracking-wider text-zinc-400 block">Size</label>
+                            <label className="text-[8px] font-mono uppercase tracking-wider text-zinc-400 block">File Size</label>
                             <input 
                               type="text"
                               required
@@ -3756,7 +3752,7 @@ export default function Page() {
                         disabled={!uploadForm.name}
                         className="w-full py-2.5 bg-gradient-to-r from-[#ca8a04] to-[#eab308] hover:brightness-110 disabled:opacity-50 text-black text-[9px] font-mono font-bold uppercase tracking-widest rounded-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
                       >
-                        <CheckCircle2 className="w-3.5 h-3.5 shrink-0" /> Commit Supplement File ✓
+                        <CheckCircle2 className="w-3.5 h-3.5 shrink-0" /> Upload File ✓
                       </button>
                     </form>
                   </motion.div>
@@ -3785,12 +3781,12 @@ export default function Page() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                 <div className="relative p-6 sm:p-8 space-y-1 z-10 max-w-xl text-left">
-                  <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#eab308] font-black">MUTUAL ASSET COOPERATIVE</span>
+                  <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#eab308] font-black">COMMUNITY ASSET SHARE</span>
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-white uppercase tracking-tight leading-none drop-shadow-md">
-                    SHARED MATERIAL RESOURCES
+                    OUR SHARED TOOLS & SPACES
                   </h3>
                   <p className="text-[10px] sm:text-xs text-zinc-300 font-light tracking-wide max-w-md drop-shadow">
-                    List and lease physical tools, freight transportation, high-end media gear, and localized physical spaces.
+                    Share and borrow tools, vehicles, camera gear, and workspaces with your neighbors.
                   </p>
                 </div>
               </div>
@@ -3802,9 +3798,9 @@ export default function Page() {
                   
                   <div className="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-900 pb-4">
                     <div className="space-y-1">
-                      <span className="text-[8.5px] font-mono uppercase text-zinc-500 tracking-wider">Module 03 Repository</span>
+                      <span className="text-[8.5px] font-mono uppercase text-zinc-500 tracking-wider">Step 3: Sharing with the Neighborhood</span>
                       <h3 className="text-xl font-bold uppercase tracking-tight text-white flex items-center gap-2">
-                        <Landmark className="w-5 h-5 text-[#eab308]" /> Shared Material Resources & Warehousing
+                        <Landmark className="w-5 h-5 text-[#eab308]" /> Shared Tools, Vehicles, & Workspaces
                       </h3>
                     </div>
 
@@ -3813,19 +3809,19 @@ export default function Page() {
                         onClick={handleResetResources}
                         className="px-2.5 py-1.5 bg-zinc-900 border border-zinc-800 text-[8.5px] font-mono text-zinc-500 hover:text-zinc-300 rounded uppercase"
                       >
-                        Reset All Reservs
+                        Reset Reservations
                       </button>
                       <button 
                         onClick={() => setIsResourceModalOpen(true)}
                         className="px-3.5 py-1.5 bg-[#ca8a04] hover:bg-amber-600 text-black text-[8.5px] font-mono uppercase tracking-widest font-black rounded"
                       >
-                        + List Material Resource
+                        + Share a Tool or Space
                       </button>
                     </div>
                   </div>
 
                   <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed max-w-3xl">
-                    Ownership is the currency here. BWS Inc. maintains a mutual depot. You are completely authorized to catalog <strong>any material or intellectual resource</strong> you are willing to support the family with (e.g., freight vans, cinema lenses, workspace cabins, custom high-speed servers, lawn mowers, kitchen stations, power washers, legal packets). Earn reputation listings and book peer resources dynamically!
+                    We believe in sharing what we own to help everyone grow. Here, you can list <strong>any tool, vehicle, space, or skill</strong> you're willing to share with the neighborhood (like delivery vans, camera gear, workspaces, computers, lawn mowers, kitchen spaces, or professional advice). You'll earn credits when others use your tools, and you can use your credits to borrow things from your neighbors when you need them!
                   </p>
 
                   {/* MATERIAL CARDS GRID */}
@@ -3848,7 +3844,7 @@ export default function Page() {
                           )}
                           {!res.isBooked && res.isCustom && (
                             <div className="absolute top-2 right-2 bg-amber-500/10 border border-amber-500/30 text-[#eab308] text-[8px] font-mono tracking-widest font-bold px-2 py-0.5 rounded">
-                              COOPERATOR LISTED
+                              SHARED BY NEIGHBOR
                             </div>
                           )}
 
@@ -3871,7 +3867,7 @@ export default function Page() {
                           <div className="pt-4 border-t border-zinc-900 flex justify-between items-center text-[10px] font-mono">
                             <div>
                               <span className="text-zinc-500 block text-[9px]">Sourced by: <strong className="text-zinc-300 font-bold">{res.ownerName}</strong></span>
-                              <span className="text-white block font-bold mt-0.5">{res.creditCost} BWSX reservation fee</span>
+                              <span className="text-white block font-bold mt-0.5">{res.creditCost} community credits to borrow</span>
                             </div>
 
                             <button 
@@ -3883,7 +3879,7 @@ export default function Page() {
                                   : 'bg-[#ca8a04] text-black hover:bg-amber-500 shadow'
                               }`}
                             >
-                              {res.isBooked ? 'Reserved Logged' : 'Book with BWSX 🗄️'}
+                              {res.isBooked ? 'Already Borrowed' : 'Borrow with Credits 🗄️'}
                             </button>
                           </div>
 
@@ -3906,20 +3902,20 @@ export default function Page() {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
                       <div className="relative p-5 z-10 space-y-1 pointer-events-none">
-                        <span className="text-[7.5px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-black">CUSTODIAL TRUST</span>
-                        <h4 className="text-sm font-mono font-black text-white uppercase tracking-wider leading-none">THE ESTES GOLD VAULT</h4>
+                        <span className="text-[7.5px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-black">SECURED & BACKED</span>
+                        <h4 className="text-sm font-mono font-black text-white uppercase tracking-wider leading-none">THE ESTES COMMUNITY FUND</h4>
                         <p className="text-[9px] text-zinc-400 font-light leading-snug">
-                          Cooperative treasury reserves backing ledger credits.
+                          Shared resources that back our community credits.
                         </p>
                       </div>
                     </div>
                     <div className="p-5 space-y-3">
                       <p className="text-[10px] text-zinc-400 font-light leading-relaxed">
-                        Historically, Greenwood&apos;s pioneers kept physical bullion reserves and title deeds filed within their own secure boardrooms, bypassing central systemic risks. All physical tool loans and space reserves listed here are backed by mutual credit locks, safeguarding cooperator wealth.
+                        In historical Greenwood, neighbors pooled their gold, property deeds, and resources to help each other succeed without relying on outside banks. In that same spirit, every tool, vehicle, and space listed here is backed by our collective community, making sure our shared wealth stays right here where it belongs.
                       </p>
                       <div className="pt-2 border-t border-zinc-900 flex justify-between items-center text-[8px] font-mono text-zinc-500 uppercase tracking-widest">
-                        <span>Secured Safeguards</span>
-                        <span className="text-[#eab308] font-bold">100% Cooperator Backed</span>
+                        <span>Built for the Neighborhood</span>
+                        <span className="text-[#eab308] font-bold">100% Backed by Neighbors</span>
                       </div>
                     </div>
                   </div>
@@ -3937,13 +3933,13 @@ export default function Page() {
                   >
                     
                     <div className="flex items-center justify-between border-b border-zinc-900 pb-3">
-                      <span className="text-[10px] font-mono uppercase tracking-[0.2em] font-extrabold text-[#eab308]">Register Material Resource</span>
+                      <span className="text-[10px] font-mono uppercase tracking-[0.2em] font-extrabold text-[#eab308]">Share a Tool or Space</span>
                       <button onClick={() => setIsResourceModalOpen(false)} className="text-zinc-500 hover:text-white"><X className="w-4 h-4" /></button>
                     </div>
 
                     <form onSubmit={handleAddMaterialResource} className="space-y-4">
                       <div className="space-y-1">
-                        <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">Asset Name (Specific Model or Item)</label>
+                        <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">Name of your Tool or Space</label>
                         <input 
                           type="text"
                           required
@@ -3956,21 +3952,21 @@ export default function Page() {
 
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-1">
-                          <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">Category Focus</label>
+                          <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">What category does it fit?</label>
                           <select 
                             value={newResource.category}
                             onChange={(e) => setNewResource(prev => ({ ...prev, category: e.target.value as any }))}
                             className="w-full bg-black border border-zinc-850 rounded p-2 text-xs text-zinc-300 focus:border-amber-550 focus:outline-none"
                           >
                             <option value="Physical Tools">Physical Tools</option>
-                            <option value="Transport">Transport</option>
-                            <option value="Media Gear">Media Gear</option>
-                            <option value="Office/Space">Office Space</option>
+                            <option value="Transport">Vehicles & Delivery</option>
+                            <option value="Media Gear">Cameras & Recording</option>
+                            <option value="Office/Space">Workspaces & Kitchens</option>
                             <option value="Other">Other</option>
                           </select>
                         </div>
                         <div className="space-y-1">
-                          <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">Fee (BWSX Credits)</label>
+                          <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">Credits to borrow (Fee)</label>
                           <input 
                             type="number"
                             required
@@ -3983,13 +3979,13 @@ export default function Page() {
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">Asset Capacity / Pickup Rules</label>
+                        <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-400 block">How to get it / Pickup Rules</label>
                         <textarea 
                           rows={3}
                           required
                           value={newResource.description}
                           onChange={(e) => setNewResource(prev => ({ ...prev, description: e.target.value }))}
-                          placeholder="State pickup block location (e.g. Block 4 Greenwood), charging needs, accessories, or instructions..."
+                          placeholder="Tell neighbors where to pick it up, any special instructions, or how to return it..."
                           className="w-full bg-black border border-zinc-850 rounded p-2.5 text-xs text-white focus:border-amber-500 focus:outline-none"
                         />
                       </div>
@@ -3998,19 +3994,17 @@ export default function Page() {
                         type="submit"
                         className="w-full py-3 bg-[#ca8a04] hover:bg-amber-600 text-black text-[9px] font-mono font-bold uppercase tracking-widest rounded"
                       >
-                        Pool Asset inside Vault ✓
+                        Share this tool/space with the community ✓
                       </button>
                     </form>
 
                   </motion.div>
                 </div>
               )}
-
             </motion.div>
           )}
 
-          {/* TAB 4: THE SHARED LEDGER SYSTEMS */}
-          {activeTab === 'ledger' && (
+                    {activeTab === 'ledger' && (
             <motion.div 
               key="ledger-tab"
               initial={{ opacity: 0, y: 12 }}
@@ -4028,12 +4022,12 @@ export default function Page() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                 <div className="relative p-6 sm:p-8 space-y-1 z-10 max-w-xl text-left">
-                  <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#eab308] font-black">CONSENSUS ACCOUNTING FRAMEWORK</span>
+                  <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#eab308] font-black">COMMUNITY SHARING RECORDS</span>
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-white uppercase tracking-tight leading-none drop-shadow-md">
-                    THE COLLECTIVE LEDGER
+                    THE SHARED LEDGER
                   </h3>
                   <p className="text-[10px] sm:text-xs text-zinc-300 font-light tracking-wide max-w-md drop-shadow">
-                    A completely tamper-proof, synchronized directory tracking all cooperator trades, skill swaps, and credit pooling blocks.
+                    A transparent list that keeps track of all tool rentals, skill swaps, and community credits shared between neighbors.
                   </p>
                 </div>
               </div>
@@ -4045,9 +4039,9 @@ export default function Page() {
                   
                   <div className="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-900 pb-3">
                     <div className="space-y-0.5">
-                      <span className="text-[8px] font-mono uppercase text-zinc-500 tracking-wider">Accounting Consensus Protocol v2.5</span>
+                      <span className="text-[8px] font-mono uppercase text-zinc-500 tracking-wider">Community Sharing Log</span>
                       <h3 className="text-xl font-bold uppercase text-white flex items-center gap-2">
-                        <Activity className="w-5 h-5 text-[#eab308]" /> The Shared Ledger Systems
+                        <Activity className="w-5 h-5 text-[#eab308]" /> Our Community Sharing Log
                       </h3>
                     </div>
 
@@ -4057,20 +4051,20 @@ export default function Page() {
                         onClick={() => setIsTransferModalOpen(true)}
                         className="px-4 py-2 bg-gradient-to-r from-[#ca8a04] to-yellow-500 text-black text-[9px] font-mono font-extrabold uppercase tracking-widest rounded flex items-center gap-2 shadow cursor-pointer"
                       >
-                        <Share2 className="w-3.5 h-3.5" /> Direct Transfer (Circulate BWSX)
+                        <Share2 className="w-3.5 h-3.5" /> Send Credits to a Neighbor
                       </button>
                       <button 
                         onClick={handleExportLedger}
                         className="px-4 py-2 bg-zinc-900 border border-[#ca8a04]/40 hover:border-[#eab308] text-[#eab308] hover:text-yellow-400 text-[9px] font-mono font-extrabold uppercase tracking-widest rounded flex items-center gap-2 shadow transition-all cursor-pointer"
                         title="Download a complete ledger transaction audit log in CSV format"
                       >
-                        <Download className="w-3.5 h-3.5" /> Export Ledger (CSV)
+                        <Download className="w-3.5 h-3.5" /> Download Sharing Log (CSV)
                       </button>
                     </div>
                   </div>
 
                   <p className="text-zinc-400 text-xs sm:text-sm font-light">
-                    A transparent consensus log of active skill trades, course validations, and physical material borrows settled within BWS. By trading skills directly—marketing for construction, legal review for development—we bypass traditional fee hurdles entirely.
+                    This is a clear record of all the skills traded, classes completed, and tools borrowed within our community. When we trade skills directly—like helping a neighbor with their business startup in exchange for carpentry help—we keep our money local and avoid paying high fees to outside banks.
                   </p>
 
                   {/* Ledger Filtering search & Date range picker */}
@@ -4084,8 +4078,8 @@ export default function Page() {
                           type="text"
                           value={searchLedgerQuery}
                           onChange={(e) => setSearchLedgerQuery(e.target.value)}
-                          placeholder="Search transactor, type, or message..."
-                          className="w-full bg-black border border-zinc-850 rounded pl-10 pr-4 py-2 text-xs font-mono text-zinc-200 focus:border-[#ca8a04] focus:outline-none placeholder-zinc-600"
+                          placeholder="Search by name, type, or notes..."
+                          className="w-full bg-black border border-zinc-855 rounded pl-10 pr-4 py-2 text-xs font-mono text-zinc-200 focus:border-[#ca8a04] focus:outline-none placeholder-zinc-650"
                         />
                         {searchLedgerQuery && (
                           <button 
@@ -4098,7 +4092,7 @@ export default function Page() {
                       </div>
 
                       {/* Date Range Start Input */}
-                      <div className="md:col-span-3 flex items-center space-x-2 bg-black border border-zinc-850 rounded px-2.5 py-1">
+                      <div className="md:col-span-3 flex items-center space-x-2 bg-black border border-zinc-855 rounded px-2.5 py-1">
                         <span className="text-[7.5px] font-mono uppercase text-zinc-500 tracking-wider font-extrabold shrink-0">From:</span>
                         <input 
                           type="date"
@@ -4109,7 +4103,7 @@ export default function Page() {
                       </div>
 
                       {/* Date Range End Input */}
-                      <div className="md:col-span-3 flex items-center space-x-2 bg-black border border-zinc-850 rounded px-2.5 py-1">
+                      <div className="md:col-span-3 flex items-center space-x-2 bg-black border border-zinc-855 rounded px-2.5 py-1">
                         <span className="text-[7.5px] font-mono uppercase text-zinc-500 tracking-wider font-extrabold shrink-0">To:</span>
                         <input 
                           type="date"
@@ -4172,8 +4166,8 @@ export default function Page() {
                       <div style={{ height: `${virtualLedgerData.paddingBottom}px` }} className="shrink-0" />
                     )}
                     {filteredTrades.length === 0 && (
-                      <div className="py-12 border border-dashed border-zinc-900 rounded text-center text-zinc-600 font-mono text-xs">
-                        No matching transacted coordinates parsed. Clear query inputs.
+                      <div className="py-12 border border-dashed border-zinc-900 rounded text-center text-zinc-650 font-mono text-xs">
+                        No matching transactions found. Try clearing your filters.
                       </div>
                     )}
                   </div>
@@ -4181,10 +4175,10 @@ export default function Page() {
                   {/* PREMIUM LEDGER PAGINATION AND METRIC ROW */}
                   {filteredTrades.length > 0 && (
                     <div className="flex flex-col sm:flex-row gap-4 items-center justify-between pt-4 border-t border-zinc-900/80 font-mono text-[10px]">
-                      <div className="text-zinc-500 text-center sm:text-left">
-                        Showing ledger blocks <span className="text-white font-bold">{(safeLedgerPage - 1) * ledgerPageSize + 1}</span> to{" "}
+                      <div className="text-zinc-550 text-center sm:text-left">
+                        Showing transactions <span className="text-white font-bold">{(safeLedgerPage - 1) * ledgerPageSize + 1}</span> to{" "}
                         <span className="text-white font-bold">{Math.min(filteredTrades.length, safeLedgerPage * ledgerPageSize)}</span> of{" "}
-                        <span className="text-white font-bold">{filteredTrades.length}</span> registered ledger streams
+                        <span className="text-white font-bold">{filteredTrades.length}</span> records
                       </div>
                       
                       {filteredTrades.length > ledgerPageSize && (
@@ -4202,7 +4196,7 @@ export default function Page() {
                           <button
                             onClick={() => setLedgerPage(prev => Math.min(totalLedgerPages, prev + 1))}
                             disabled={safeLedgerPage === totalLedgerPages}
-                            className="px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 disabled:opacity-30 disabled:hover:bg-zinc-900 border border-zinc-800 text-zinc-300 disabled:text-zinc-600 disabled:cursor-not-allowed rounded text-[9px] uppercase tracking-wider transition-colors"
+                            className="px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 disabled:opacity-30 disabled:hover:bg-zinc-900 border border-zinc-800 text-zinc-300 disabled:text-zinc-650 disabled:cursor-not-allowed rounded text-[9px] uppercase tracking-wider transition-colors"
                           >
                             Next
                           </button>
@@ -4225,20 +4219,20 @@ export default function Page() {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
                       <div className="relative p-5 z-10 space-y-1 pointer-events-none">
-                        <span className="text-[7.5px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-black">MEMBER ACCOUNTING</span>
-                        <h4 className="text-sm font-mono font-black text-white uppercase tracking-wider leading-none">THE GREENWOOD LEDGER</h4>
+                        <span className="text-[7.5px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-black">COMMUNITY TRUST</span>
+                        <h4 className="text-sm font-mono font-black text-white uppercase tracking-wider leading-none">THE GREENWOOD RECORD</h4>
                         <p className="text-[9px] text-zinc-400 font-light leading-snug">
-                          Cooperative double-entry ledger consensus logs.
+                          A clear and open record of how we support each other.
                         </p>
                       </div>
                     </div>
                     <div className="p-5 space-y-3">
                       <p className="text-[10px] text-zinc-400 font-light leading-relaxed">
-                        In 1921, the Greenwood community operated its own independent clearing house. Ledger accounts were synchronized nightly to ensure gold-backed liquidity and prevent outside systemic leverage from disrupting the local dollar circulation speed.
+                        Back in 1921, the Greenwood community ran its own independent banks and clearing systems. They kept track of their trades nightly to ensure their money was backed by real value, keeping their wealth circulating within the community instead of flowing to outside banks. We are carrying that legacy forward today.
                       </p>
                       <div className="pt-2 border-t border-zinc-900 flex justify-between items-center text-[8px] font-mono text-zinc-500 uppercase tracking-widest">
-                        <span>Family Clearing</span>
-                        <span className="text-[#eab308] font-bold">Consensus Verified</span>
+                        <span>Our Community</span>
+                        <span className="text-[#eab308] font-bold">Verified by Neighbors</span>
                       </div>
                     </div>
                   </div>
@@ -4256,18 +4250,18 @@ export default function Page() {
                   >
                     
                     <div className="flex items-center justify-between border-b border-zinc-900 pb-2">
-                      <span className="text-[9px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-black">Circulate BWSX Credits</span>
+                      <span className="text-[9px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-black">Send Community Credits</span>
                       <button onClick={() => setIsTransferModalOpen(false)} className="text-zinc-500 hover:text-white"><X className="w-4 h-4" /></button>
                     </div>
 
                     <p className="text-zinc-400 text-[11px] font-light">
-                      Keep cash moving within the syndicate family. Transmit custom BWSX units instantly.
+                      Keep credits circulating within our neighborhood. Send community credits to your neighbors instantly.
                     </p>
 
                     <form onSubmit={handleTransferCredits} className="space-y-4">
                       
                       <div className="space-y-1">
-                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block">Recipient Email / Handle</label>
+                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block">Recipient's Email Address</label>
                         <input 
                           type="text"
                           required
@@ -4279,7 +4273,7 @@ export default function Page() {
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block">Amount (BWSX Credits)</label>
+                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block">Amount to Send (Credits)</label>
                         <input 
                           type="number"
                           required
@@ -4293,25 +4287,25 @@ export default function Page() {
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block">Trade Memo / Service Description</label>
+                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block">What is this for? (Memo)</label>
                         <input 
                           type="text"
                           value={transferData.memo}
                           onChange={(e) => setTransferData(prev => ({ ...prev, memo: e.target.value }))}
-                          placeholder="e.g. Legal framework review service"
+                          placeholder="e.g. Lawn mowing help, sewing lesson, carpentry work"
                           className="w-full bg-black border border-[#2a2a2e] rounded p-2 text-xs font-mono text-white focus:border-amber-520 focus:outline-none"
                         />
                       </div>
 
                       {transferError && <p className="text-[10px] text-amber-500 font-mono text-left">{transferError}</p>}
-                      {transferSuccess && <p className="text-[10px] text-emerald-400 font-bold font-mono text-left">✓ Units Circulated Safely!</p>}
+                      {transferSuccess && <p className="text-[10px] text-emerald-400 font-bold font-mono text-left">✓ Credits Sent Safely!</p>}
 
                       <button 
                         type="submit"
                         disabled={transferSuccess}
                         className="w-full py-2.5 bg-[#ca8a04] hover:bg-amber-600 text-black text-[9px] font-mono font-bold uppercase tracking-widest rounded transition-all"
                       >
-                        {transferSuccess ? 'Sending coordinates...' : 'Transmit BWSX Coordinates ✓'}
+                        {transferSuccess ? 'Sending...' : 'Send Credits ✓'}
                       </button>
 
                     </form>
@@ -4320,7 +4314,7 @@ export default function Page() {
                 </div>
               )}
 
-              {/* SOVEREIGN TREASURY SWAP CENTRAL MODAL */}
+              {/* COMMUNITY WALLET EXCHANGE MODAL */}
               {isWalletModalOpen && (
                 <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
                   <motion.div 
@@ -4335,7 +4329,7 @@ export default function Page() {
                     <div className="flex items-center justify-between border-b border-zinc-900 pb-3 relative z-10">
                       <div className="flex items-center space-x-2">
                         <Coins className="w-4 h-4 text-[#eab308] animate-pulse" />
-                        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-black">Treasury Exchange</span>
+                        <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-black">Credit Exchange</span>
                       </div>
                       <button 
                         onClick={() => {
@@ -4351,7 +4345,7 @@ export default function Page() {
 
                     <div className="space-y-4 relative z-10">
                       <p className="text-zinc-400 text-xs font-light font-sans leading-relaxed">
-                        Exchange and manage distributed <strong className="text-white">BWSX credits</strong> instantly using peer-to-peer family funding pools of cash or cryptocurrency assets.
+                        Exchange and manage your <strong className="text-white">Community Credits</strong> instantly. You can trade cash or cryptocurrency to get credits to spend on tools and lessons, or turn your credits back into cash.
                       </p>
 
                       {/* Side by Side Tab selectors */}
@@ -4369,7 +4363,7 @@ export default function Page() {
                               : 'text-zinc-500 hover:text-zinc-300'
                           }`}
                         >
-                          Acquire BWSX (Buy)
+                          Get Credits (Buy)
                         </button>
                         <button 
                           type="button"
@@ -4384,14 +4378,14 @@ export default function Page() {
                               : 'text-zinc-500 hover:text-zinc-300'
                           }`}
                         >
-                          Liquidate BWSX (Sell)
+                          Trade In Credits (Sell)
                         </button>
                       </div>
 
                       {/* Current Vault States Bento Panel */}
                       <div className="bg-black/80 border border-zinc-900 p-3 rounded-lg grid grid-cols-2 sm:grid-cols-4 gap-2 text-center font-mono text-[9px]">
                         <div>
-                          <span className="text-zinc-500 block text-[7px] uppercase tracking-wider">Local Cash USD</span>
+                          <span className="text-zinc-500 block text-[7px] uppercase tracking-wider">Your Cash ($ USD)</span>
                           <strong className="text-white">${simulatedBalances.usd.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong>
                         </div>
                         <div>
@@ -4412,7 +4406,7 @@ export default function Page() {
                         {/* Currency selection & details */}
                         <div className="grid grid-cols-2 gap-3.5">
                           <div className="space-y-1">
-                            <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block font-bold">Trading Host Asset</label>
+                            <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block font-bold">Select what you want to trade</label>
                             <select 
                               value={swapCurrency}
                               onChange={(e: any) => {
@@ -4429,7 +4423,7 @@ export default function Page() {
                           </div>
 
                           <div className="space-y-1">
-                            <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block font-bold">Input Asset Units</label>
+                            <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block font-bold">Enter Amount</label>
                             <div className="relative">
                               <input 
                                 type="number"
@@ -4469,7 +4463,7 @@ export default function Page() {
                         {swapAmount && !isNaN(Number(swapAmount)) && Number(swapAmount) > 0 && (
                           <div className="bg-zinc-950 border border-zinc-900 p-3 rounded-lg space-y-1 font-mono text-[9px]">
                             <div className="flex justify-between">
-                              <span className="text-zinc-500 uppercase">Interactive Conversion Rate</span>
+                              <span className="text-zinc-500 uppercase">Current Exchange Rate</span>
                               <span className="text-white">
                                 {swapCurrency === 'usd' ? '1 USD = 1.00 BWSX' : 
                                  swapCurrency === 'btc' ? '1 BTC = 68,500.00 BWSX' : 
@@ -4479,7 +4473,7 @@ export default function Page() {
                             </div>
                             <div className="flex justify-between border-t border-zinc-900/50 pt-1">
                               <span className="text-zinc-400 uppercase font-black">
-                                {swapType === 'BUY' ? 'You will send / authenticate:' : 'You will receive / retrieve:'}
+                                {swapType === 'BUY' ? 'You will send:' : 'You will receive:'}
                               </span>
                               <strong className="text-white">
                                 {parseFloat(swapAmount).toLocaleString()} {swapCurrency.toUpperCase()}
@@ -4487,7 +4481,7 @@ export default function Page() {
                             </div>
                             <div className="flex justify-between">
                               <span className="text-zinc-400 uppercase font-black">
-                                {swapType === 'BUY' ? 'You will mint / receive:' : 'You will burn / pay:'}
+                                {swapType === 'BUY' ? 'You will receive:' : 'You will trade in:'}
                               </span>
                               <strong className="text-[#eab308] text-[11px] animate-pulse">
                                 {(parseFloat(swapAmount) * (swapCurrency === 'usd' ? 1.0 : swapCurrency === 'btc' ? 68500.0 : swapCurrency === 'eth' ? 3450.0 : 145.0)).toLocaleString('en-US', { minimumFractionDigits: 2 })} BWSX
@@ -4499,7 +4493,7 @@ export default function Page() {
                         {swapError && <p className="text-[10px] text-amber-500 font-mono text-left">{swapError}</p>}
                         {swapSuccessMessage && (
                           <div className="bg-emerald-500/15 border border-emerald-500/25 p-2 rounded text-[10px] text-emerald-400 font-mono text-left leading-relaxed">
-                            <strong>✓ SWAP SECURED AND INJECTED!</strong><br/>
+                            <strong>✓ EXCHANGE COMPLETED SUCCESSFULLY!</strong><br/>
                             {swapSuccessMessage}
                           </div>
                         )}
@@ -4508,24 +4502,21 @@ export default function Page() {
                           type="submit"
                           className="w-full py-2.5 bg-gradient-to-r from-[#ca8a04] to-yellow-500 text-black text-[9px] font-mono font-bold uppercase tracking-widest rounded cursor-pointer hover:brightness-115 transition-all text-center flex items-center justify-center font-black shadow-[0_0_12px_rgba(202,138,4,0.15)]"
                         >
-                          {swapType === 'BUY' ? 'AUTHORIZE & MINT CREDITS ✓' : 'AUTHORIZE & LIQUIDATE TO VAULT ↗'}
+                          {swapType === 'BUY' ? 'CONFIRM & GET CREDITS ✓' : 'CONFIRM & SEND TO WALLET ↗'}
                         </button>
 
                       </form>
                     </div>
 
                     <div className="text-[8px] font-mono text-zinc-500 text-center border-t border-zinc-900 pt-3 uppercase tracking-wider">
-                      Secured by Private Trust Registry • Built on Greenwood&apos;s Eternal Foundation
+                      Secured by our Community Trust • Built on the Legacy of Greenwood
                     </div>
 
                   </motion.div>
                 </div>
               )}
-
             </motion.div>
           )}
-
-          {/* TAB 5: SELF-OWNERSHIP INVESTMENT */}
           {activeTab === 'support' && (
             <motion.div 
               key="support-tab"
@@ -4544,12 +4535,12 @@ export default function Page() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                 <div className="relative p-6 sm:p-8 space-y-1 z-10 max-w-xl text-left">
-                  <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#eab308] font-black">PRIVATE TRUST RE-ALIGNMENT</span>
+                  <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#eab308] font-black">OUR SHARED NEIGHBORHOOD</span>
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-white uppercase tracking-tight leading-none drop-shadow-md">
-                    INVEST IN ECOSYSTEM SELF-OWNERSHIP
+                    SUPPORT OUR COMMUNITY FUND
                   </h3>
                   <p className="text-[10px] sm:text-xs text-zinc-300 font-light tracking-wide max-w-md drop-shadow">
-                    Acquire elite private trust membership shards to back server resources, business registrations, and load launch credits.
+                    Help fund shared neighborhood tools, business setup classes, and get community credits to spend.
                   </p>
                 </div>
               </div>
@@ -4561,14 +4552,14 @@ export default function Page() {
                   
                   <div className="p-6 bg-zinc-950 border border-zinc-900 rounded-2xl space-y-4">
                     <div className="border-b border-zinc-900 pb-3">
-                      <span className="text-[8.5px] font-mono uppercase text-zinc-500 tracking-wider">Redefining Capital & Standing</span>
+                      <span className="text-[8.5px] font-mono uppercase text-zinc-500 tracking-wider">True Community Value</span>
                       <h3 className="text-xl font-bold uppercase text-white flex items-center gap-2">
-                        <Coins className="w-5 h-5 text-[#eab308]" /> Redesign: Redefining Capital & Invest in Self
+                        <Coins className="w-5 h-5 text-[#eab308]" /> Invest in Greenwood's Future
                       </h3>
                     </div>
 
                     <p className="text-zinc-400 text-xs sm:text-sm font-light leading-relaxed">
-                      We are not trading speculative stocks or listing commercial gold bullion. Our core value is <strong>mutual community utility</strong>. When you seed BWS Inc., you are directly investing in yourself, funding server clusters, business registrations, legal syndicate trust models, and preloading your launch wallet with BWSX Credits.
+                      We aren't trading stocks or trying to get rich quick off our neighbors. Our real value is <strong>helping each other succeed</strong>. When you support this fund, you are investing in local projects, family businesses, neighborhood classes, and tools. You also get community credits in your wallet to start trading right away.
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
@@ -4610,7 +4601,7 @@ export default function Page() {
                     {/* Entering dynamic custom amount */}
                     <div className="p-4 bg-black/60 border border-zinc-900 rounded-xl space-y-3">
                       <div className="flex items-center justify-between">
-                        <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-500 block">Custom Allocation Ledger Amount</label>
+                        <label className="text-[8.5px] font-mono uppercase tracking-widest text-zinc-500 block">Choose a Custom Amount</label>
                         <button 
                           onClick={() => {
                             setIsUsingCustomAmount(true);
@@ -4626,7 +4617,7 @@ export default function Page() {
 
                       <div className="flex items-center gap-3">
                         <div className="relative flex-1">
-                          <DollarSign className="absolute left-3 top-2.5 w-4 h-4 text-zinc-500" />
+                          <DollarSign className="absolute left-3 top-2.5 w-4 h-4 text-zinc-550" />
                           <input 
                             type="number"
                             value={customSupportAmount}
@@ -4635,13 +4626,13 @@ export default function Page() {
                               setIsUsingCustomAmount(true);
                               setSelectedTierIndex(-1);
                             }}
-                            placeholder="Enter any custom USD dollar support seed amount..."
+                            placeholder="Enter custom support amount in dollars..."
                             className="w-full bg-black border border-zinc-850 rounded p-2.5 pl-9 text-xs font-mono text-zinc-200 focus:border-[#ca8a04] focus:outline-none"
                           />
                         </div>
                         {isUsingCustomAmount && customSupportAmount && (
                           <span className="text-[10px] font-mono text-emerald-400 shrink-0 font-bold">
-                            + {Math.floor(parseFloat(customSupportAmount || '0') * 1.5)} BWSX minting value
+                            + {Math.floor(parseFloat(customSupportAmount || '0') * 1.5)} credits to receive
                           </span>
                         )}
                       </div>
@@ -4660,13 +4651,13 @@ export default function Page() {
                     </span>
 
                     <h4 className="text-xs font-mono uppercase font-black text-white tracking-widest pb-3 border-b border-zinc-900 mb-4">
-                      Investment Allocation Form
+                      Community Contribution Form
                     </h4>
 
                     <form onSubmit={handleSupportMovementSubmit} className="space-y-4">
                       
                       <div className="space-y-1">
-                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block">Sponsor Full Name</label>
+                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block">Your Full Name</label>
                         <input 
                           type="text"
                           required
@@ -4678,7 +4669,7 @@ export default function Page() {
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block">Direct Contact Email address</label>
+                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block">Your Email Address</label>
                         <input 
                           type="email"
                           required
@@ -4690,23 +4681,23 @@ export default function Page() {
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block">Associated Venture / Organization (Optional)</label>
+                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block">Your Business or Organization Name (Optional)</label>
                         <input 
                           type="text"
                           value={supportFormData.organization}
                           onChange={(e) => setSupportFormData(prev => ({ ...prev, organization: e.target.value }))}
-                          placeholder="Your business syndicate or family office name"
+                          placeholder="Your business name (if you have one)"
                           className="w-full bg-black border border-zinc-850 rounded p-2 text-xs text-white focus:border-single focus:outline-none placeholder-zinc-700"
                         />
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block">Consensus Narrative Message (Optional)</label>
+                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block">Leave a Message for the Community (Optional)</label>
                         <textarea 
                           rows={2}
                           value={supportFormData.customMessage}
                           onChange={(e) => setSupportFormData(prev => ({ ...prev, customMessage: e.target.value }))}
-                          placeholder="Leave an encouraging message to display in the Shared Ledger listings..."
+                          placeholder="Leave an encouraging note for your neighbors to see..."
                           className="w-full bg-black border border-zinc-855 rounded p-2 text-xs text-white focus:border-amber-500 focus:outline-none placeholder-zinc-700"
                         />
                       </div>
@@ -4717,14 +4708,14 @@ export default function Page() {
                         type="submit"
                         className="w-full py-3.5 bg-gradient-to-r from-[#ca8a04] to-yellow-500 hover:from-amber-600 hover:to-amber-500 text-black text-[9px] font-mono font-black uppercase tracking-widest rounded cursor-pointer"
                       >
-                        Complete Support Form (Secure Gateway) ✓
+                        Confirm Contribution ✓
                       </button>
 
                     </form>
 
                     <div className="mt-4 pt-4 border-t border-zinc-900 text-left">
                       <p className="text-[9px] text-zinc-550 leading-relaxed font-mono text-zinc-500">
-                        * Allocations represent a financial membership support stake in Black Wall Street Inc. Mutual credits (BWSX) will be fully trade-ready inside the operating system upon general June 1st launches. Asé.
+                        * Your contributions help build and maintain our community platform. Community credits can be used immediately to borrow tools, join classes, and trade services with neighbors. Thank you for your support. Asé.
                       </p>
                     </div>
 
@@ -4741,17 +4732,17 @@ export default function Page() {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
                       <div className="relative p-4 z-10 space-y-0.5 pointer-events-none">
-                        <span className="text-[7.5px] font-mono uppercase tracking-[0.2em] text-[#eab308] font-black">PRIVATE TRUST RE-ALIGNMENT</span>
-                        <h4 className="text-xs font-mono font-black text-white uppercase tracking-wider">THE ESTES TRUST DEED</h4>
+                        <span className="text-[7.5px] font-mono uppercase tracking-[0.2em] text-[#eab308] font-black">OUR SHARED NEIGHBORHOOD</span>
+                        <h4 className="text-xs font-mono font-black text-white uppercase tracking-wider">THE ESTES LEGACY</h4>
                       </div>
                     </div>
                     <div className="p-4 space-y-2">
                       <p className="text-[10px] text-zinc-400 font-light leading-relaxed">
-                        By securing private shards in the mutual cooperative treasury, you are formally realigning raw credit circulation back into Greenwood&apos;s modern, self-governed financial infrastructure. Secure your family stake now for the June 1st launch.
+                        By joining our community fund, you help keep resources and money moving between families in our neighborhood. Every contribution helps build a strong, independent future for our community.
                       </p>
                       <div className="flex justify-between items-center text-[8px] font-mono text-zinc-500 pt-1 uppercase tracking-widest font-bold">
-                        <span>Private Syndicate</span>
-                        <span className="text-[#eab308]">100% Secure Guard</span>
+                        <span>For the Neighborhood</span>
+                        <span className="text-[#eab308]">100% Trusted & Safe</span>
                       </div>
                     </div>
                   </div>
@@ -4767,7 +4758,7 @@ export default function Page() {
                   
                   <div className="flex justify-between items-center border-b border-emerald-500/20 pb-2.5">
                     <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-black flex items-center gap-1.5">
-                      <ShieldCheck className="w-4 h-4 inline-block text-emerald-400" /> Secure Block Audit Logged
+                      <ShieldCheck className="w-4 h-4 inline-block text-emerald-400" /> Contribution Successfully Logged
                     </span>
                     <button 
                       onClick={() => setSupportReceipt(null)} 
@@ -4780,26 +4771,26 @@ export default function Page() {
                   <div className="space-y-2 text-xs font-mono text-zinc-330">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <span className="text-[8px] text-zinc-500 block">Sponsor Level:</span>
+                        <span className="text-[8px] text-zinc-500 block">Your Tier:</span>
                         <strong className="text-white uppercase">{supportReceipt.tierName}</strong>
                       </div>
                       <div>
-                        <span className="text-[8px] text-zinc-500 block">Cooperative Hash:</span>
+                        <span className="text-[8px] text-zinc-500 block">Transaction Code:</span>
                         <code className="text-emerald-400 text-[10px]">{supportReceipt.receiptHash}</code>
                       </div>
                       <div>
-                        <span className="text-[8px] text-zinc-500 block">Wallet Allocation Height:</span>
-                        <span className="text-[#eab308] block">Node Block #{supportReceipt.blockHeight}</span>
+                        <span className="text-[8px] text-zinc-500 block">Log Number:</span>
+                        <span className="text-[#eab308] block">Record #{supportReceipt.blockHeight}</span>
                       </div>
                       <div>
-                        <span className="text-[8px] text-zinc-500 block">Allocated Time Index:</span>
+                        <span className="text-[8px] text-zinc-500 block">Date & Time:</span>
                         <span className="text-zinc-300 block">{supportReceipt.timestamp}</span>
                       </div>
                     </div>
 
                     <div className="pt-3.5 border-t border-zinc-900 flex justify-between items-center">
                       <div>
-                        <span className="text-[8.5px] font-mono text-zinc-500 uppercase tracking-widest block leading-none">Wallet Credits Minted:</span>
+                        <span className="text-[8.5px] font-mono text-zinc-500 uppercase tracking-widest block leading-none">Credits Added to Wallet:</span>
                         <strong className="text-white text-base mt-1.5 block font-mono">{supportReceipt.creditsMinted}.00 BWSX</strong>
                       </div>
                     </div>
@@ -5784,9 +5775,9 @@ export default function Page() {
                   </table>
                 </div>
               </div>
+
             </motion.div>
           )}
-
         </AnimatePresence>
 
       </main>
@@ -5837,7 +5828,7 @@ export default function Page() {
                     <Sparkle className="w-3.5 h-3.5 text-[#eab308]" />
                   </div>
                   <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-white font-bold leading-none">
-                    BWS Inc. Community Blueprint
+                    Our Community Blueprint
                   </span>
                 </div>
                 
@@ -5855,15 +5846,15 @@ export default function Page() {
                   className="space-y-4"
                 >
                   <div className="space-y-2">
-                    <span className="text-[9px] font-mono text-[#eab308] uppercase tracking-widest block font-bold">FOUNDATIONAL HERITAGE</span>
+                    <span className="text-[9px] font-mono text-[#eab308] uppercase tracking-widest block font-bold">OUR LEGACY</span>
                     <h3 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight leading-none">
-                      Reclaiming Greenwood&apos;s Economic Spirit
+                      Bringing the Spirit of Greenwood Back Home
                     </h3>
                     <p className="text-xs sm:text-sm text-zinc-350 leading-relaxed font-light">
-                      In 1921, our ancestors engineered Tulsa&apos;s Black Wall Street—a standard-setting, completely self-sustained ecosystem. They kept funds active within our families and community circles.
+                      In 1921, our ancestors built Tulsa's Black Wall Street—a beautiful, thriving community where neighbors supported neighbors. They kept their money circulating within their own families and local shops.
                     </p>
                     <p className="text-xs text-zinc-400 leading-relaxed font-light">
-                      BWS Inc. picks up where our ancestor visionaries left off. Rather than relying on predatory commercial intermediaries, we deploy cutting-edge coordination tools, shared ledger networks, and group resource pooling to rebuild sustainable Black economic independence.
+                      Today, we are bringing that same vision back to life. Instead of relying on big banks or corporate middle-men, we use simple tools to share resources, track our agreements, and build independent wealth together as a community.
                     </p>
                   </div>
 
@@ -5871,11 +5862,11 @@ export default function Page() {
                   <div className="space-y-2 border-t border-zinc-900/80 pt-4">
                     <div className="flex items-start space-x-2.5 text-xs text-zinc-400">
                       <span className="text-[#eab308] mt-0.5 font-bold font-mono">✊</span>
-                      <span><strong>Community Reciprocity:</strong> Direct hour-for-hour and skill swaps between cooperator enterprises.</span>
+                      <span><strong>Swapping Skills:</strong> Trade hours and services directly with neighbors without needing cash.</span>
                     </div>
                     <div className="flex items-start space-x-2.5 text-xs text-zinc-400">
                       <span className="text-[#eab308] mt-0.5 font-bold font-mono">🪙</span>
-                      <span><strong>The Mutual Balance:</strong> Building tangible power through localized collective circulation.</span>
+                      <span><strong>Keeping Money Local:</strong> Keep our hard-earned wealth circulating in our neighborhood.</span>
                     </div>
                   </div>
                 </motion.div>
@@ -5890,15 +5881,15 @@ export default function Page() {
                   className="space-y-4"
                 >
                   <div className="space-y-2">
-                    <span className="text-[9px] font-mono text-[#eab308] uppercase tracking-widest block font-bold">BUSINESS INDEPENDENCE</span>
+                    <span className="text-[9px] font-mono text-[#eab308] uppercase tracking-widest block font-bold">BUILDING OUR OWN</span>
                     <h3 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight leading-none">
-                      AI Lead Pipelines & Private Family Trusts
+                      Smart Business Setup & Protecting Family Assets
                     </h3>
                     <p className="text-xs sm:text-sm text-zinc-350 leading-relaxed font-light">
-                      Real freedom is constructed, not granted. We empower you with technical operational frameworks and defensive asset protections.
+                      True independence is something we build with our own hands. We help you with the tools to start businesses and protect what you own.
                     </p>
                     <p className="text-xs text-zinc-400 leading-relaxed font-light">
-                      Through the Skill Academy, learn to set up autonomous outbound lead pipelines to scale your business using AI models. Then, learn how to secure structures, title assets, and deploy land deeds within private generalized trusts that keep wealth immune to external corporate interference.
+                      Through our Skill Academy, you'll learn how to start a business, find customers using helpful AI tools, and structure your business safely. You'll also learn how to protect your home and family assets so they can be passed down to your children and grandchildren without outside interference.
                     </p>
                   </div>
 
@@ -5906,11 +5897,11 @@ export default function Page() {
                   <div className="space-y-2 border-t border-zinc-900/80 pt-4">
                     <div className="flex items-start space-x-2.5 text-xs text-zinc-400">
                       <span className="text-[#eab308] mt-0.5 font-bold font-mono">🤖</span>
-                      <span><strong>AI Business Academy:</strong> Automated lead generation, client onboarding, and business platforms.</span>
+                      <span><strong>AI Business Academy:</strong> Simple lessons to find customers and set up your business using smart tech.</span>
                     </div>
                     <div className="flex items-start space-x-2.5 text-xs text-zinc-400">
                       <span className="text-[#eab308] mt-0.5 font-bold font-mono">🔒</span>
-                      <span><strong>Family Estate Trusts:</strong> Safe holding legal instruments to shield our generations.</span>
+                      <span><strong>Family Trusts:</strong> Safe holding legal instruments to shield our generations.</span>
                     </div>
                   </div>
                 </motion.div>
@@ -5925,15 +5916,15 @@ export default function Page() {
                   className="space-y-4"
                 >
                   <div className="space-y-2">
-                    <span className="text-[9px] font-mono text-[#eab308] uppercase tracking-widest block font-bold">RESOURCE SHARING POOL</span>
+                    <span className="text-[9px] font-mono text-[#eab308] uppercase tracking-widest block font-bold">SHARING WHAT WE HAVE</span>
                     <h3 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight leading-none">
-                      The Material Vault & Cooperator Assets
+                      Our Shared Tool Shed & Assets
                     </h3>
-                    <p className="text-xs sm:text-sm text-zinc-350 leading-relaxed font-light">
-                      Stop renting from commercial giants at inflated fees. Tap directly into the Shared Material Vault—our cooperative pool of physical resources.
+                    <p className="text-xs sm:text-sm text-zinc-355 leading-relaxed font-light">
+                      Stop paying high rental fees to big companies. Borrow directly from our Shared Tool Shed—a neighborhood pool of tools, spaces, and vehicles.
                     </p>
                     <p className="text-xs text-zinc-400 leading-relaxed font-light">
-                      <strong>Any material asset is welcome</strong>—freight delivery vans, high-end content creator stabilizer cameras, wood carvers, workspaces, electronics, lawnmowers, specialized farming tools, commercial printers, or kitchen blocks. Catalog yours to earn credit standings, and spend BWSX credits to reserve fellow cooperators&apos; tools instantly.
+                      You can list anything you're willing to share—like delivery vans, cameras, workspaces, computers, lawnmowers, kitchen gear, or commercial printers. You'll earn community credits when neighbors borrow your things, and you can spend those credits to borrow theirs when you need them.
                     </p>
                   </div>
 
@@ -5941,11 +5932,11 @@ export default function Page() {
                   <div className="space-y-2 border-t border-zinc-900/80 pt-4">
                     <div className="flex items-start space-x-2.5 text-xs text-zinc-400">
                       <span className="text-[#eab308] mt-0.5 font-bold font-mono">🚚</span>
-                      <span><strong>Logistical Hubs:</strong> Rent and pool delivery vehicles or cargo fleets for group coordinates.</span>
+                      <span><strong>Vehicles & Deliveries:</strong> Rent delivery vans or cargo vehicles to get things done.</span>
                     </div>
                     <div className="flex items-start space-x-2.5 text-xs text-zinc-400">
                       <span className="text-[#eab308] mt-0.5 font-bold font-mono">🛒</span>
-                      <span><strong>Everyday Tools:</strong> From cameras and laptops to lawnmowers or event cabins, use what you need.</span>
+                      <span><strong>Everyday Tools:</strong> From laptops and cameras to lawnmowers or workspaces, use what you need.</span>
                     </div>
                   </div>
                 </motion.div>
@@ -5960,19 +5951,19 @@ export default function Page() {
                   className="space-y-4"
                 >
                   <div className="space-y-2 text-center">
-                    <span className="text-[9px] font-mono text-[#eab308] uppercase tracking-widest block font-bold">COOPERATIVE MEMBERSHIP REGISTRY</span>
+                    <span className="text-[9px] font-mono text-[#eab308] uppercase tracking-widest block font-bold">JOINING THE NEIGHBORHOOD</span>
                     <h3 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight leading-none">
-                      Establish Your Standing
+                      Choose Your Community Name
                     </h3>
                     <p className="text-xs text-zinc-300 leading-relaxed font-light max-w-md mx-auto">
-                      State your unique nickname to draft your first registry record. We will instantly seed your wallet with <strong className="text-emerald-400">+20.00 BWSX Credits</strong> for you to start exploring and using resources!
+                      Enter a nickname or business handle to create your account. We will immediately add <strong className="text-emerald-400">20 community credits</strong> to your wallet so you can start borrowing tools and joining classes today!
                     </p>
                   </div>
 
                   {/* Nickname Form */}
                   <div className="p-4 bg-black/60 border border-zinc-900 rounded-2xl space-y-3.5 text-left">
                     <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block font-bold">
-                      Cooperative Name / Handle
+                      Your Community Nickname / Handle
                     </label>
                     <input 
                       type="text"
@@ -5985,7 +5976,7 @@ export default function Page() {
 
                     {/* Incentives panel */}
                     <div className="bg-emerald-500/5 p-3 rounded-lg border border-emerald-500/25 flex items-center justify-between text-[10px] font-mono">
-                      <span className="text-emerald-400">🎉 Dynamic Welcome Allocation:</span>
+                      <span className="text-emerald-400">🎉 Welcome Gift:</span>
                       <strong className="text-white">+20.00 BWSX Credits</strong>
                     </div>
                   </div>
@@ -6051,6 +6042,7 @@ export default function Page() {
                         isAnonymous: true,
                         photoURL: null,
                         providerId: 'custom-guest',
+                        role: 'user',
                       };
                       setUser(customGuestUserObj as any);
                       setSupportFormData(prev => ({
@@ -6070,7 +6062,7 @@ export default function Page() {
                         source: finalizedName,
                         tradeType: 'Onboard Seed',
                         value: '+20.00 BWSX',
-                        message: 'Cooperative standing initiated. Free BWSX credits granted to new registry account!'
+                        message: 'Welcome to the neighborhood! We added 20 credits to your wallet.'
                       };
                       setTrades(prev => [welcomeLog, ...prev]);
 
@@ -6084,7 +6076,7 @@ export default function Page() {
                         : "bg-zinc-800 text-zinc-500 border border-zinc-700/50 cursor-not-allowed opacity-65"
                     }`}
                   >
-                    {isStepFourReady ? "Activate Cooperative Standing ✓" : "Securing Registration..."}
+                    {isStepFourReady ? "Join the Community ✓" : "Creating Account..."}
                   </button>
                 )}
               </div>
@@ -6140,7 +6132,7 @@ export default function Page() {
               {/* Top Sparkles Ornament */}
               <div className="absolute top-4 right-4 flex items-center space-x-1.5 text-[#eab308]/40 font-mono text-[8px] tracking-widest select-none">
                 <Sparkles className="w-3.5 h-3.5 text-[#eab308] " />
-                <span>COOPERATIVE MASTER REGISTRY</span>
+                <span>COMMUNITY BOARD</span>
               </div>
 
               {/* Elegant golden circular badge with award icon */}
@@ -6172,13 +6164,13 @@ export default function Page() {
               <div className="space-y-1 mb-4 relative z-10">
                 <div className="inline-flex items-center space-x-1.5 bg-zinc-900 border border-zinc-800 px-3 py-1 rounded-full text-[#eab308] font-mono text-[8.5px] uppercase tracking-widest font-black">
                   <Sparkle className="w-2.5 h-2.5 text-[#eab308] fill-[#eab308]" />
-                  <span>Standing Upgrade Unlocked</span>
+                  <span>Upgrade Unlocked!</span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight font-sans pt-1">
                   Academy Leader
                 </h2>
                 <p className="text-[10px] font-mono uppercase text-zinc-500 tracking-wider">
-                  Verified Cooperative Ecosystem Credentials
+                  Verified Academy Achievement
                 </p>
               </div>
 
@@ -6186,7 +6178,7 @@ export default function Page() {
               <div className="bg-zinc-950/80 border border-zinc-900 rounded-2xl p-4 mb-6 space-y-3.5 text-left font-mono text-xs relative z-10">
                 <div className="flex items-start justify-between gap-4 border-b border-zinc-900 pb-2.5">
                   <div className="min-w-0 flex-1">
-                    <span className="text-[8px] text-zinc-500 block uppercase">Competency Unit Mastered</span>
+                    <span className="text-[8px] text-zinc-500 block uppercase">Course Mastered</span>
                     <strong className="text-white text-[11px] block mt-0.5 leading-snug uppercase truncate" title={levelUpModal.lessonTitle}>{levelUpModal.lessonTitle}</strong>
                   </div>
                   <span className="text-[8px] bg-[#ca8a04]/10 border border-[#ca8a04]/30 px-2 py-0.5 text-[#eab308] rounded uppercase font-bold text-right shrink-0">
@@ -6196,13 +6188,13 @@ export default function Page() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <span className="text-[8px] text-zinc-500 block uppercase">Cooperator Identity</span>
+                    <span className="text-[8px] text-zinc-500 block uppercase">Member</span>
                     <span className="text-[11px] font-bold text-white mt-0.5 block truncate">
                       {user ? user.displayName || 'Academy Student' : 'Academy Student'}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[8px] text-zinc-500 block uppercase">BWSX Reward Minted</span>
+                    <span className="text-[8px] text-zinc-500 block uppercase">Community Credits Earned</span>
                     <span className="text-[11px] font-bold text-emerald-400 mt-0.5 block">
                       +{levelUpModal.creditsReward}.00 BWSX Credits
                     </span>
@@ -6210,16 +6202,16 @@ export default function Page() {
                 </div>
 
                 <div className="border-t border-zinc-900 pt-2.5 flex items-center justify-between text-[8px] text-zinc-500">
-                  <span>REGISTRY RECORD HEIGHT: #{activeNodes + 50}</span>
+                  <span>RECORD NUMBER: #{activeNodes + 50}</span>
                   <span className="text-emerald-500 flex items-center gap-1">
-                    <ShieldCheck className="w-3 h-3 text-emerald-500" /> TRUSTEE VERIFIED
+                    <ShieldCheck className="w-3 h-3 text-emerald-500" /> COMMUNITY VERIFIED
                   </span>
                 </div>
               </div>
 
               {/* Informative message */}
               <p className="text-zinc-400 text-xs text-center font-light leading-relaxed mb-6 px-4 relative z-10">
-                Your standing value is verified. By acquiring this practical framework competency, your status is elevated. Tap your wealth standing to claim credits and return to the active curriculum modules.
+                Congratulations on finishing this class! You've learned a valuable new skill and earned credits for your hard work. Click below to claim your credits and return to the classes page.
               </p>
 
               {/* Call to action button to seal */}
@@ -6229,7 +6221,7 @@ export default function Page() {
                 onClick={() => setLevelUpModal(null)}
                 className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#ca8a04] via-[#eab308] to-[#ca8a04] text-black text-xs font-mono font-bold uppercase tracking-widest shadow-[0_4px_30px_rgba(234,179,8,0.25)] flex items-center justify-center gap-2 cursor-pointer relative z-10"
               >
-                <span>Save Academy Standing</span>
+                <span>Claim Credits & Keep Learning</span>
                 <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
               </motion.button>
             </motion.div>
@@ -6254,7 +6246,7 @@ export default function Page() {
               <Share2 className="w-4 h-4" />
             </div>
             <div className="flex-1 min-w-0">
-              <h5 className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#eab308] mb-0.5">LEDGER BROADCAST</h5>
+              <h5 className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#eab308] mb-0.5">COMMUNITY UPDATE</h5>
               <p className="text-[11px] font-mono text-zinc-300 leading-relaxed">{toastMessage}</p>
             </div>
             <button 
