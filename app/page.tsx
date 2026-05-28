@@ -243,6 +243,7 @@ export default function Page() {
   
   // Custom Auth state layers
   const [user, setUser] = useState<User | null>(null);
+  const [authChecking, setAuthChecking] = useState<boolean>(true);
   const [formError, setFormError] = useState<string | null>(null);
   const [authError, setAuthError] = useState<string | null>(null);
   const [isDbNetworkSynced, setIsDbNetworkSynced] = useState<boolean>(true);
@@ -820,6 +821,7 @@ export default function Page() {
           return null;
         });
       }
+      setAuthChecking(false);
     });
 
     return () => {
@@ -2458,6 +2460,84 @@ export default function Page() {
       }
     };
   }, []);
+
+  if (authChecking) {
+    return (
+      <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
+        <div className="flex flex-col items-center space-y-4">
+          <Loader2 className="w-8 h-8 text-[#eab308] animate-spin" />
+          <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-500">Connecting to BWS network...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] font-sans antialiased relative flex flex-col justify-between overflow-hidden">
+        {/* Obsidian & Gold Ambient Background */}
+        <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-gradient-to-br from-[#eab308]/5 via-[#ca8a04]/2 to-transparent blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[450px] h-[450px] bg-gradient-to-tr from-[#ca8a04]/3 via-transparent to-transparent blur-[120px] rounded-full pointer-events-none" />
+
+        <header className="p-6 flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-zinc-950 via-[#ca8a04] to-zinc-900 rounded-lg border border-[#eab308]/40 flex items-center justify-center shadow-lg">
+              <span className="font-mono text-[#eab308] font-black text-xs">BWS</span>
+            </div>
+            <span className="text-sm font-extrabold tracking-widest uppercase text-white font-mono leading-none">BWS <span className="text-[#ca8a04] font-light">INC</span></span>
+          </div>
+        </header>
+
+        <main className="flex-1 flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-zinc-950/85 border border-[#ca8a04]/40 rounded-3xl p-8 shadow-[0_0_50px_rgba(234,179,8,0.05)] relative overflow-hidden">
+            <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#ca8a04] to-transparent" />
+            
+            <div className="text-center space-y-6">
+              <div className="w-12 h-12 mx-auto bg-gradient-to-br from-zinc-950 via-[#ca8a04] to-zinc-900 rounded-xl border border-[#eab308]/40 flex items-center justify-center shadow-lg">
+                <Lock className="w-5 h-5 text-[#eab308]" />
+              </div>
+              
+              <div className="space-y-2">
+                <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-[0.25em] block">Sovereign Portal</span>
+                <h2 className="text-2xl font-black text-white uppercase tracking-tight font-mono">ACCESS REQUIRED</h2>
+                <p className="text-[10px] text-zinc-400 max-w-xs mx-auto leading-relaxed">
+                  Sign in with Google to enter the BWS Community Network, or use Guest Access to browse sandbox replica data.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <button
+                  onClick={handleSignIn}
+                  className="w-full py-3 px-4 rounded bg-gradient-to-r from-[#ca8a04] to-[#eab308] hover:from-[#f59e0b] hover:to-[#ca8a04] text-black text-[10px] font-mono font-bold uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(202,138,4,0.15)] flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                  Sign In with Google
+                </button>
+
+                <button
+                  onClick={handleGuestSignIn}
+                  className="w-full py-3 px-4 rounded bg-zinc-900 border border-zinc-800 text-zinc-350 hover:bg-zinc-850 hover:text-white text-[10px] font-mono uppercase tracking-widest font-bold flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  Enter as Guest Patron
+                </button>
+              </div>
+
+              {authError && (
+                <div className="p-3 bg-red-500/10 border border-red-500/25 rounded-lg text-left text-red-400 text-[9px] font-mono leading-relaxed mt-4">
+                  <p className="font-bold uppercase mb-1">Sign-In Fault:</p>
+                  <p className="font-sans font-light text-zinc-350">{authError}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </main>
+
+        <footer className="py-6 text-center text-[8px] font-mono uppercase text-zinc-650 tracking-[0.2em]">
+          Powered by Lumen Labs
+        </footer>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-[#09090b] text-[#f4f4f5] font-sans antialiased selection:bg-[#ca8a04] selection:text-black relative overflow-x-hidden" id="bws-framework">
