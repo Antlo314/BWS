@@ -194,17 +194,20 @@ export default function LoginAdminPage() {
   // Filtered Users List
   const filteredUsers = useMemo(() => {
     return users.filter(u => 
-      u.displayName.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      u.uid.toLowerCase().includes(searchQuery.toLowerCase())
+      u.role !== 'admin' && 
+      u.email !== 'iamwhoiambook@gmail.com' &&
+      (u.displayName.toLowerCase().includes(searchQuery.toLowerCase()) || 
+       u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+       u.uid.toLowerCase().includes(searchQuery.toLowerCase()))
     );
   }, [users, searchQuery]);
 
   // Statistics
   const stats = useMemo(() => {
-    const totalUsers = users.length;
-    const totalBWSX = users.reduce((sum, u) => sum + (u.balance || 0), 0);
-    const totalSpending = users.reduce((sum, u) => sum + (u.spending || 0), 0);
+    const regularUsers = users.filter(u => u.role !== 'admin' && u.email !== 'iamwhoiambook@gmail.com');
+    const totalUsers = regularUsers.length;
+    const totalBWSX = regularUsers.reduce((sum, u) => sum + (u.balance || 0), 0);
+    const totalSpending = regularUsers.reduce((sum, u) => sum + (u.spending || 0), 0);
     return { totalUsers, totalBWSX, totalSpending };
   }, [users]);
 
