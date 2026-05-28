@@ -71,6 +71,7 @@ export default function LoginAdminPage() {
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
   const [newBalance, setNewBalance] = useState<string>('');
   const [updatingBalance, setUpdatingBalance] = useState<boolean>(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   // Auth State Listener
   useEffect(() => {
@@ -145,10 +146,18 @@ export default function LoginAdminPage() {
 
   const handleSignIn = async () => {
     setAuthLoading(true);
+    setAuthError(null);
     try {
       await signInWithPopup(auth, googleProvider);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Google Sign-In Error: ', error);
+      let userFriendlyMsg = error?.message || String(error);
+      if (error?.code === 'auth/unauthorized-domain') {
+        userFriendlyMsg = "Domain Unauthorized: Please add 'bws-coral.vercel.app' to your Firebase Console Authorized Domains list (Auth > Settings > Authorized Domains).";
+      } else if (error?.code === 'auth/popup-blocked') {
+        userFriendlyMsg = "Popup Blocked: Please enable popups or login in a full browser window.";
+      }
+      setAuthError(userFriendlyMsg);
     } finally {
       setAuthLoading(false);
     }
@@ -258,6 +267,13 @@ export default function LoginAdminPage() {
                   </>
                 )}
               </button>
+
+              {authError && (
+                <div className="p-3 bg-red-500/10 border border-red-500/25 rounded-lg text-left text-red-400 text-[9px] font-mono leading-relaxed mt-4">
+                  <p className="font-bold uppercase mb-1">Authorization Fault:</p>
+                  <p className="font-sans font-light text-zinc-350">{authError}</p>
+                </div>
+              )}
             </div>
           </div>
         </main>
