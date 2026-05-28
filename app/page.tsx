@@ -2782,7 +2782,7 @@ export default function Page() {
               {/* Premium Luxury Heritage Banner */}
               <div className="relative h-48 sm:h-64 w-full rounded-2xl overflow-hidden border border-[#ca8a04]/15 shadow-xl flex items-end">
                 <img 
-                  src="/bws_heritage.png" 
+                  src="/bws_hero.png" 
                   alt="Black Wall Street Ancestral Legacy" 
                   className="absolute inset-0 w-full h-full object-cover brightness-50 contrast-115 hover:scale-102 transition-transform duration-700 select-none" 
                   referrerPolicy="no-referrer"
