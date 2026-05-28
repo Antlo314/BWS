@@ -2477,6 +2477,14 @@ export default function Page() {
       <div className="absolute top-[35%] left-[-150px] w-[500px] h-[500px] bg-gradient-to-tr from-[#ca8a04]/4 via-transparent to-transparent blur-[130px] rounded-full pointer-events-none z-0" />
       <div className="absolute bottom-[10%] right-[-100px] w-[450px] h-[450px] bg-[#eab308]/4 blur-[120px] rounded-full pointer-events-none z-0" />
 
+      {/* BETA BANNER */}
+      <div className="bg-[#ca8a04]/20 border-b border-[#ca8a04]/40 text-center py-2 px-4 z-[60] relative">
+        <p className="text-[#eab308] text-[10px] font-mono uppercase tracking-widest font-black flex items-center justify-center gap-2">
+          <AlertTriangle className="w-3.5 h-3.5" />
+          Beta Site — Official Site & Program Launch Expected June 1st. We will keep you updated!
+        </p>
+      </div>
+
       {/* HEADER SECTION WITH WALLET DISPLAY */}
       <header className="h-20 border-b border-zinc-900 bg-[#09090b]/90 backdrop-blur-md sticky top-0 z-50 px-6 sm:px-12 flex items-center justify-between">
         <div className="flex items-center space-x-4">
@@ -2821,17 +2829,7 @@ export default function Page() {
                         &quot;BWS Inc. is us continuing the work of our ancestors—this time using modern tools and online networks to support each other.&quot;
                       </p>
                       
-                      <button 
-                        onClick={handlePlayNarrativeStory}
-                        className={`px-4 py-2 rounded text-[10px] font-mono tracking-widest uppercase font-bold shrink-0 flex items-center gap-2 transition-all cursor-pointer ${
-                          isSpeaking 
-                            ? 'bg-amber-600 text-black shadow-[0_0_15px_rgba(217,119,6,0.4)]' 
-                            : 'bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white'
-                        }`}
-                      >
-                        {isSpeaking ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5 text-[#eab308]" />}
-                        {isSpeaking ? 'Mute' : 'Listen to Story'}
-                      </button>
+                      {/* Audio narrative button temporarily removed until ElevenLabs account is restored */}
                     </div>
                     {ttsNotice && (
                       <div className="mt-2.5 p-2.5 bg-[#ca8a04]/5 border border-[#ca8a04]/25 rounded-lg flex items-start gap-2.5 text-left animate-in fade-in slide-in-from-top-1 duration-200">
