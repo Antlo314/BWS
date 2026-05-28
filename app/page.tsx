@@ -307,7 +307,7 @@ export default function Page() {
 
   // --- WALLET STATE ---
   const [userBWSXBalance, setUserBWSXBalance] = useState<number>(12450.00); 
-  const [fundingTotal, setFundingTotal] = useState<number>(18429);
+  const [fundingTotal, setFundingTotal] = useState<number>(15000);
   const [totalBWSXCreditsMinted, setTotalBWSXCreditsMinted] = useState<number>(1842910);
   const [activeNodes, setActiveNodes] = useState<number>(81);
 
@@ -2333,7 +2333,7 @@ export default function Page() {
 
   // Phase 1 progress calculations
   const phase1Percent = useMemo(() => {
-    const goalUpper = 15000;
+    const goalUpper = 50000;
     return Math.min(100, Math.max(15, (fundingTotal / goalUpper) * 100));
   }, [fundingTotal]);
 
@@ -2917,7 +2917,7 @@ export default function Page() {
                       <div className="space-y-1 flex-1">
                         <div className="flex justify-between items-center text-[10px] font-mono text-zinc-400">
                           <span>Funds Raised by Lumen Labs</span>
-                          <span className="text-white">${fundingTotal.toLocaleString()} of $15,000 Goal</span>
+                          <span className="text-white">${fundingTotal.toLocaleString()} of $50,000 Goal</span>
                         </div>
                         <div className="h-2 w-full bg-black rounded-full overflow-hidden border border-zinc-900">
                           <motion.div 
