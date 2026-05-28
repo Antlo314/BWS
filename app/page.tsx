@@ -2333,7 +2333,7 @@ export default function Page() {
 
   // Phase 1 progress calculations
   const phase1Percent = useMemo(() => {
-    const goalUpper = 50000;
+    const goalUpper = 15000;
     return Math.min(100, Math.max(15, (fundingTotal / goalUpper) * 100));
   }, [fundingTotal]);
 
@@ -2918,8 +2918,8 @@ export default function Page() {
                       
                       <div className="space-y-1 flex-1">
                         <div className="flex justify-between items-center text-[10px] font-mono text-zinc-400">
-                          <span>Community Fund Raised</span>
-                          <span className="text-white">${fundingTotal.toLocaleString()} of $50,000 Goal</span>
+                          <span>Funds Raised by Lumen Labs</span>
+                          <span className="text-white">${fundingTotal.toLocaleString()} of $15,000 Goal</span>
                         </div>
                         <div className="h-2 w-full bg-black rounded-full overflow-hidden border border-zinc-900">
                           <motion.div 
@@ -2931,7 +2931,7 @@ export default function Page() {
                       </div>
 
                       <p className="text-[10px] text-zinc-500 leading-relaxed font-light">
-                        Your contributions help buy shared equipment (like vans and tools), set up local business trusts, and build our community sharing network.
+                        This goal reflects the time, effort, and resources dedicated to creating and launching the BWS application platform. All funds raised thus far have been provided by Lumen Labs.
                       </p>
 
                       <button 
@@ -5788,6 +5788,7 @@ export default function Page() {
           <div className="text-left font-mono">
             <span className="text-[10px] uppercase text-white font-bold tracking-widest block leading-none">BWS COOPERATIVE TRUST ALLIANCE</span>
             <span className="text-[8px] text-zinc-600 block mt-1.5 uppercase">Circulated for the Greenwood Community • Asé</span>
+            <span className="text-[8px] text-zinc-500 block mt-1.5 uppercase">Powered by <a href="https://lumenlabsatl.com" target="_blank" rel="noopener noreferrer" className="text-[#eab308] hover:underline">Lumen Labs</a></span>
           </div>
 
           <div className="text-[8px] uppercase tracking-[0.2em] font-mono max-w-md text-left sm:text-right space-y-1">
