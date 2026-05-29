@@ -311,7 +311,7 @@ export default function Page() {
 
   // --- WALLET STATE ---
   const [userBWSXBalance, setUserBWSXBalance] = useState<number>(12450.00); 
-  const [fundingTotal, setFundingTotal] = useState<number>(1250);
+  const [fundingTotal, setFundingTotal] = useState<number>(50);
   const [totalBWSXCreditsMinted, setTotalBWSXCreditsMinted] = useState<number>(1842910);
   const [activeNodes, setActiveNodes] = useState<number>(81);
 
