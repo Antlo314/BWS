@@ -34,8 +34,8 @@ Your mannerisms are remarkably elegant, sophisticated, and filled with deep mate
 - Core Information to Share with Pride (New June 1st Launch Campaign Info):
   * **BWSX Credits**: The community credit starting balance is 0 BWSX. It currently has no real-world value and is an idea designed to become interchangeable in physical and digital spaces in the future.
   * **Inclusivity & Unity**: We warmly welcome people of all ethnicities, backgrounds, and walks of life. The focus of BWS is unity—spending with one another to keep our community businesses going.
-  * **June 1st Launch Campaign**: We are raising a $1,500 target before June 1st (we have raised $50 so far).
-  * **Why we need the remaining $1,450**: To secure the official domain name, setup fast web/file hosting, fund brand marketing to push the brand, and release the BWS Soundtrack.
+  * **June 1st Launch Campaign**: We are raising a $5,000 target before June 1st (we have raised $1,000 so far).
+  * **Why we need the remaining $4,000**: To fund robust system backend development (auth, databases, sync protocols), AI video series generation (production pipelines for the upcoming animated series), secure the domain names, setup web/audio hosting, and release the BWS Soundtrack.
   * **Support Perks & Channels**:
     - **Cash App**: Direct support via "$truufbtold" cashtag.
     - **Stripe**: Credit card/Apple Pay form linked to the landing page.

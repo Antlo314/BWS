@@ -80,6 +80,7 @@ interface SovereignProfile {
   savedLessons?: string[];
   lessonNotes?: Record<string, string>;
   photoURL?: string;
+  googlePromoClaimed?: boolean;
 }
 
 // Helper to format ISO timestamps in high-end human readable form while preserving simple relative strings
@@ -312,7 +313,7 @@ export default function Page() {
 
   // --- WALLET STATE ---
   const [userBWSXBalance, setUserBWSXBalance] = useState<number>(0); 
-  const [fundingTotal, setFundingTotal] = useState<number>(50);
+  const [fundingTotal, setFundingTotal] = useState<number>(1000);
   const [totalBWSXCreditsMinted, setTotalBWSXCreditsMinted] = useState<number>(0);
   const [activeNodes, setActiveNodes] = useState<number>(0);
 
@@ -898,16 +899,36 @@ export default function Page() {
               photoURL: data.photoURL || currentUser.photoURL || ''
             };
 
-            // Double check admin role bootstrapping for special emails
-            if (currentUser.email === 'iamwhoiambook@gmail.com' && data.role !== 'admin') {
-              prof.role = 'admin';
-              await setDoc(pRef, { role: 'admin' }, { merge: true }).catch(err => {
-                console.error("Failed to automatically elevate admin role in DB: ", err);
-              });
+            // Promo check: Existing Google Auth users log in before June 1st get 100 BWSX promo award if not yet claimed
+            const isGoogleAuth = currentUser.providerData.some(p => p.providerId === 'google.com');
+            const isBeforeJuneFirst = new Date() < new Date('2026-06-01T00:00:00');
+            
+            if (isGoogleAuth && isBeforeJuneFirst && !data.googlePromoClaimed) {
+              const currentBal = typeof data.balance === 'number' ? data.balance : 0;
+              const newBal = currentBal + 100;
+              
+              // Prevent recursive snapshot loops by updating directly with transaction logging flag
+              await updateDoc(pRef, {
+                balance: newBal,
+                googlePromoClaimed: true
+              }).catch(err => console.error("Promo balance update failed: ", err));
+
+              const promoTxId = `google-promo-${currentUser.uid}`;
+              await setDoc(doc(db, 'trades', promoTxId), {
+                timestamp: new Date().toISOString(),
+                source: currentUser.displayName || 'Google Steward',
+                tradeType: 'Promo Reward',
+                value: '+100.00 BWSX',
+                message: 'Awarded 100 BWSX promo credits for Google Auth signup before June 1st',
+                status: 'CONFIRMED'
+              }).catch(err => console.error("Promo transaction log failed: ", err));
+              
+              prof.balance = newBal;
             }
 
             setUserProfile(prof);
             setUserBWSXBalance(prof.balance);
+          } else {
             // Document doesn't exist, initialize a new default Sovereign Profile
             const initialRole = currentUser.email === 'iamwhoiambook@gmail.com' ? 'admin' : 'user';
             
@@ -929,7 +950,8 @@ export default function Page() {
               createdAt: new Date().toISOString(),
               savedLessons: [],
               lessonNotes: {},
-              photoURL: currentUser.photoURL || ''
+              photoURL: currentUser.photoURL || '',
+              googlePromoClaimed: isGoogleAuth && isBeforeJuneFirst
             };
 
             try {
@@ -2487,7 +2509,7 @@ export default function Page() {
 
   // Phase 1 progress calculations
   const phase1Percent = useMemo(() => {
-    const goalUpper = 1500;
+    const goalUpper = 5000;
     return Math.min(100, Math.max(15, (fundingTotal / goalUpper) * 100));
   }, [fundingTotal]);
 
@@ -3194,7 +3216,7 @@ export default function Page() {
                       <div className="space-y-1 flex-1">
                         <div className="flex justify-between items-center text-[10px] font-mono text-zinc-400">
                           <span>Total Contributions Raised</span>
-                          <span className="text-white">${fundingTotal.toLocaleString()} of $1,500 Goal</span>
+                          <span className="text-white">${fundingTotal.toLocaleString()} of $5,000 Goal</span>
                         </div>
                         <div className="h-2 w-full bg-black rounded-full overflow-hidden border border-zinc-900">
                           <motion.div 
@@ -3207,26 +3229,30 @@ export default function Page() {
 
                       {/* GOAL BREAKDOWN BOX */}
                       <div className="bg-[#ca8a04]/5 border border-[#ca8a04]/20 p-4 rounded-xl space-y-2.5 text-left">
-                        <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-[#eab308] block font-bold">Why We Need The Remaining $1,450</span>
+                        <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-[#eab308] block font-bold">Why We Need The Remaining $4,000</span>
                         <p className="text-[10px] text-zinc-300 font-light leading-relaxed">
                           To successfully launch the official platform on June 1st, we need to secure the remaining funds for:
                         </p>
                         <ul className="space-y-1.5 font-mono text-[9px] text-zinc-400">
                           <li className="flex items-start gap-2">
                             <span className="text-[#ca8a04] font-bold">✓</span>
-                            <span><strong>Domain Name:</strong> Securing our permanent official BWS web domain.</span>
+                            <span><strong>System Backend Development:</strong> Setting up secure authentication, databases, and synchronization protocols.</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-[#ca8a04] font-bold">✓</span>
-                            <span><strong>Fast Hosting:</strong> Deploying fast, reliable web and audio streaming servers.</span>
+                            <span><strong>AI Video Series Generation:</strong> Building production pipelines to generate our upcoming animated web series.</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-[#ca8a04] font-bold">✓</span>
-                            <span><strong>Brand Marketing:</strong> Promotional campaigns to push the BWS brand and message.</span>
+                            <span><strong>Domain & Server Hosting:</strong> Securing BWS official domain names and fast decentralized media hosting.</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-[#ca8a04] font-bold">✓</span>
-                            <span><strong>BWS Soundtrack Release:</strong> Finalizing and releasing the free downloadable soundtrack.</span>
+                            <span><strong>Brand Marketing & Ads:</strong> Launching promotional campaigns to spread our economic unity message.</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-[#ca8a04] font-bold">✓</span>
+                            <span><strong>BWS Soundtrack Release:</strong> Deploying the system to distribute the free commemorative soundtrack.</span>
                           </li>
                         </ul>
                       </div>
