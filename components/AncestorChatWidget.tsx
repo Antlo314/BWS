@@ -54,7 +54,7 @@ function createMessage(role: "user" | "assistant", content: string): Message {
 const INITIAL_MESSAGE: Message = {
   id: "initial-system-codex-msg",
   role: "assistant",
-  content: "Greetings, child. Come on in, sit down a moment, and rest. I am **The Seer** — keeping the history, the hard times, and the triumphs of Black Wall Street alive as we build this new digital home together.\n\nI am here to help you learn new skills, borrow tools and vans, and trade with your neighbors using our community points. What is on your mind today, darlin'? Let's build this together.",
+  content: "Greetings, child. Come on in, sit down a moment, and rest. I am **The Seer** — keeping the history, the hard times, and the triumphs of Black Wall Street alive as we build this new digital home together.\n\nWe are on a journey to raise **$1,500** before June 1st (with **$50** raised so far) to secure our domain name, hosting, marketing, and release our free commemorative BWS Soundtrack. Our community credits (**BWSX**) start at 0, but they are designed to become interchangeable in all physical and digital local spaces. We welcome people of all ethnicities and backgrounds to trade and build with us; our focus is unity and spending with one another to keep us going. What is on your mind today, darlin'?",
   timestamp: "19:21",
 };
 

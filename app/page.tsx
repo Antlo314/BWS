@@ -79,6 +79,7 @@ interface SovereignProfile {
   createdAt: string;
   savedLessons?: string[];
   lessonNotes?: Record<string, string>;
+  photoURL?: string;
 }
 
 // Helper to format ISO timestamps in high-end human readable form while preserving simple relative strings
@@ -887,13 +888,14 @@ export default function Page() {
               email: data.email || currentUser.email || '',
               bio: data.bio || 'Cooperative trustee of Black Wall Street.',
               organization: data.organization || 'Private Family Trust',
-              balance: typeof data.balance === 'number' ? data.balance : 12450.00,
+              balance: typeof data.balance === 'number' ? data.balance : 0,
               spending: typeof data.spending === 'number' ? data.spending : 0,
               classesMastered: typeof data.classesMastered === 'number' ? data.classesMastered : 0,
               role: (currentUser.email === 'iamwhoiambook@gmail.com' || data.role === 'admin') ? 'admin' : 'user',
               createdAt: data.createdAt || new Date().toISOString(),
               savedLessons: Array.isArray(data.savedLessons) ? data.savedLessons : [],
-              lessonNotes: (data.lessonNotes && typeof data.lessonNotes === 'object' && !Array.isArray(data.lessonNotes)) ? data.lessonNotes as Record<string, string> : {}
+              lessonNotes: (data.lessonNotes && typeof data.lessonNotes === 'object' && !Array.isArray(data.lessonNotes)) ? data.lessonNotes as Record<string, string> : {},
+              photoURL: data.photoURL || currentUser.photoURL || ''
             };
 
             // Double check admin role bootstrapping for special emails
@@ -915,13 +917,14 @@ export default function Page() {
               email: currentUser.email || '',
               bio: 'Cooperative trustee of Black Wall Street.',
               organization: 'Private Family Trust',
-              balance: 12450.00, // starting seeded balance
+              balance: 0, // starting seeded balance
               spending: 0,
               classesMastered: 0,
               role: initialRole,
               createdAt: new Date().toISOString(),
               savedLessons: [],
-              lessonNotes: {}
+              lessonNotes: {},
+              photoURL: currentUser.photoURL || ''
             };
 
             try {
@@ -1187,13 +1190,14 @@ export default function Page() {
       email: 'guest.patron@bws.inc',
       bio: 'Cooperative trustee of Black Wall Street (Guest Mode).',
       organization: 'Private Family Trust',
-      balance: 12450.00,
+      balance: 0,
       spending: 0,
       classesMastered: 0,
       role: 'user',
       createdAt: new Date().toISOString(),
       savedLessons: [],
-      lessonNotes: {}
+      lessonNotes: {},
+      photoURL: ''
     });
     setSupportFormData(prev => ({
       ...prev,
@@ -2832,12 +2836,16 @@ export default function Page() {
               )}
               <motion.div 
                 whileHover={{ scale: 1.05 }}
-                className="w-8 h-8 rounded-full border border-[#ca8a04] p-0.5 flex items-center justify-center bg-zinc-900 cursor-pointer overflow-hidden cursor-pointer"
+                className="w-8 h-8 rounded-full border border-[#ca8a04] p-0.5 flex items-center justify-center bg-zinc-900 cursor-pointer overflow-hidden"
                 onClick={handleSignOut}
                 title="Disconnect from Academy Platform"
               >
-                <div className="w-full h-full rounded-full bg-gradient-to-tr from-[#ca8a04] to-[#f59e0b] flex items-center justify-center text-black font-black text-[10px]">
-                  {user.displayName ? user.displayName.substring(0,2).toUpperCase() : 'CO'}
+                <div className="w-full h-full rounded-full bg-gradient-to-tr from-[#ca8a04] to-[#f59e0b] flex items-center justify-center text-black font-black text-[10px] overflow-hidden">
+                  {userProfile?.photoURL || user.photoURL ? (
+                    <img src={userProfile?.photoURL || user.photoURL || ''} alt="Avatar" className="w-full h-full object-cover rounded-full" referrerPolicy="no-referrer" />
+                  ) : (
+                    <span>{user.displayName ? user.displayName.substring(0,2).toUpperCase() : 'CO'}</span>
+                  )}
                 </div>
               </motion.div>
             </div>
@@ -3335,13 +3343,20 @@ export default function Page() {
                         <h4 className="text-xs font-mono font-black text-white uppercase tracking-wider">THE 35 BLOCKS OF GREENWOOD</h4>
                       </div>
                     </div>
-                    <div className="p-4 space-y-2">
-                      <p className="text-[10px] text-zinc-400 font-light leading-relaxed">
+                    <div className="p-4 space-y-3">
+                      <p className="text-[10px] text-zinc-300 font-light leading-relaxed">
                         In the early 1900s, community leaders built Greenwood—a self-reliant neighborhood with its own banks, grocery stores, hotels, and schools. Today, we are bringing that same spirit online so we can support and build with each other easily.
                       </p>
-                      <div className="flex justify-between items-center text-[8px] font-mono text-zinc-500 pt-1 uppercase tracking-widest">
+                      
+                      {/* Interactive Unity Tagline */}
+                      <div className="p-3 bg-black/40 border border-zinc-900 rounded-lg text-center font-mono">
+                        <span className="text-[7.5px] uppercase tracking-[0.2em] text-[#eab308] font-bold block mb-1">Cooperative Motto</span>
+                        <span className="text-[11px] font-black text-white uppercase">“Each One Teach One”</span>
+                      </div>
+
+                      <div className="flex justify-between items-center text-[8px] font-mono text-zinc-550 pt-1.5 border-t border-zinc-900/60 uppercase tracking-widest">
                         <span>EST. Greenwood Tulsa</span>
-                        <span className="text-[#eab308] font-bold">Independent Local Economy</span>
+                        <span className="text-[#eab308] font-bold">Independent Local</span>
                       </div>
                     </div>
                   </div>
@@ -5543,8 +5558,12 @@ export default function Page() {
                 
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative">
                   <div className="flex items-center space-x-4">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-600 to-amber-400 p-0.5 shadow-[0_0_15px_rgba(202,138,4,0.25)] flex items-center justify-center text-black font-black text-xl">
-                      {userProfile?.displayName ? userProfile.displayName.substring(0, 2).toUpperCase() : user.displayName?.substring(0, 2).toUpperCase() || 'CO'}
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-600 to-amber-400 p-0.5 shadow-[0_0_15px_rgba(202,138,4,0.25)] flex items-center justify-center text-black font-black text-xl overflow-hidden shrink-0">
+                      {userProfile?.photoURL || user.photoURL ? (
+                        <img src={userProfile?.photoURL || user.photoURL || ''} alt="Profile Photo" className="w-full h-full object-cover rounded-full" referrerPolicy="no-referrer" />
+                      ) : (
+                        <span>{userProfile?.displayName ? userProfile.displayName.substring(0, 2).toUpperCase() : user.displayName?.substring(0, 2).toUpperCase() || 'CO'}</span>
+                      )}
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
@@ -5602,13 +5621,15 @@ export default function Page() {
                       const dName = (e.currentTarget.elements.namedItem('dispName') as HTMLInputElement).value || '';
                       const orgName = (e.currentTarget.elements.namedItem('orgName') as HTMLInputElement).value || '';
                       const bioText = (e.currentTarget.elements.namedItem('bioText') as HTMLTextAreaElement).value || '';
+                      const photoUrlVal = (e.currentTarget.elements.namedItem('photoUrlVal') as HTMLInputElement).value || '';
 
                       try {
                         const pRef = doc(db, 'profiles', user.uid);
                         await setDoc(pRef, {
                           displayName: dName,
                           organization: orgName,
-                          bio: bioText
+                          bio: bioText,
+                          photoURL: photoUrlVal
                         }, { merge: true });
                         alert("Profile updated successfully!");
                       } catch (err) {
@@ -5636,6 +5657,17 @@ export default function Page() {
                         name="orgName"
                         defaultValue={userProfile?.organization || ''}
                         placeholder="e.g. Greenwood Living Estate"
+                        className="w-full bg-zinc-900 border border-zinc-800 text-white rounded p-2.5 focus:outline-none focus:border-[#ca8a04]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-zinc-500 uppercase tracking-wider block mb-1.5">Profile Photo URL</label>
+                      <input 
+                        type="url"
+                        name="photoUrlVal"
+                        defaultValue={userProfile?.photoURL || user.photoURL || ''}
+                        placeholder="Paste image address URL"
                         className="w-full bg-zinc-900 border border-zinc-800 text-white rounded p-2.5 focus:outline-none focus:border-[#ca8a04]"
                       />
                     </div>
