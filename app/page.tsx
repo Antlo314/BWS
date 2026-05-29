@@ -2607,22 +2607,14 @@ export default function Page() {
             Academy
           </button>
           <button 
-            onClick={() => setActiveTab('vault')}
-            className={`px-3 py-1.5 rounded text-[9px] font-mono uppercase tracking-widest transition-all ${
-              activeTab === 'vault' 
-                ? 'bg-[#ca8a04] text-black font-extrabold' 
-                : 'text-zinc-400 hover:text-white'
-            }`}
+            disabled
+            className="px-3 py-1.5 rounded text-[9px] font-mono uppercase tracking-widest text-zinc-600 cursor-not-allowed opacity-50 select-none"
           >
             Vault Pool
           </button>
           <button 
-            onClick={() => setActiveTab('ledger')}
-            className={`px-3 py-1.5 rounded text-[9px] font-mono uppercase tracking-widest transition-all ${
-              activeTab === 'ledger' 
-                ? 'bg-[#ca8a04] text-black font-extrabold' 
-                : 'text-zinc-400 hover:text-white'
-            }`}
+            disabled
+            className="px-3 py-1.5 rounded text-[9px] font-mono uppercase tracking-widest text-zinc-600 cursor-not-allowed opacity-50 select-none"
           >
             Shared Ledger
           </button>
@@ -2781,8 +2773,8 @@ export default function Page() {
           >
             <button onClick={() => { setActiveTab('overview'); setIsMobileMenuOpen(false); }} className={`text-left py-2 cursor-pointer ${activeTab === 'overview' ? 'text-white font-extrabold' : ''}`}>Overview & Commemoration</button>
             <button onClick={() => { setActiveTab('academy'); setIsMobileMenuOpen(false); }} className={`text-left py-2 cursor-pointer ${activeTab === 'academy' ? 'text-white font-extrabold' : ''}`}>Skill Academy</button>
-            <button onClick={() => { setActiveTab('vault'); setIsMobileMenuOpen(false); }} className={`text-left py-2 cursor-pointer ${activeTab === 'vault' ? 'text-white font-extrabold' : ''}`}>Resource Vault</button>
-            <button onClick={() => { setActiveTab('ledger'); setIsMobileMenuOpen(false); }} className={`text-left py-2 cursor-pointer ${activeTab === 'ledger' ? 'text-white font-extrabold' : ''}`}>Ledger Scoreboard</button>
+            <button disabled className="text-left py-2 text-zinc-600 cursor-not-allowed opacity-50 select-none">Resource Vault</button>
+            <button disabled className="text-left py-2 text-zinc-600 cursor-not-allowed opacity-50 select-none">Ledger Scoreboard</button>
             <button onClick={() => { setActiveTab('support'); setIsMobileMenuOpen(false); }} className={`text-left py-2 cursor-pointer ${activeTab === 'support' ? 'text-white font-extrabold' : ''}`}>Invest In Self</button>
             {user && (
               <button onClick={() => { setActiveTab('profile'); setIsMobileMenuOpen(false); }} className={`text-left py-2 cursor-pointer ${activeTab === 'profile' ? 'text-white font-extrabold' : ''}`}>My Profile</button>
@@ -3371,7 +3363,8 @@ export default function Page() {
                   </div>
                   </div>
 
-                </div>
+                  {/* Right Column: Workshops, Calendar & Archive */}
+                  <div className="lg:col-span-5 space-y-6">
 
                 {/* GOOGLE MEET CLASSROOMS & LIVE SCHEDULER */}
                            {/* MEET TIMELINE WIDGET */}
@@ -3553,7 +3546,8 @@ export default function Page() {
                     </div>
                   </div>
 
-                </div>
+                  </div> {/* Close lg:col-span-5 container */}
+                </div> {/* Close grid container */}
 
               {/* CLASSROOM PROPOSAL MODAL */}
               {isClassroomModalOpen && (
