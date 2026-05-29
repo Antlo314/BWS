@@ -3545,9 +3545,8 @@ export default function Page() {
                       </div>
                     </div>
                   </div>
-
-                  </div> {/* Close lg:col-span-5 container */}
-                </div> {/* Close grid container */}
+                </div>
+              </div>
 
               {/* CLASSROOM PROPOSAL MODAL */}
               {isClassroomModalOpen && (
