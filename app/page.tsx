@@ -50,6 +50,7 @@ import { auth, googleProvider, meetGoogleProvider, db, handleFirestoreError, Ope
 import { signInWithPopup, signOut, onAuthStateChanged, User, GoogleAuthProvider } from 'firebase/auth';
 import { collection, query, where, doc, setDoc, onSnapshot, getDocFromServer, limit, getDoc, updateDoc, getDocs, orderBy, deleteDoc } from 'firebase/firestore';
 import AncestorChatWidget from '@/components/AncestorChatWidget';
+import { getPaymentLink, isSimulationMode } from '@/lib/stripe-config';
 
 // Define layout views
 type ActiveSection = 'overview' | 'academy' | 'vault' | 'ledger' | 'support' | 'system-audit' | 'profile' | 'admin-controls';
@@ -234,6 +235,7 @@ export default function Page() {
   const [ledgerStartDate, setLedgerStartDate] = useState('');
   const [ledgerEndDate, setLedgerEndDate] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   
   // Immersive User Onboarding & Walkthrough States
   const [showOnboarding, setShowOnboarding] = useState<boolean>(false);
@@ -690,6 +692,108 @@ export default function Page() {
       ]
     }
   ], []);
+
+  // --- STRIPE PAYMENT SUCCESS VERIFICATION ---
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const paymentStatus = params.get('payment_status');
+
+    if (paymentStatus === 'success' && user) {
+      const verifyPayment = async () => {
+        const pendingTxStr = localStorage.getItem('bws_pending_support_tx');
+        if (!pendingTxStr) {
+          window.history.replaceState({}, document.title, window.location.pathname);
+          return;
+        }
+
+        try {
+          const pendingTx = JSON.parse(pendingTxStr);
+          
+          if (user.uid !== 'guest_sovereign_identity' && pendingTx.userId !== user.uid) {
+            console.warn("User ID mismatch for pending transaction.");
+            window.history.replaceState({}, document.title, window.location.pathname);
+            return;
+          }
+
+          if (user.uid === 'guest_sovereign_identity') {
+            const localTrade: LedgerTrade = {
+              id: pendingTx.id,
+              timestamp: 'Just Now',
+              source: pendingTx.sourceName,
+              tradeType: 'Sovereign Seed',
+              value: `+${pendingTx.credits}.00 BWSX`,
+              message: pendingTx.customMsg,
+              status: 'CONFIRMED'
+            };
+            setTrades(prev => [localTrade, ...prev]);
+
+            setSupportReceipt({
+              blockHeight: activeNodes + 1,
+              receiptHash: pendingTx.hash,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              tierName: pendingTx.tierName,
+              creditsMinted: pendingTx.credits
+            });
+
+            setUserBWSXBalance(prev => prev + pendingTx.credits);
+            setFundingTotal(prev => prev + pendingTx.amount);
+            setTotalBWSXCreditsMinted(prev => prev + pendingTx.credits);
+            setActiveNodes(prev => prev + 1);
+            playSovereignChime();
+          } else {
+            const tradeRef = doc(db, 'trades', pendingTx.id);
+            const tradeSnap = await getDoc(tradeRef);
+
+            if (tradeSnap.exists()) {
+              const tradeData = tradeSnap.data();
+              if (tradeData.status === 'PENDING') {
+                await updateDoc(tradeRef, {
+                  status: 'CONFIRMED',
+                  timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                });
+
+                const uProfileRef = doc(db, 'profiles', user.uid);
+                const finalBal = (userProfile ? userProfile.balance : userBWSXBalance) + pendingTx.credits;
+                await updateDoc(uProfileRef, {
+                  balance: finalBal
+                }).catch(err => console.error("Profile sync failed: ", err));
+
+                setSupportReceipt({
+                  blockHeight: activeNodes + 1,
+                  receiptHash: pendingTx.hash,
+                  timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                  tierName: pendingTx.tierName,
+                  creditsMinted: pendingTx.credits
+                });
+
+                setUserBWSXBalance(prev => prev + pendingTx.credits);
+                setFundingTotal(prev => prev + pendingTx.amount);
+                setTotalBWSXCreditsMinted(prev => prev + pendingTx.credits);
+                setActiveNodes(prev => prev + 1);
+                playSovereignChime();
+              } else if (tradeData.status === 'CONFIRMED') {
+                setSupportReceipt({
+                  blockHeight: activeNodes,
+                  receiptHash: tradeData.hash || pendingTx.hash,
+                  timestamp: tradeData.timestamp || pendingTx.timestamp,
+                  tierName: pendingTx.tierName,
+                  creditsMinted: pendingTx.credits
+                });
+              }
+            }
+          }
+        } catch (err) {
+          console.error("Error verifying payment completion:", err);
+        } finally {
+          localStorage.removeItem('bws_pending_support_tx');
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+      };
+
+      verifyPayment();
+    }
+  }, [user, userProfile]);
 
   // Sync connection to Firestore on initiation
   useEffect(() => {
@@ -1206,45 +1310,51 @@ export default function Page() {
       bwsxAmount: `+${activeCreditsCalculated}.00 BWSX`,
       customMsg: supportFormData.customMessage || `Invested $${actualPriceUSD.toFixed(2)} in BWS Inc. Phase 1 Self-Ownership Fund.`,
       userId: user.uid,
-      email: user.email || ''
+      email: user.email || '',
+      status: 'PENDING',
+      priceUsd: actualPriceUSD,
+      creditsCalculated: activeCreditsCalculated,
+      tierName: isUsingCustomAmount ? 'Custom Supporter' : matchedTier.name
     };
 
     try {
-      if (user.uid === 'guest_sovereign_identity') {
-        const localTrade: LedgerTrade = {
-          id: generatedReceiptId,
-          timestamp: 'Just Now',
-          source: userSupportTx.sourceName,
-          tradeType: userSupportTx.tradeType,
-          value: userSupportTx.bwsxAmount,
-          message: userSupportTx.customMsg
-        };
-        setTrades(prev => [localTrade, ...prev]);
-      } else {
-        await setDoc(doc(db, 'trades', generatedReceiptId), userSupportTx);
-        // Sync to user profile in Firestore
-        const uProfileRef = doc(db, 'profiles', user.uid);
-        const finalBal = (userProfile ? userProfile.balance : userBWSXBalance) + activeCreditsCalculated;
-        await updateDoc(uProfileRef, {
-          balance: finalBal
-        }).catch(err => console.error("Profile sync failed: ", err));
-      }
+      setIsProcessingPayment(true);
 
-      setSupportReceipt({
-        blockHeight: activeNodes + 1,
-        receiptHash: generatedHash,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      // Save pending transaction to localStorage for client-side success page loading validation
+      localStorage.setItem('bws_pending_support_tx', JSON.stringify({
+        id: generatedReceiptId,
+        userId: user.uid,
+        credits: activeCreditsCalculated,
+        amount: actualPriceUSD,
         tierName: isUsingCustomAmount ? 'Custom Supporter' : matchedTier.name,
-        creditsMinted: activeCreditsCalculated
-      });
+        hash: generatedHash,
+        timestamp: timestampStr,
+        sourceName: userSupportTx.sourceName,
+        customMsg: userSupportTx.customMsg
+      }));
 
-      // Update local wallet indicators instantly
-      setUserBWSXBalance(prev => prev + activeCreditsCalculated);
-      setFundingTotal(prev => prev + actualPriceUSD);
-      setTotalBWSXCreditsMinted(prev => prev + activeCreditsCalculated);
-      setActiveNodes(prev => prev + 1);
-
+      if (user.uid === 'guest_sovereign_identity') {
+        // Guest user simulation redirect
+        setTimeout(() => {
+          window.location.href = window.location.pathname + '?payment_status=success';
+        }, 1200);
+      } else {
+        // Write pending trade to Firestore database
+        await setDoc(doc(db, 'trades', generatedReceiptId), userSupportTx);
+        
+        if (isSimulationMode()) {
+          // Simulation Mode: Wait 1.5s and redirect to success query params
+          setTimeout(() => {
+            window.location.href = window.location.pathname + '?payment_status=success';
+          }, 1500);
+        } else {
+          // Live Stripe Checkout Redirect
+          const paymentUrl = getPaymentLink(supportFormData.email, generatedReceiptId);
+          window.location.href = paymentUrl;
+        }
+      }
     } catch (error) {
+      setIsProcessingPayment(false);
       setFormError("System verification block: please ensure your login is established properly.");
       handleFirestoreError(error, OperationType.WRITE, `trades/${generatedReceiptId}`);
     }
@@ -4778,9 +4888,17 @@ export default function Page() {
 
                       <button 
                         type="submit"
-                        className="w-full py-3.5 bg-gradient-to-r from-[#ca8a04] to-yellow-500 hover:from-amber-600 hover:to-amber-500 text-black text-[9px] font-mono font-black uppercase tracking-widest rounded cursor-pointer"
+                        disabled={isProcessingPayment}
+                        className="w-full py-3.5 bg-gradient-to-r from-[#ca8a04] to-yellow-500 hover:from-amber-600 hover:to-amber-500 text-black text-[9px] font-mono font-black uppercase tracking-widest rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                       >
-                        Confirm Contribution ✓
+                        {isProcessingPayment ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            {isSimulationMode() ? "Simulating Redirect..." : "Redirecting to Stripe..."}
+                          </>
+                        ) : (
+                          "Confirm Contribution ✓"
+                        )}
                       </button>
 
                     </form>
