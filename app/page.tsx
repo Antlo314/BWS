@@ -236,6 +236,7 @@ export default function Page() {
   const [ledgerEndDate, setLedgerEndDate] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [cashtagCopied, setCashtagCopied] = useState(false);
   
   // Immersive User Onboarding & Walkthrough States
   const [showOnboarding, setShowOnboarding] = useState<boolean>(false);
@@ -310,7 +311,7 @@ export default function Page() {
 
   // --- WALLET STATE ---
   const [userBWSXBalance, setUserBWSXBalance] = useState<number>(12450.00); 
-  const [fundingTotal, setFundingTotal] = useState<number>(15000);
+  const [fundingTotal, setFundingTotal] = useState<number>(1250);
   const [totalBWSXCreditsMinted, setTotalBWSXCreditsMinted] = useState<number>(1842910);
   const [activeNodes, setActiveNodes] = useState<number>(81);
 
@@ -647,48 +648,50 @@ export default function Page() {
   // Premium Strategic Brackets
   const TIER_BRACKETS: SupportTier[] = useMemo(() => [
     {
-      price: '$5.00',
-      credits: '10 Community Credits',
-      name: 'Show Some Love 💛',
-      desc: 'Help keep our servers running and create your permanent community profile today.',
+      price: '$10.00',
+      credits: '15 Community Credits',
+      name: 'Soundtrack Collector 🎵',
+      desc: 'Get the official BWS Soundtrack downloadable release on June 1st (R&B, Neo Soul, Blues, and Rap detailing Tulsa truths).',
       perks: [
-        'Listed forever as a Founding Member on our community board',
-        'Get 10 community credits in your wallet to spend right away',
-        'Access the member list and listen to audio legacy stories'
-      ]
-    },
-    {
-      price: '$25.00',
-      credits: '50 Community Credits',
-      name: "I'm With the Movement ✊",
-      desc: 'Help neighbors trade directly with each other and keep our hard-earned money inside local households.',
-      perks: [
-        'All Show Some Love perks included',
-        'Get 50 community credits in your wallet to start trading',
-        'Unlock the full direct service marketplace and chat with other members'
+        'Direct digital download of the official BWS Soundtrack on June 1st',
+        'Get 15 community credits in your wallet to spend on our platform',
+        'Your name listed as a founding supporter on our community board'
       ]
     },
     {
       price: '$50.00',
-      credits: '90 Community Credits',
-      name: 'Building Together 🏗️',
-      desc: 'Unlock full access to all Skill Academy classes, including family trust and asset protection courses.',
+      credits: '75 Community Credits',
+      name: 'Soundtrack & Merch Patron 👕',
+      desc: 'Get the BWS Soundtrack download plus a free merchandise item launching June 1st from viralcartel.net.',
       perks: [
-        'All perks from the I\'m With the Movement tier',
-        'Get 90 community credits in your wallet to start trading',
-        'Join advanced classes and live video workshops'
+        'Digital download of the BWS Soundtrack on June 1st',
+        '1 free merchandise item of your choice from viralcartel.net',
+        'Get 75 community credits in your wallet to start trading',
+        'Your name listed as a founding supporter on our community board'
       ]
     },
     {
       price: '$100.00',
-      credits: '180 Community Credits',
-      name: 'Academy Leader 👑',
-      desc: 'Our top tier support level to help acquire new shared tools and set up neighborhood business trusts.',
+      credits: '150 Community Credits',
+      name: 'Legacy Animator 🎬',
+      desc: 'All soundtrack and merch perks, plus your name will be included in the credits of our upcoming animated web series.',
       perks: [
-        'All benefits from the Building Together tier included',
-        'Get 180 community credits in your wallet to start trading',
-        'A verified "Academy Leader" badge on your profile',
-        'List up to 5 of your own tools or resources in the shared vault to earn credits'
+        'Your name permanently credited in our upcoming BWS animated series',
+        'Digital download of the BWS Soundtrack on June 1st',
+        '1 free merchandise item of your choice from viralcartel.net',
+        'Get 150 community credits in your wallet to spend right away'
+      ]
+    },
+    {
+      price: '$250.00',
+      credits: '400 Community Credits',
+      name: 'Greenwood Resident 🎮',
+      desc: 'All the above, plus you will be designed and included as a custom character in the New Greenwood game.',
+      perks: [
+        'Included as a character in the New Greenwood game (newgreen-sigma.vercel.app)',
+        'Your name permanently credited in our BWS animated series',
+        '1 free merchandise item from viralcartel.net + Soundtrack download',
+        'Get 400 community credits in your wallet to trade with neighbors'
       ]
     }
   ], []);
@@ -809,6 +812,29 @@ export default function Page() {
       }
     }
     testConnection();
+  }, []);
+
+  // Countdown to June 1, 2026 (EST/EDT)
+  useEffect(() => {
+    const targetDate = new Date('2026-06-01T00:00:00-04:00');
+    const updateTimer = () => {
+      const now = new Date();
+      const difference = targetDate.getTime() - now.getTime();
+      
+      if (difference <= 0) {
+        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      } else {
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        setCountdown({ days, hours, minutes, seconds });
+      }
+    };
+    
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   // Initiate automatic onboarding for first-time visitors
@@ -2440,7 +2466,7 @@ export default function Page() {
 
   // Phase 1 progress calculations
   const phase1Percent = useMemo(() => {
-    const goalUpper = 50000;
+    const goalUpper = 1500;
     return Math.min(100, Math.max(15, (fundingTotal / goalUpper) * 100));
   }, [fundingTotal]);
 
@@ -2713,39 +2739,7 @@ export default function Page() {
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
-            Overview
-          </button>
-          <button 
-            onClick={() => setActiveTab('academy')}
-            className={`px-3 py-1.5 rounded text-[9px] font-mono uppercase tracking-widest transition-all ${
-              activeTab === 'academy' 
-                ? 'bg-[#ca8a04] text-black font-extrabold' 
-                : 'text-zinc-400 hover:text-white'
-            }`}
-          >
-            Academy
-          </button>
-          <button 
-            disabled
-            className="px-3 py-1.5 rounded text-[9px] font-mono uppercase tracking-widest text-zinc-600 cursor-not-allowed opacity-50 select-none"
-          >
-            Vault Pool
-          </button>
-          <button 
-            disabled
-            className="px-3 py-1.5 rounded text-[9px] font-mono uppercase tracking-widest text-zinc-600 cursor-not-allowed opacity-50 select-none"
-          >
-            Shared Ledger
-          </button>
-          <button 
-            onClick={() => setActiveTab('support')}
-            className={`px-3 py-1.5 rounded text-[9px] font-mono uppercase tracking-widest transition-all cursor-pointer ${
-              activeTab === 'support' 
-                ? 'bg-[#ca8a04] text-black font-extrabold' 
-                : 'text-zinc-400 hover:text-white'
-            }`}
-          >
-            Invest Self
+            Campaign Page
           </button>
           {user && (
             <button 
@@ -2769,18 +2763,6 @@ export default function Page() {
               }`}
             >
               Admin Console 👑
-            </button>
-          )}
-          {isFounder && (
-            <button 
-              onClick={() => setActiveTab('system-audit')}
-              className={`px-3 py-1.5 rounded text-[9px] font-mono uppercase tracking-widest transition-all border border-[#ca8a04]/40 text-[#eab308] hover:bg-[#ca8a04]/15 cursor-pointer ${
-                activeTab === 'system-audit' 
-                  ? 'bg-gradient-to-r from-[#ca8a04] to-yellow-500 text-black font-black shadow-[0_0_15px_rgba(234,179,8,0.25)]' 
-                  : ''
-              }`}
-            >
-              System Audit 🛡️
             </button>
           )}
         </nav>
@@ -2890,21 +2872,12 @@ export default function Page() {
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden border-b border-zinc-900 bg-zinc-950 px-6 py-4 flex flex-col space-y-2 text-[10px] font-mono uppercase tracking-widest text-[#a1a1aa]"
           >
-            <button onClick={() => { setActiveTab('overview'); setIsMobileMenuOpen(false); }} className={`text-left py-2 cursor-pointer ${activeTab === 'overview' ? 'text-white font-extrabold' : ''}`}>Overview & Commemoration</button>
-            <button onClick={() => { setActiveTab('academy'); setIsMobileMenuOpen(false); }} className={`text-left py-2 cursor-pointer ${activeTab === 'academy' ? 'text-white font-extrabold' : ''}`}>Skill Academy</button>
-            <button disabled className="text-left py-2 text-zinc-600 cursor-not-allowed opacity-50 select-none">Resource Vault</button>
-            <button disabled className="text-left py-2 text-zinc-600 cursor-not-allowed opacity-50 select-none">Ledger Scoreboard</button>
-            <button onClick={() => { setActiveTab('support'); setIsMobileMenuOpen(false); }} className={`text-left py-2 cursor-pointer ${activeTab === 'support' ? 'text-white font-extrabold' : ''}`}>Invest In Self</button>
+            <button onClick={() => { setActiveTab('overview'); setIsMobileMenuOpen(false); }} className={`text-left py-2 cursor-pointer ${activeTab === 'overview' ? 'text-white font-extrabold' : ''}`}>Campaign Page</button>
             {user && (
               <button onClick={() => { setActiveTab('profile'); setIsMobileMenuOpen(false); }} className={`text-left py-2 cursor-pointer ${activeTab === 'profile' ? 'text-white font-extrabold' : ''}`}>My Profile</button>
             )}
             {(user?.email === 'iamwhoiambook@gmail.com' || userProfile?.role === 'admin') && (
               <button onClick={() => { setActiveTab('admin-controls'); setIsMobileMenuOpen(false); }} className={`text-left py-2 text-[#eab308] border-t border-[#ca8a04]/20 mt-1 pt-2 font-bold cursor-pointer ${activeTab === 'admin-controls' ? 'text-yellow-400 font-extrabold' : ''}`}>Admin Console 👑</button>
-            )}
-            {isFounder && (
-              <button onClick={() => { setActiveTab('system-audit'); setIsMobileMenuOpen(false); }} className={`text-left py-2 text-zinc-400 border-t border-zinc-900 mt-1 pt-2 font-semibold flex items-center gap-1.5 cursor-pointer ${activeTab === 'system-audit' ? 'text-white font-extrabold' : ''}`}>
-                System Audit 🛡️
-              </button>
             )}
           </motion.div>
         )}
@@ -3037,41 +3010,95 @@ export default function Page() {
                     )}
                   </div>
 
-                  {/* THREE CORE RULES */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-                    <div className="p-4 bg-zinc-950/60 border border-zinc-900/90 rounded-xl space-y-2">
-                      <div className="h-7 w-7 rounded bg-[#ca8a04]/10 border border-[#ca8a04]/40 flex items-center justify-center text-[#eab308]">
-                        <UserIcon className="w-3.5 h-3.5" />
-                      </div>
-                      <h4 className="text-[11px] font-mono uppercase font-bold text-white tracking-widest">Look Out for Each Other</h4>
-                      <p className="text-[10px] text-zinc-500 font-light leading-normal">
-                        Swap skills directly. If you need marketing, web design, or business advice, you can trade your own services directly with neighbors instead of paying expensive fees to outside companies.
-                      </p>
+                  {/* BWS SOUNDTRACK LAUNCH CAMPAIGN & PERKS */}
+                  <div className="space-y-4 pt-4">
+                    <div className="border-b border-zinc-900 pb-2">
+                      <span className="text-[8px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-bold">Campaign Rewards & Perks</span>
+                      <h3 className="text-xl font-bold uppercase text-white">Support the Campaign to Unlock Exclusive Perks</h3>
                     </div>
 
-                    <div className="p-4 bg-zinc-950/60 border border-zinc-900/90 rounded-xl space-y-2">
-                      <div className="h-7 w-7 rounded bg-[#ca8a04]/10 border border-[#ca8a04]/40 flex items-center justify-center text-[#eab308]">
-                        <Coins className="w-3.5 h-3.5" />
-                      </div>
-                      <h4 className="text-[11px] font-mono uppercase font-bold text-white tracking-widest">Own It Together</h4>
-                      <p className="text-[10px] text-zinc-500 font-light leading-normal">
-                        Share tools and resources. Take classes in our Skill Academy to earn credits, then spend those credits to borrow vehicles, camera gear, commercial kitchens, or tools owned by other members.
-                      </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {TIER_BRACKETS.map((tier, idx) => (
+                        <div 
+                          key={idx}
+                          onClick={() => {
+                            setSelectedTierIndex(idx);
+                            setIsUsingCustomAmount(false);
+                          }}
+                          className={`p-4 rounded-xl border text-left cursor-pointer transition-all ${
+                            selectedTierIndex === idx && !isUsingCustomAmount
+                              ? 'border-[#ca8a04] bg-zinc-900/50 shadow-[0_0_15px_rgba(202,138,4,0.15)]'
+                              : 'border-zinc-900 bg-black/40 hover:border-zinc-800'
+                          }`}
+                        >
+                          <div className="flex justify-between items-center mb-1">
+                            <h4 className="text-xs font-mono font-bold text-white uppercase">{tier.name}</h4>
+                            <span className="text-xs font-bold text-[#eab308] font-mono">{tier.price}</span>
+                          </div>
+                          <p className="text-[10px] text-zinc-500 font-light leading-snug mb-3">
+                            {tier.desc}
+                          </p>
+                          <ul className="space-y-1">
+                            {tier.perks.map((perk, perkIdx) => (
+                              <li key={perkIdx} className="text-[9px] text-zinc-400 font-mono font-light flex items-start gap-1">
+                                <span className="text-[#ca8a04]">•</span>
+                                <span>{perk}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* BWS ECOSYSTEM PROJECT SHOWCASE */}
+                  <div className="space-y-4 pt-4">
+                    <div className="border-b border-zinc-900 pb-2">
+                      <span className="text-[8px] font-mono uppercase tracking-[0.25em] text-[#ca8a04] font-bold">BWS Ecosystem Project Links</span>
+                      <h3 className="text-base font-bold uppercase text-white">Explore the Greenwood Digital Frontier</h3>
                     </div>
 
-                    <div className="p-4 bg-zinc-950/60 border border-zinc-900/90 rounded-xl space-y-2">
-                      <div className="h-7 w-7 rounded bg-[#ca8a04]/10 border border-[#ca8a04]/40 flex items-center justify-center text-[#eab308]">
-                        <ShieldCheck className="w-3.5 h-3.5" />
-                      </div>
-                      <h4 className="text-[11px] font-mono uppercase font-bold text-white tracking-widest">Protect Our Bag</h4>
-                      <p className="text-[10px] text-zinc-500 font-light leading-normal">
-                        Keep wealth in the community. Our community directory tracks all trades and borrows safely, keeping our neighborhood economy independent and secure.
-                      </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <a 
+                        href="https://newgreen-sigma.vercel.app" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="p-4 rounded-xl border border-zinc-900 bg-black/40 hover:border-[#ca8a04]/40 hover:bg-zinc-900/10 transition-all text-left block group"
+                      >
+                        <div className="flex items-center justify-between mb-1.5">
+                          <h4 className="text-xs font-mono font-bold text-white uppercase tracking-wider group-hover:text-[#eab308] transition-colors flex items-center gap-1.5">
+                            🎮 New Greenwood Game
+                          </h4>
+                          <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-[#eab308] transition-colors" />
+                        </div>
+                        <p className="text-[10px] text-zinc-500 font-light leading-normal">
+                          Step into the interactive 3D virtual simulation of Tulsa's historic district. Rebuild, trade, and experience the community.
+                        </p>
+                        <span className="text-[8px] font-mono text-[#eab308] uppercase tracking-widest block mt-2.5">newgreen-sigma.vercel.app →</span>
+                      </a>
+
+                      <a 
+                        href="https://viralcartel.net" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="p-4 rounded-xl border border-zinc-900 bg-black/40 hover:border-[#ca8a04]/40 hover:bg-zinc-900/10 transition-all text-left block group"
+                      >
+                        <div className="flex items-center justify-between mb-1.5">
+                          <h4 className="text-xs font-mono font-bold text-white uppercase tracking-wider group-hover:text-[#eab308] transition-colors flex items-center gap-1.5">
+                            👕 Viral Cartel Merch
+                          </h4>
+                          <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-[#eab308] transition-colors" />
+                        </div>
+                        <p className="text-[10px] text-zinc-500 font-light leading-normal">
+                          The official merch storefront launching June 1st. Supporters in the $50+ tiers can choose their free apparel directly here.
+                        </p>
+                        <span className="text-[8px] font-mono text-[#eab308] uppercase tracking-widest block mt-2.5">viralcartel.net →</span>
+                      </a>
                     </div>
                   </div>
                 </div>
 
-                {/* COUNTDOWN & SUBSTANTIATIVE MILESTONES */}
+                {/* COUNTDOWN & CAMPAIGN FUNDRAISER */}
                 <div className="lg:col-span-5 space-y-6">
                   
                   {/* Glass countdown card */}
@@ -3079,8 +3106,8 @@ export default function Page() {
                     <div className="absolute top-0 right-0 w-16 h-16 bg-[#ca8a04]/5 blur-lg rounded-full" />
                     
                     <div className="flex justify-between items-center mb-4">
-                      <span className="text-[8px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-bold">Launch Countdown</span>
-                      <span className="text-[8px] text-[#ca8a54] font-mono bg-[#ca8a04]/10 px-2 py-0.5 rounded border border-[#ca8a04]/20 font-bold">EST_CLOCK</span>
+                      <span className="text-[8px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-bold">Campaign Countdown</span>
+                      <span className="text-[8px] text-[#ca8a54] font-mono bg-[#ca8a04]/10 px-2 py-0.5 rounded border border-[#ca8a04]/20 font-bold">RELEASE_JUNE_1ST</span>
                     </div>
 
                     <div className="grid grid-cols-4 gap-2 text-center mb-5">
@@ -3103,12 +3130,12 @@ export default function Page() {
                     </div>
 
                     <div className="space-y-4 pt-4 border-t border-zinc-900">
-                      <h4 className="text-xs font-mono uppercase font-black tracking-widest text-[#eab308]">Phase 1 Fundraising Goal</h4>
+                      <h4 className="text-xs font-mono uppercase font-black tracking-widest text-[#eab308]">BWS Inc. Launch Goal</h4>
                       
                       <div className="space-y-1 flex-1">
                         <div className="flex justify-between items-center text-[10px] font-mono text-zinc-400">
-                          <span>Funds Raised by Lumen Labs</span>
-                          <span className="text-white">${fundingTotal.toLocaleString()} of $50,000 Goal</span>
+                          <span>Total Contributions Raised</span>
+                          <span className="text-white">${fundingTotal.toLocaleString()} of $1,500 Goal</span>
                         </div>
                         <div className="h-2 w-full bg-black rounded-full overflow-hidden border border-zinc-900">
                           <motion.div 
@@ -3119,48 +3146,131 @@ export default function Page() {
                         </div>
                       </div>
 
-                      <p className="text-[10px] text-zinc-500 leading-relaxed font-light">
-                        This goal reflects the time, effort, and resources dedicated to creating and launching the BWS application platform. All funds raised thus far have been provided by Lumen Labs.
+                      <p className="text-[10px] text-zinc-400 leading-relaxed font-light">
+                        Help us hit our <strong>$1,500 target</strong> before June 1st to fund our official domain name purchase, hosting setup, brand marketing, and the release of our commemorative soundtrack.
                       </p>
+                    </div>
+                  </div>
 
+                  {/* Cash App Tag Card */}
+                  <div className="bg-zinc-950/80 border border-emerald-500/20 p-5 rounded-2xl relative overflow-hidden shadow-xl text-left">
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-emerald-500/5 blur-lg rounded-full" />
+                    
+                    <h4 className="text-xs font-mono uppercase font-black tracking-widest text-emerald-400 pb-2 border-b border-zinc-900 mb-3 flex items-center gap-1.5">
+                      <Coins className="w-4 h-4 text-emerald-400 animate-pulse animate-duration-1000 animate-infinite" /> Support Via Cash App
+                    </h4>
+
+                    <p className="text-[10.5px] text-zinc-400 leading-relaxed font-light mb-4 font-sans">
+                      For instant, zero-fee support, donate directly to our Cashtag. <strong>Please add your email in the payment note</strong> so we can register your account and send your soundtrack download link on June 1st.
+                    </p>
+
+                    <div className="flex items-center justify-between bg-black border border-zinc-900 rounded-lg p-3 font-mono">
+                      <div className="space-y-0.5">
+                        <span className="text-[7.5px] text-zinc-500 uppercase tracking-widest block leading-none">BWS Cashtag URL</span>
+                        <span className="text-base font-bold text-emerald-400 leading-none">$truufbtold</span>
+                      </div>
                       <button 
-                        onClick={() => setActiveTab('support')}
-                        className="w-full py-2.5 rounded bg-gradient-to-r from-[#ca8a04] to-[#eab308] text-black text-[9px] font-mono tracking-widest uppercase font-bold text-center block"
+                        onClick={() => {
+                          navigator.clipboard.writeText('$truufbtold');
+                          setCashtagCopied(true);
+                          setTimeout(() => setCashtagCopied(false), 2000);
+                        }}
+                        className="px-3.5 py-1.5 rounded bg-emerald-500/10 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-400 text-[9px] font-mono uppercase tracking-widest font-bold cursor-pointer transition-all"
                       >
-                        Support the Movement →
+                        {cashtagCopied ? 'Copied! ✓' : 'Copy Tag'}
                       </button>
                     </div>
                   </div>
 
-                  {/* COOPERATING ROADMAP INDEX */}
-                  <div className="bg-zinc-950/80 border border-zinc-900 p-5 rounded-xl space-y-4 text-left">
-                    <h4 className="text-xs font-mono uppercase font-black text-[#eab308] tracking-widest flex items-center gap-1.5 border-b border-zinc-900 pb-2">
-                      <TrendingUp className="w-4 h-4" /> Key Milestones
+                  {/* Stripe form container */}
+                  <div className="p-6 bg-zinc-950 border border-[#ca8a04]/40 rounded-2xl relative shadow-2xl text-left">
+                    <span className="absolute top-3 right-3 flex h-1.5 w-1.5">
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#ca8a04]"></span>
+                    </span>
+
+                    <h4 className="text-xs font-mono uppercase font-black text-white tracking-widest pb-3 border-b border-zinc-900 mb-4">
+                      Support via Credit Card / Apple Pay
                     </h4>
-                    <ul className="space-y-3.5 text-xs text-zinc-400 font-light font-mono">
-                      <li className="flex items-start gap-2.5">
-                        <span className="h-3.5 w-3.5 rounded-full bg-emerald-500/10 border border-emerald-500 flex items-center justify-center text-[8px] text-emerald-400 font-bold shrink-0 mt-0.5">✓</span>
-                        <div>
-                          <strong className="text-white text-[11px] block">PHASE 1: Building the Foundation (Active)</strong>
-                          <span className="text-[9px] text-zinc-500">Setting up the official organization structure and business registry to protect our members.</span>
+
+                    <form onSubmit={handleSupportMovementSubmit} className="space-y-4">
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block font-bold">Select Support Reward Level</label>
+                        <div className="grid grid-cols-2 gap-2">
+                          {TIER_BRACKETS.map((tier, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              onClick={() => {
+                                setSelectedTierIndex(idx);
+                                setIsUsingCustomAmount(false);
+                              }}
+                              className={`p-2.5 text-left border rounded transition-all text-xs font-mono cursor-pointer ${
+                                selectedTierIndex === idx && !isUsingCustomAmount
+                                  ? 'border-[#eab308] bg-zinc-900 text-white font-bold'
+                                  : 'border-zinc-900 bg-black/40 text-zinc-400 hover:border-zinc-800'
+                              }`}
+                            >
+                              <div className="font-mono">{tier.price}</div>
+                              <div className="text-[8px] text-zinc-500 font-light truncate mt-0.5">{tier.name}</div>
+                            </button>
+                          ))}
                         </div>
-                      </li>
-                      <li className="flex items-start gap-2.5">
-                        <span className="h-3.5 w-3.5 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center text-[7px] text-[#ca8a04] font-bold shrink-0 mt-0.5">02</span>
-                        <div>
-                          <strong className="text-white text-[11px] block">PHASE 2: Skill Academy & Video Classes (Active Prototype)</strong>
-                          <span className="text-[9px] text-zinc-500">Launching live online classrooms, video lessons, and skills matching.</span>
-                        </div>
-                      </li>
-                      <li className="flex items-start gap-2.5">
-                        <span className="h-3.5 w-3.5 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center text-[7px] text-zinc-650 font-bold shrink-0 mt-0.5">03</span>
-                        <div>
-                          <strong className="text-white text-[11px] block">PHASE 3: Shared Tool Vault (Active)</strong>
-                          <span className="text-[9px] text-zinc-500">Creating our shared warehouse where members can pool and borrow vans, cameras, tools, and workspaces.</span>
-                        </div>
-                      </li>
-                    </ul>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block font-bold">Your Full Name</label>
+                        <input 
+                          type="text"
+                          required
+                          value={supportFormData.fullName}
+                          onChange={(e) => setSupportFormData(prev => ({ ...prev, fullName: e.target.value }))}
+                          placeholder="Your complete name"
+                          className="w-full bg-black border border-zinc-850 rounded p-2.5 text-xs text-white focus:border-amber-500 focus:outline-none placeholder-zinc-700"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block font-bold">Your Email Address</label>
+                        <input 
+                          type="email"
+                          required
+                          value={supportFormData.email}
+                          onChange={(e) => setSupportFormData(prev => ({ ...prev, email: e.target.value }))}
+                          placeholder="Your email coordinates"
+                          className="w-full bg-black border border-zinc-850 rounded p-2.5 text-xs text-white focus:border-amber-500 focus:outline-none placeholder-zinc-700"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[8px] font-mono uppercase tracking-widest text-[#ca8a04] block font-bold">Leave a Message (Optional)</label>
+                        <textarea 
+                          rows={2}
+                          value={supportFormData.customMessage}
+                          onChange={(e) => setSupportFormData(prev => ({ ...prev, customMessage: e.target.value }))}
+                          placeholder="Leave an encouraging note for your neighbors to see..."
+                          className="w-full bg-black border border-zinc-855 rounded p-2.5 text-xs text-white focus:border-amber-500 focus:outline-none placeholder-zinc-700"
+                        />
+                      </div>
+
+                      {formError && <p className="text-[10px] text-amber-500 font-mono text-left">{formError}</p>}
+
+                      <button 
+                        type="submit"
+                        disabled={isProcessingPayment}
+                        className="w-full py-3.5 bg-gradient-to-r from-[#ca8a04] to-yellow-500 hover:from-amber-600 hover:to-amber-500 text-black text-[9px] font-mono font-black uppercase tracking-widest rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      >
+                        {isProcessingPayment ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            {isSimulationMode() ? "Simulating Redirect..." : "Redirecting to Stripe..."}
+                          </>
+                        ) : (
+                          "Confirm Contribution ✓"
+                        )}
+                      </button>
+                    </form>
                   </div>
+                </div>
 
                   {/* Deeply respectful legacy narrative illustration box */}
                   <div className="bg-zinc-950 border border-zinc-900 p-1.5 rounded-2xl relative overflow-hidden shadow-xl text-left group">
@@ -3187,9 +3297,6 @@ export default function Page() {
                       </div>
                     </div>
                   </div>
-
-                </div>
-
               </div>
             </motion.div>
           )}
