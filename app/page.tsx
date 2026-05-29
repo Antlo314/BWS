@@ -908,16 +908,21 @@ export default function Page() {
 
             setUserProfile(prof);
             setUserBWSXBalance(prof.balance);
-          } else {
             // Document doesn't exist, initialize a new default Sovereign Profile
             const initialRole = currentUser.email === 'iamwhoiambook@gmail.com' ? 'admin' : 'user';
+            
+            // Promo check: Google signup before June 1st gets 100 BWSX promo
+            const isGoogleAuth = currentUser.providerData.some(p => p.providerId === 'google.com');
+            const isBeforeJuneFirst = new Date() < new Date('2026-06-01T00:00:00');
+            const initialBalance = (isGoogleAuth && isBeforeJuneFirst) ? 100 : 0;
+
             const newProf: SovereignProfile = {
               uid: currentUser.uid,
               displayName: currentUser.displayName || 'Sovereign Steward',
               email: currentUser.email || '',
               bio: 'Cooperative trustee of Black Wall Street.',
               organization: 'Private Family Trust',
-              balance: 0, // starting seeded balance
+              balance: initialBalance,
               spending: 0,
               classesMastered: 0,
               role: initialRole,
@@ -929,7 +934,19 @@ export default function Page() {
 
             try {
               await setDoc(pRef, newProf);
-              // Snap listener handles the active state propagation once write completes
+              
+              // If promo was awarded, write corresponding entry to central network ledger logs
+              if (initialBalance > 0) {
+                const promoTxId = `google-promo-${currentUser.uid}`;
+                await setDoc(doc(db, 'trades', promoTxId), {
+                  timestamp: new Date().toISOString(),
+                  source: currentUser.displayName || 'Google Steward',
+                  tradeType: 'Promo Reward',
+                  value: '+100.00 BWSX',
+                  message: 'Awarded 100 BWSX promo credits for Google Auth signup before June 1st',
+                  status: 'CONFIRMED'
+                }).catch(err => console.error("Promo transaction log failed: ", err));
+              }
             } catch (err) {
               console.error("Auto-initial profile write failed: ", err);
               setUserProfile(newProf);
@@ -2714,6 +2731,14 @@ export default function Page() {
         </p>
       </div>
 
+      {/* GLOWING PROMO BANNER */}
+      <div className="bg-gradient-to-r from-yellow-500/20 via-[#ca8a04]/30 to-amber-500/20 border-b border-[#ca8a04]/60 text-center py-2 px-4 z-[60] relative shadow-[0_0_15px_rgba(202,138,4,0.25)] animate-pulse">
+        <p className="text-white text-[10px] font-mono uppercase tracking-wider font-extrabold flex items-center justify-center gap-2">
+          <Sparkles className="w-3.5 h-3.5 text-yellow-400 animate-spin" style={{ animationDuration: '3s' }} />
+          <span>Google Auth Launch Promo: Sign up before June 1st to receive a free bonus of <strong className="text-yellow-300">100 BWSX</strong> credited directly to your wallet!</span>
+        </p>
+      </div>
+
       {/* HEADER SECTION WITH WALLET DISPLAY */}
       <header className="h-20 border-b border-zinc-900 bg-[#09090b]/90 backdrop-blur-md sticky top-0 z-50 px-6 sm:px-12 flex items-center justify-between">
         <div className="flex items-center space-x-4">
@@ -3329,7 +3354,7 @@ export default function Page() {
                 </div>
 
                   {/* Deeply respectful legacy narrative illustration box */}
-                  <div className="bg-zinc-950 border border-zinc-900 p-1.5 rounded-2xl relative overflow-hidden shadow-xl text-left group">
+                  <div className="lg:col-span-12 bg-zinc-950 border border-zinc-900 p-1.5 rounded-2xl relative overflow-hidden shadow-xl text-left group">
                     <div className="relative h-44 w-full rounded-xl overflow-hidden border border-zinc-900 shadow-inner flex items-end">
                       <img 
                         src="/bws_heritage.png" 

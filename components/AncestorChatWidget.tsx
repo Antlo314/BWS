@@ -25,8 +25,8 @@ interface Message {
 
 const PRESET_PROMPTS = [
   {
-    label: "How do community credits work?",
-    text: "Can you explain how I can earn and use community credits (BWSX) here?",
+    label: "What is a community credit?",
+    text: "What is the BWSX community credit, and what is its future plan?",
   },
   {
     label: "What is BWS Inc.?",
