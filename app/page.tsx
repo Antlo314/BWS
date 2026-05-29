@@ -3362,9 +3362,10 @@ export default function Page() {
                     })()}
                   </div>
                   </div>
+                </div>
 
-                  {/* Right Column: Workshops, Calendar & Archive */}
-                  <div className="lg:col-span-5 space-y-6">
+                {/* Right Column: Workshops, Calendar & Archive */}
+                <div className="lg:col-span-5 space-y-6">
 
                 {/* GOOGLE MEET CLASSROOMS & LIVE SCHEDULER */}
                            {/* MEET TIMELINE WIDGET */}
