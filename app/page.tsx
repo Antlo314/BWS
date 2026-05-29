@@ -323,6 +323,70 @@ export default function Page() {
   const speechUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const elevenLabsAudioRef = useRef<HTMLAudioElement | null>(null);
 
+  // Custom music player states
+  const [currentTrackPath, setCurrentTrackPath] = useState<string | null>(null);
+  const [isPlayingMusic, setIsPlayingMusic] = useState<boolean>(false);
+  const [musicProgress, setMusicProgress] = useState<number>(0);
+  const [musicDuration, setMusicDuration] = useState<number>(0);
+  const musicAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    const audio = musicAudioRef.current;
+    if (!audio) return;
+
+    const handleTimeUpdate = () => {
+      if (audio.duration) {
+        setMusicProgress((audio.currentTime / audio.duration) * 100);
+      }
+    };
+
+    const handleLoadedMetadata = () => {
+      setMusicDuration(audio.duration);
+    };
+
+    const handleEnded = () => {
+      setIsPlayingMusic(false);
+      setMusicProgress(0);
+    };
+
+    audio.addEventListener('timeupdate', handleTimeUpdate);
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+    audio.addEventListener('ended', handleEnded);
+
+    return () => {
+      audio.removeEventListener('timeupdate', handleTimeUpdate);
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.removeEventListener('ended', handleEnded);
+    };
+  }, []);
+
+  const handlePlayTrack = (trackPath: string) => {
+    if (isSpeaking) {
+      if (typeof window !== "undefined" && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      setIsSpeaking(false);
+    }
+
+    if (currentTrackPath === trackPath) {
+      if (isPlayingMusic) {
+        musicAudioRef.current?.pause();
+        setIsPlayingMusic(false);
+      } else {
+        musicAudioRef.current?.play().catch(e => console.error("Audio playback failed: ", e));
+        setIsPlayingMusic(true);
+      }
+    } else {
+      setCurrentTrackPath(trackPath);
+      setIsPlayingMusic(true);
+      if (musicAudioRef.current) {
+        musicAudioRef.current.src = trackPath;
+        musicAudioRef.current.load();
+        musicAudioRef.current.play().catch(e => console.error("Audio playback failed: ", e));
+      }
+    }
+  };
+
   // Custom resource submit states
   const [isResourceModalOpen, setIsResourceModalOpen] = useState(false);
   const [newResource, setNewResource] = useState({
@@ -3086,6 +3150,100 @@ export default function Page() {
                           <p className="text-[9px] text-zinc-400 font-light leading-snug">
                             {ttsNotice.detail}
                           </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* SOUNDTRACK PREVIEW MUSIC PLAYER */}
+                  <div className="bg-zinc-950/80 border border-[#ca8a04]/40 p-5 rounded-2xl relative overflow-hidden shadow-xl text-left">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-[#ca8a04]/5 blur-2xl rounded-full pointer-events-none" />
+                    
+                    <div className="flex justify-between items-center pb-2 border-b border-zinc-900 mb-4">
+                      <div>
+                        <span className="text-[8px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-bold block">Soundtrack Preview</span>
+                        <h4 className="text-xs font-mono font-black text-white uppercase tracking-wider mt-0.5">Listen to the Sound of BWS</h4>
+                      </div>
+                      <span className="text-[7px] text-yellow-500 font-mono bg-yellow-950/40 px-2 py-0.5 rounded border border-yellow-500/20 font-bold uppercase tracking-wider animate-pulse">Pre-Release</span>
+                    </div>
+
+                    <p className="text-[10px] text-zinc-400 font-light leading-relaxed mb-4">
+                      Below are exclusive pre-release tracks from the upcoming **BWS Soundtrack** (releasing June 1st). Showcasing R&B, Neo Soul, Blues, and Rap detailing hidden truths of Greenwood. **Support the campaign below to download the full album!**
+                    </p>
+
+                    <div className="space-y-2.5">
+                      {/* Track 1 */}
+                      <div className={`p-3 rounded-lg border transition-all flex items-center justify-between gap-4 ${
+                        currentTrackPath === '/Thirty-Five Blocks.mp3'
+                          ? 'bg-zinc-900/40 border-[#ca8a04]/60'
+                          : 'bg-black/40 border-zinc-900 hover:border-zinc-800'
+                      }`}>
+                        <div className="flex items-center space-x-3 min-w-0">
+                          <button
+                            onClick={() => handlePlayTrack('/Thirty-Five Blocks.mp3')}
+                            className="w-8 h-8 rounded-full bg-gradient-to-r from-[#ca8a04] to-yellow-500 hover:from-yellow-500 hover:to-[#ca8a04] text-black flex items-center justify-center cursor-pointer shrink-0 transition-all shadow-[0_0_10px_rgba(202,138,4,0.2)]"
+                            title="Play/Pause Track"
+                          >
+                            {isPlayingMusic && currentTrackPath === '/Thirty-Five Blocks.mp3' ? (
+                              <Pause className="w-3.5 h-3.5 fill-black text-black" />
+                            ) : (
+                              <Play className="w-3.5 h-3.5 fill-black text-black ml-0.5" />
+                            )}
+                          </button>
+                          <div className="min-w-0 text-left">
+                            <span className="text-[10.5px] font-bold text-white block uppercase tracking-wide truncate">Thirty-Five Blocks</span>
+                            <span className="text-[8px] font-mono text-zinc-550 uppercase">Official Soundtrack Track 01</span>
+                          </div>
+                        </div>
+                        <span className="text-[9px] font-mono text-zinc-550 shrink-0 font-bold uppercase tracking-wider text-yellow-500">Neo Soul / R&B</span>
+                      </div>
+
+                      {/* Track 2 */}
+                      <div className={`p-3 rounded-lg border transition-all flex items-center justify-between gap-4 ${
+                        currentTrackPath === '/Thirty-Five Brick.mp3'
+                          ? 'bg-zinc-900/40 border-[#ca8a04]/60'
+                          : 'bg-black/40 border-zinc-900 hover:border-zinc-800'
+                      }`}>
+                        <div className="flex items-center space-x-3 min-w-0">
+                          <button
+                            onClick={() => handlePlayTrack('/Thirty-Five Brick.mp3')}
+                            className="w-8 h-8 rounded-full bg-gradient-to-r from-[#ca8a04] to-yellow-500 hover:from-yellow-500 hover:to-[#ca8a04] text-black flex items-center justify-center cursor-pointer shrink-0 transition-all shadow-[0_0_10px_rgba(202,138,4,0.2)]"
+                            title="Play/Pause Track"
+                          >
+                            {isPlayingMusic && currentTrackPath === '/Thirty-Five Brick.mp3' ? (
+                              <Pause className="w-3.5 h-3.5 fill-black text-black" />
+                            ) : (
+                              <Play className="w-3.5 h-3.5 fill-black text-black ml-0.5" />
+                            )}
+                          </button>
+                          <div className="min-w-0 text-left">
+                            <span className="text-[10.5px] font-bold text-white block uppercase tracking-wide truncate">Thirty-Five Brick</span>
+                            <span className="text-[8px] font-mono text-zinc-550 uppercase">Official Soundtrack Track 02</span>
+                          </div>
+                        </div>
+                        <span className="text-[9px] font-mono text-zinc-550 shrink-0 font-bold uppercase tracking-wider text-yellow-500">Trap / Rap</span>
+                      </div>
+                    </div>
+
+                    {/* Active Track Progress Bar */}
+                    {currentTrackPath && (
+                      <div className="mt-4 pt-3.5 border-t border-zinc-900/80 animate-in fade-in duration-200">
+                        <div className="flex justify-between items-center text-[8.5px] font-mono text-zinc-400 mb-1">
+                          <span className="truncate max-w-[180px] uppercase text-[#eab308] font-bold">
+                            Now Playing: {currentTrackPath.split('/').pop()?.replace('.mp3', '')}
+                          </span>
+                          <span>
+                            {Math.floor((musicProgress / 100) * musicDuration / 60)}:
+                            {String(Math.floor((musicProgress / 100) * musicDuration % 60)).padStart(2, '0')} / 
+                            {Math.floor(musicDuration / 60)}:
+                            {String(Math.floor(musicDuration % 60)).padStart(2, '0')}
+                          </span>
+                        </div>
+                        <div className="h-1.5 w-full bg-black rounded-full overflow-hidden border border-zinc-900 relative">
+                          <div 
+                            className="h-full bg-gradient-to-r from-[#ca8a04] to-yellow-500"
+                            style={{ width: `${musicProgress}%` }}
+                          />
                         </div>
                       </div>
                     )}
@@ -6669,6 +6827,9 @@ export default function Page() {
 
       {/* FIXED ANCESTOR CHAT WIDGET - FEATURING THE OLDER WOMAN SEER */}
       <AncestorChatWidget />
+
+      {/* Main audio player element for soundtrack previews */}
+      <audio ref={musicAudioRef} />
 
       {/* Toast Notification for Share confirmation */}
       <AnimatePresence>
