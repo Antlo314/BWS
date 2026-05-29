@@ -1360,6 +1360,69 @@ export default function Page() {
     }
   };
 
+  const triggerDirectStripePayment = async (amount: number = 25) => {
+    if (!user) {
+      setFormError("Active credentials needed. Please sign-in above first.");
+      setActiveTab('support');
+      return;
+    }
+
+    setIsProcessingPayment(true);
+    const generatedReceiptId = generateStaticId('tx-user');
+    const generatedHash = generateSystemHash();
+    const timestampStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    const userSupportTx = {
+      id: generatedReceiptId,
+      timestamp: timestampStr,
+      hash: generatedHash,
+      sourceName: userProfile?.displayName || user.displayName || 'Sovereign Steward',
+      tradeType: 'Sovereign Seed',
+      bwsxAmount: `+${Math.floor(amount * 1.5)}.00 BWSX`,
+      customMsg: `Invested $${amount.toFixed(2)} in BWS Inc. Phase 1 Self-Ownership Fund.`,
+      userId: user.uid,
+      email: user.email || '',
+      status: 'PENDING',
+      priceUsd: amount,
+      creditsCalculated: Math.floor(amount * 1.5),
+      tierName: 'Direct Contributor'
+    };
+
+    try {
+      localStorage.setItem('bws_pending_support_tx', JSON.stringify({
+        id: generatedReceiptId,
+        userId: user.uid,
+        credits: Math.floor(amount * 1.5),
+        amount: amount,
+        tierName: 'Direct Contributor',
+        hash: generatedHash,
+        timestamp: timestampStr,
+        sourceName: userSupportTx.sourceName,
+        customMsg: userSupportTx.customMsg
+      }));
+
+      if (user.uid === 'guest_sovereign_identity') {
+        setTimeout(() => {
+          window.location.href = window.location.pathname + '?payment_status=success';
+        }, 1200);
+      } else {
+        await setDoc(doc(db, 'trades', generatedReceiptId), userSupportTx);
+        
+        if (isSimulationMode()) {
+          setTimeout(() => {
+            window.location.href = window.location.pathname + '?payment_status=success';
+          }, 1500);
+        } else {
+          const paymentUrl = getPaymentLink(user.email || '', generatedReceiptId);
+          window.location.href = paymentUrl;
+        }
+      }
+    } catch (error) {
+      setIsProcessingPayment(false);
+      console.error("Direct payment initiation error: ", error);
+    }
+  };
+
   // Synthesize a majestic wealth & power chime using standard Web Audio API
   const playSovereignChime = () => {
     try {
@@ -2652,6 +2715,20 @@ export default function Page() {
   return (
     <div className="flex flex-col min-h-screen bg-[#09090b] text-[#f4f4f5] font-sans antialiased selection:bg-[#ca8a04] selection:text-black relative overflow-x-hidden" id="bws-framework">
       
+      {isProcessingPayment && (
+        <div className="fixed inset-0 z-50 bg-[#09090b]/90 backdrop-blur-sm flex items-center justify-center">
+          <div className="flex flex-col items-center space-y-4 text-center px-4">
+            <Loader2 className="w-10 h-10 text-[#eab308] animate-spin" />
+            <p className="text-xs font-mono uppercase tracking-[0.25em] text-[#eab308] font-bold">
+              {isSimulationMode() ? "Simulating Secure Redirect..." : "Redirecting to Secure Stripe Checkout..."}
+            </p>
+            <p className="text-[10px] font-mono text-zinc-500 max-w-xs leading-relaxed">
+              Please do not close this window. You will be redirected to the secure community fund donation page.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Subtle page-wide historical legacy background image layer under overlay */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.035] mix-blend-luminosity z-0">
         <img 
@@ -2729,7 +2806,7 @@ export default function Page() {
             Shared Ledger
           </button>
           <button 
-            onClick={() => setActiveTab('support')}
+            onClick={() => triggerDirectStripePayment(25)}
             className={`px-3 py-1.5 rounded text-[9px] font-mono uppercase tracking-widest transition-all cursor-pointer ${
               activeTab === 'support' 
                 ? 'bg-[#ca8a04] text-black font-extrabold' 
@@ -2885,7 +2962,7 @@ export default function Page() {
             <button onClick={() => { setActiveTab('academy'); setIsMobileMenuOpen(false); }} className={`text-left py-2 cursor-pointer ${activeTab === 'academy' ? 'text-white font-extrabold' : ''}`}>Skill Academy</button>
             <button disabled className="text-left py-2 text-zinc-600 cursor-not-allowed opacity-50 select-none">Resource Vault</button>
             <button disabled className="text-left py-2 text-zinc-600 cursor-not-allowed opacity-50 select-none">Ledger Scoreboard</button>
-            <button onClick={() => { setActiveTab('support'); setIsMobileMenuOpen(false); }} className={`text-left py-2 cursor-pointer ${activeTab === 'support' ? 'text-white font-extrabold' : ''}`}>Invest In Self</button>
+            <button onClick={() => { triggerDirectStripePayment(25); setIsMobileMenuOpen(false); }} className={`text-left py-2 cursor-pointer ${activeTab === 'support' ? 'text-white font-extrabold' : ''}`}>Invest In Self</button>
             {user && (
               <button onClick={() => { setActiveTab('profile'); setIsMobileMenuOpen(false); }} className={`text-left py-2 cursor-pointer ${activeTab === 'profile' ? 'text-white font-extrabold' : ''}`}>My Profile</button>
             )}
@@ -3115,7 +3192,7 @@ export default function Page() {
                       </p>
 
                       <button 
-                        onClick={() => setActiveTab('support')}
+                        onClick={() => triggerDirectStripePayment(25)}
                         className="w-full py-2.5 rounded bg-gradient-to-r from-[#ca8a04] to-[#eab308] text-black text-[9px] font-mono tracking-widest uppercase font-bold text-center block"
                       >
                         Support the Movement →
