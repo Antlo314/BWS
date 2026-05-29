@@ -310,10 +310,10 @@ export default function Page() {
   } | null>(null);
 
   // --- WALLET STATE ---
-  const [userBWSXBalance, setUserBWSXBalance] = useState<number>(12450.00); 
+  const [userBWSXBalance, setUserBWSXBalance] = useState<number>(0); 
   const [fundingTotal, setFundingTotal] = useState<number>(50);
-  const [totalBWSXCreditsMinted, setTotalBWSXCreditsMinted] = useState<number>(1842910);
-  const [activeNodes, setActiveNodes] = useState<number>(81);
+  const [totalBWSXCreditsMinted, setTotalBWSXCreditsMinted] = useState<number>(0);
+  const [activeNodes, setActiveNodes] = useState<number>(0);
 
   // Audio story states
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
@@ -2984,6 +2984,20 @@ export default function Page() {
                     <p className="text-[11.5px] text-zinc-300 font-light leading-relaxed">
                       BWS Inc. is dedicated to building self-ownership, economic independence, and cooperative logistics. By restoring the community wealth-building principles of historic Black Wall Street, we empower each other to pass down trades, share resources, and secure our collective future.
                     </p>
+                    <div className="mt-4 pt-3.5 border-t border-zinc-900/60 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <span className="text-[8px] font-mono uppercase tracking-[0.15em] text-[#eab308] block font-bold mb-1">Future Value & Utility</span>
+                        <p className="text-[10px] text-zinc-400 font-light leading-snug font-sans">
+                          The BWSX credit is designed to become interchangeable in all physical and digital spaces. Eventually, these tokens will have transactional utility and value for exchanging goods and services across participating local stores.
+                        </p>
+                      </div>
+                      <div>
+                        <span className="text-[8px] font-mono uppercase tracking-[0.15em] text-[#eab308] block font-bold mb-1">Unity Across Backgrounds</span>
+                        <p className="text-[10px] text-zinc-400 font-light leading-snug font-sans">
+                          People of all ethnicities and backgrounds are welcome to participate, support, and trade. Our single, unifying focus is spending with one another to keep our resources and businesses growing together.
+                        </p>
+                      </div>
+                    </div>
                   </div>
                   
                   <div className="space-y-3">
