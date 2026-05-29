@@ -2973,6 +2973,18 @@ export default function Page() {
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>Continuing the Legacy of Tulsa</span>
                   </div>
+
+                  {/* MISSION STATEMENT BOX */}
+                  <div className="p-5 bg-gradient-to-r from-zinc-950 to-zinc-900 border border-[#ca8a04]/30 rounded-2xl relative overflow-hidden text-left shadow-lg">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-[#ca8a04]/5 blur-xl rounded-full" />
+                    <span className="text-[8px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-bold block mb-1">Our Mission</span>
+                    <h3 className="text-lg font-bold text-white uppercase tracking-tight mb-2 flex items-center gap-2">
+                      “Each One Teach One”
+                    </h3>
+                    <p className="text-[11.5px] text-zinc-300 font-light leading-relaxed">
+                      BWS Inc. is dedicated to building self-ownership, economic independence, and cooperative logistics. By restoring the community wealth-building principles of historic Black Wall Street, we empower each other to pass down trades, share resources, and secure our collective future.
+                    </p>
+                  </div>
                   
                   <div className="space-y-3">
                     <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight leading-none text-white">
@@ -3146,9 +3158,31 @@ export default function Page() {
                         </div>
                       </div>
 
-                      <p className="text-[10px] text-zinc-400 leading-relaxed font-light">
-                        Help us hit our <strong>$1,500 target</strong> before June 1st to fund our official domain name purchase, hosting setup, brand marketing, and the release of our commemorative soundtrack.
-                      </p>
+                      {/* GOAL BREAKDOWN BOX */}
+                      <div className="bg-[#ca8a04]/5 border border-[#ca8a04]/20 p-4 rounded-xl space-y-2.5 text-left">
+                        <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-[#eab308] block font-bold">Why We Need The Remaining $1,450</span>
+                        <p className="text-[10px] text-zinc-300 font-light leading-relaxed">
+                          To successfully launch the official platform on June 1st, we need to secure the remaining funds for:
+                        </p>
+                        <ul className="space-y-1.5 font-mono text-[9px] text-zinc-400">
+                          <li className="flex items-start gap-2">
+                            <span className="text-[#ca8a04] font-bold">✓</span>
+                            <span><strong>Domain Name:</strong> Securing our permanent official BWS web domain.</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-[#ca8a04] font-bold">✓</span>
+                            <span><strong>Fast Hosting:</strong> Deploying fast, reliable web and audio streaming servers.</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-[#ca8a04] font-bold">✓</span>
+                            <span><strong>Brand Marketing:</strong> Promotional campaigns to push the BWS brand and message.</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-[#ca8a04] font-bold">✓</span>
+                            <span><strong>BWS Soundtrack Release:</strong> Finalizing and releasing the free downloadable soundtrack.</span>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
 
