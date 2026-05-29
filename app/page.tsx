@@ -1333,25 +1333,20 @@ export default function Page() {
         customMsg: userSupportTx.customMsg
       }));
 
-      if (user.uid === 'guest_sovereign_identity') {
-        // Guest user simulation redirect
+      // Write pending trade to Firestore database (skip write for guest accounts)
+      if (user.uid !== 'guest_sovereign_identity') {
+        await setDoc(doc(db, 'trades', generatedReceiptId), userSupportTx);
+      }
+      
+      if (isSimulationMode()) {
+        // Simulation Mode: Wait 1.5s and redirect to success query params
         setTimeout(() => {
           window.location.href = window.location.pathname + '?payment_status=success';
-        }, 1200);
+        }, 1500);
       } else {
-        // Write pending trade to Firestore database
-        await setDoc(doc(db, 'trades', generatedReceiptId), userSupportTx);
-        
-        if (isSimulationMode()) {
-          // Simulation Mode: Wait 1.5s and redirect to success query params
-          setTimeout(() => {
-            window.location.href = window.location.pathname + '?payment_status=success';
-          }, 1500);
-        } else {
-          // Live Stripe Checkout Redirect
-          const paymentUrl = getPaymentLink(supportFormData.email, generatedReceiptId);
-          window.location.href = paymentUrl;
-        }
+        // Live Stripe Checkout Redirect
+        const paymentUrl = getPaymentLink(supportFormData.email, generatedReceiptId);
+        window.location.href = paymentUrl;
       }
     } catch (error) {
       setIsProcessingPayment(false);
