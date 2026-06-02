@@ -2821,86 +2821,16 @@ export default function Page() {
 
                 {/* LEFT SIDE: VIDEO PLAYER CONTAINER */}
                 <div className="lg:col-span-7 flex flex-col items-center">
-                  <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-zinc-800/80 bg-black group shadow-2xl">
-                    <video 
-                      ref={videoRef}
-                      src="/sarahrector.mp4"
-                      autoPlay
-                      muted={isVideoMuted}
-                      playsInline
-                      onTimeUpdate={handleVideoTimeUpdate}
-                      onLoadedMetadata={handleVideoLoadedMetadata}
-                      onEnded={handleVideoEnded}
-                      onClick={handleTogglePlay}
-                      className="w-full h-full object-cover cursor-pointer"
+                  <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-zinc-800/80 bg-black shadow-2xl">
+                    <iframe 
+                      src="https://www.youtube.com/embed/cLkaMn-CSQA?autoplay=1&mute=1&rel=0" 
+                      title="Sarah Rector Story"
+                      frameBorder="0" 
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                      allowFullScreen
+                      className="w-full h-full"
                     />
-                    
-                    {/* Big Play Overlay (appears when paused) */}
-                    {!isVideoPlaying && (
-                      <div 
-                        onClick={handleTogglePlay}
-                        className="absolute inset-0 flex items-center justify-center bg-black/45 cursor-pointer transition-opacity z-10"
-                      >
-                        <motion.div 
-                          whileHover={{ scale: 1.1 }}
-                          className="w-16 h-16 rounded-full bg-gradient-to-r from-[#ca8a04] to-yellow-500 flex items-center justify-center shadow-lg animate-pulse"
-                        >
-                          <Play className="w-6 h-6 fill-black text-black ml-1" />
-                        </motion.div>
-                      </div>
-                    )}
-
-                    {/* Top-right Volume Toggle Pill */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleToggleMute();
-                      }}
-                      className="absolute top-3 right-3 px-3 py-1.5 bg-black/80 hover:bg-black/90 text-white rounded-full border border-zinc-800 flex items-center gap-1.5 text-[9px] font-mono uppercase font-bold tracking-wider z-20 transition-all cursor-pointer shadow-lg hover:scale-105"
-                    >
-                      {isVideoMuted ? (
-                        <>
-                          <VolumeX className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
-                          <span>Tap to Unmute</span>
-                        </>
-                      ) : (
-                        <>
-                          <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
-                          <span>Mute Audio</span>
-                        </>
-                      )}
-                    </button>
-
-                    {/* Video Control Bar Overlay */}
-                    <div className="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/95 to-transparent z-10 flex items-center justify-between gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleTogglePlay();
-                        }}
-                        className="text-[#eab308] hover:text-white transition-colors cursor-pointer"
-                      >
-                        {isVideoPlaying ? <Pause className="w-4 h-4 fill-[#eab308]" /> : <Play className="w-4 h-4 fill-[#eab308]" />}
-                      </button>
-                      
-                      {/* Slider Progress */}
-                      <div className="flex-1 h-1 bg-zinc-800 rounded-full overflow-hidden relative">
-                        <div 
-                          className="h-full bg-gradient-to-r from-[#ca8a04] to-[#eab308]"
-                          style={{ width: `${videoProgress}%` }}
-                        />
-                      </div>
-
-                      <span className="text-[9px] font-mono text-zinc-400">
-                        {videoRef.current ? Math.floor(videoRef.current.currentTime) : 0}s / {Math.floor(videoDuration) || 0}s
-                      </span>
-                    </div>
                   </div>
-                  
-                  {/* Micro-prompts below player */}
-                  <p className="text-[10px] text-zinc-500 font-mono mt-2 tracking-wide uppercase">
-                    Click player to Pause/Play • Hover for controls progress
-                  </p>
                 </div>
 
                 {/* RIGHT SIDE: TEXT & ACTIONS PANEL */}
@@ -3096,86 +3026,16 @@ export default function Page() {
 
               {/* LEFT SIDE: VIDEO PLAYER CONTAINER */}
               <div className="lg:col-span-7 flex flex-col items-center">
-                <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-zinc-800/80 bg-black group shadow-2xl">
-                  <video 
-                    ref={videoRef}
-                    src="/sarahrector.mp4"
-                    autoPlay
-                    muted={isVideoMuted}
-                    playsInline
-                    onTimeUpdate={handleVideoTimeUpdate}
-                    onLoadedMetadata={handleVideoLoadedMetadata}
-                    onEnded={handleVideoEnded}
-                    onClick={handleTogglePlay}
-                    className="w-full h-full object-cover cursor-pointer"
+                <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-zinc-800/80 bg-black shadow-2xl">
+                  <iframe 
+                    src="https://www.youtube.com/embed/cLkaMn-CSQA?autoplay=1&mute=1&rel=0" 
+                    title="Sarah Rector Story"
+                    frameBorder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowFullScreen
+                    className="w-full h-full"
                   />
-                  
-                  {/* Big Play Overlay (appears when paused) */}
-                  {!isVideoPlaying && (
-                    <div 
-                      onClick={handleTogglePlay}
-                      className="absolute inset-0 flex items-center justify-center bg-black/45 cursor-pointer transition-opacity z-10"
-                    >
-                      <motion.div 
-                        whileHover={{ scale: 1.1 }}
-                        className="w-16 h-16 rounded-full bg-gradient-to-r from-[#ca8a04] to-yellow-500 flex items-center justify-center shadow-lg animate-pulse"
-                      >
-                        <Play className="w-6 h-6 fill-black text-black ml-1" />
-                      </motion.div>
-                    </div>
-                  )}
-
-                  {/* Top-right Volume Toggle Pill */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleToggleMute();
-                    }}
-                    className="absolute top-3 right-3 px-3 py-1.5 bg-black/80 hover:bg-black/90 text-white rounded-full border border-zinc-800 flex items-center gap-1.5 text-[9px] font-mono uppercase font-bold tracking-wider z-20 transition-all cursor-pointer shadow-lg hover:scale-105"
-                  >
-                    {isVideoMuted ? (
-                      <>
-                        <VolumeX className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
-                        <span>Tap to Unmute</span>
-                      </>
-                    ) : (
-                      <>
-                        <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>Mute Audio</span>
-                      </>
-                    )}
-                  </button>
-
-                  {/* Video Control Bar Overlay */}
-                  <div className="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/95 to-transparent z-10 flex items-center justify-between gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleTogglePlay();
-                      }}
-                      className="text-[#eab308] hover:text-white transition-colors cursor-pointer"
-                    >
-                      {isVideoPlaying ? <Pause className="w-4 h-4 fill-[#eab308]" /> : <Play className="w-4 h-4 fill-[#eab308]" />}
-                    </button>
-                    
-                    {/* Slider Progress */}
-                    <div className="flex-1 h-1 bg-zinc-800 rounded-full overflow-hidden relative">
-                      <div 
-                        className="h-full bg-gradient-to-r from-[#ca8a04] to-[#eab308]"
-                        style={{ width: `${videoProgress}%` }}
-                      />
-                    </div>
-
-                    <span className="text-[9px] font-mono text-zinc-400">
-                      {videoRef.current ? Math.floor(videoRef.current.currentTime) : 0}s / {Math.floor(videoDuration) || 0}s
-                    </span>
-                  </div>
                 </div>
-                
-                {/* Micro-prompts below player */}
-                <p className="text-[10px] text-zinc-500 font-mono mt-2 tracking-wide uppercase">
-                  Click player to Pause/Play • Hover for controls progress
-                </p>
               </div>
 
               {/* RIGHT SIDE: TEXT & ACTIONS PANEL */}
