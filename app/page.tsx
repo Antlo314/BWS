@@ -223,6 +223,127 @@ function generateSystemHash(): string {
   return `0x${ledgerNonce.toString(16).toUpperCase()}_SECURE`;
 }
 
+interface GreenwoodBlock {
+  number: number;
+  name: string;
+  type: string;
+  owner: string;
+  description: string;
+  coords: string;
+}
+
+const GREENWOOD_BLOCKS: GreenwoodBlock[] = [
+  {
+    number: 1,
+    name: "Stradford Hotel",
+    type: "Luxury Hospitality",
+    owner: "J.B. Stradford",
+    description: "A gorgeous 54-room brick hotel, representing the largest black-owned hotel in the US. It housed a fine dining hall, drug store, and ballroom.",
+    coords: "Greenwood Ave & Archer St"
+  },
+  {
+    number: 2,
+    name: "Dreamland Theatre",
+    type: "Entertainment & Cinema",
+    owner: "John & Loula Williams",
+    description: "A modern 750-seat silent film theater that served as a central hub for social gathering, music, and community lectures.",
+    coords: "127 N. Greenwood Ave"
+  },
+  {
+    number: 3,
+    name: "Vernon A.M.E. Church",
+    type: "Faith & Spiritual Sanctuary",
+    owner: "Greenwood Congregation",
+    description: "The spiritual and civic core of Greenwood. It provided a basement emergency shelter, community planning space, and historical archive.",
+    coords: "311 N. Greenwood Ave"
+  },
+  {
+    number: 4,
+    name: "Gurley Hotel & Office Block",
+    type: "Real Estate & Commercial",
+    owner: "O.W. Gurley",
+    description: "A prominent three-story brick structure housing offices for Black doctors, lawyers, and O.W. Gurley's own real estate ventures.",
+    coords: "110 N. Greenwood Ave"
+  },
+  {
+    number: 5,
+    name: "Greenwood Pharmacy",
+    type: "Healthcare & Medicine",
+    owner: "Dr. A.C. Jackson",
+    description: "Owned by Dr. Jackson, described by the Mayo brothers as the 'most able Negro surgeon in America'. A vital healthcare provider.",
+    coords: "124 N. Greenwood Ave"
+  },
+  {
+    number: 6,
+    name: "Williams Confectionery",
+    type: "Dining & Social Hub",
+    owner: "Williams Family",
+    description: "A beloved local ice cream parlor and candy store where youths and families gathered after theater shows or Sunday service.",
+    coords: "100 Block Greenwood Ave"
+  },
+  {
+    number: 7,
+    name: "The Tulsa Star",
+    type: "Media & Journalism",
+    owner: "A.J. Smitherman",
+    description: "A crusading black newspaper that advocated for civil rights, economic self-reliance, and cooperative neighborhood safety.",
+    coords: "Archer St & Greenwood Ave"
+  },
+  {
+    number: 8,
+    name: "Greenwood Commercial Club",
+    type: "Civic Association",
+    owner: "Greenwood Merchants",
+    description: "A networking board where local entrepreneurs pooled capital, negotiated business partnerships, and guarded local interests.",
+    coords: "100 Block Greenwood Ave"
+  },
+  {
+    number: 9,
+    name: "East End Feed Store",
+    type: "Agriculture & Supplies",
+    owner: "Cooperative Supply Guild",
+    description: "Provided seed, farming tools, and animal feed to family farms and urban gardens surrounding the Greenwood district.",
+    coords: "East Archer St"
+  },
+  {
+    number: 10,
+    name: "Royal Hotel",
+    type: "Hospitality & Lodging",
+    owner: "R.T. Bridgewater",
+    description: "An elegant boarding house that offered comfortable accommodations for travelers, artists, and business delegates visiting Tulsa.",
+    coords: "200 Block Greenwood Ave"
+  },
+  {
+    number: 11,
+    name: "Mann's Grocery & Market",
+    type: "Food & Retail",
+    owner: "C.A. Mann",
+    description: "A fully stocked grocery market that kept food dollars circulating locally by sourcing fresh produce from nearby black-owned farms.",
+    coords: "Greenwood Avenue"
+  },
+  {
+    number: 12,
+    name: "Greenwood Public Library",
+    type: "Education & Literacy",
+    owner: "Greenwood School Board",
+    description: "A volunteer-run library filled with books, journals, and historical documents detailing African and Creek heritage.",
+    coords: "N. Greenwood Ave"
+  }
+];
+
+const getBlockProfile = (num: number): GreenwoodBlock => {
+  const matched = GREENWOOD_BLOCKS.find(b => b.number === num);
+  if (matched) return matched;
+  return {
+    number: num,
+    name: `Greenwood Block ${num}`,
+    type: "Cooperative Asset Block",
+    owner: "Greenwood Residents",
+    description: `A designated land allotment of the historic 35-block district. In 1921, this block housed private family residences, local dry goods stores, and tailoring shops funded entirely by neighborhood capital.`,
+    coords: `Greenwood District, Block Coordinates: E-${num}`
+  };
+};
+
 // Cash in-memory OAuth token for Meet & Workspace APIs
 let cachedAccessToken: string | null = null;
 
@@ -232,6 +353,7 @@ export default function Page() {
   const [countdown, setCountdown] = useState({ days: 10, hours: 0, minutes: 0, seconds: 0 });
   const [selectedTierIndex, setSelectedTierIndex] = useState<number>(1); // $25 as default
   const [customSupportAmount, setCustomSupportAmount] = useState<string>('');
+  const [selectedBlockNum, setSelectedBlockNum] = useState<number>(1);
 
   // --- SARAH RECTOR VIDEO & INTRO STATES ---
   const [showIntroVideo, setShowIntroVideo] = useState<boolean>(true);
@@ -3169,10 +3291,10 @@ export default function Page() {
       <div className="absolute bottom-[10%] right-[-100px] w-[450px] h-[450px] bg-[#eab308]/4 blur-[120px] rounded-full pointer-events-none z-0" />
 
       {/* BETA BANNER */}
-      <div className="bg-[#ca8a04]/20 border-b border-[#ca8a04]/40 text-center py-2 px-4 z-[60] relative">
-        <p className="text-[#eab308] text-[10px] font-mono uppercase tracking-widest font-black flex items-center justify-center gap-2">
-          <AlertTriangle className="w-3.5 h-3.5" />
-          Beta Site — Official Site & Program Launch Expected June 1st. We will keep you updated!
+      <div className="bg-[#ca8a04]/20 border-b border-[#ca8a04]/40 text-center py-2.5 px-4 z-[60] relative">
+        <p className="text-[#eab308] text-[9.5px] sm:text-[10.5px] font-mono uppercase tracking-wider font-black flex items-center justify-center gap-2 flex-wrap">
+          <AlertTriangle className="w-3.5 h-3.5 animate-pulse" />
+          <span>Sovereign Launch Campaign — Deployment window adjusted to June 1st – June 7th, depending on cooperative community backing. Back a tier to help secure our infrastructure!</span>
         </p>
       </div>
 
@@ -3180,7 +3302,7 @@ export default function Page() {
       <div className="bg-gradient-to-r from-yellow-500/20 via-[#ca8a04]/30 to-amber-500/20 border-b border-[#ca8a04]/60 text-center py-2 px-4 z-[60] relative shadow-[0_0_15px_rgba(202,138,4,0.25)] animate-pulse">
         <p className="text-white text-[10px] font-mono uppercase tracking-wider font-extrabold flex items-center justify-center gap-2">
           <Sparkles className="w-3.5 h-3.5 text-yellow-400 animate-spin" style={{ animationDuration: '3s' }} />
-          <span>Google Auth Launch Promo: Sign up before June 1st to receive a free bonus of <strong className="text-yellow-300">100 BWSX</strong> credited directly to your wallet!</span>
+          <span>Google Auth Launch Promo: Sign up before June 7th to receive a free bonus of <strong className="text-yellow-300">100 BWSX</strong> credited directly to your wallet!</span>
         </p>
       </div>
 
@@ -3528,11 +3650,112 @@ export default function Page() {
                     )}
                   </div>
 
+                  {/* INTERACTIVE 35-BLOCK GRID MAP OF GREENWOOD */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="bg-zinc-950/80 border border-[#ca8a04]/40 p-5 sm:p-6 rounded-2xl relative overflow-hidden shadow-xl text-left mb-6"
+                  >
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-[#ca8a04]/5 blur-2xl rounded-full pointer-events-none" />
+                    
+                    <div className="flex justify-between items-center pb-2.5 border-b border-zinc-900 mb-5">
+                      <div>
+                        <span className="text-[8px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-bold block">Historic Interactive Map</span>
+                        <h4 className="text-sm font-mono font-black text-white uppercase tracking-wider mt-0.5">The 35 Blocks of Greenwood</h4>
+                      </div>
+                      <span className="text-[7.5px] text-emerald-400 font-mono bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-500/20 font-bold uppercase tracking-wider">Independent Economy</span>
+                    </div>
+
+                    <p className="text-[10px] text-zinc-400 font-light leading-relaxed mb-5">
+                      Honoring the 35 blocks of Black Wall Street. Click on any block coordinates in the grid below to inspect historical businesses, pioneer landowners, and cultural hubs of the district.
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+                      {/* Grid representation of 35 blocks */}
+                      <div className="md:col-span-7 space-y-3">
+                        <span className="text-[8px] font-mono uppercase tracking-widest text-zinc-500 block">Greenwood Allotment Map (35 Block Grid)</span>
+                        
+                        <div className="grid grid-cols-7 gap-1.5 p-3 bg-black/60 border border-zinc-900 rounded-xl">
+                          {Array.from({ length: 35 }, (_, i) => {
+                            const blockNum = i + 1;
+                            const isSelected = selectedBlockNum === blockNum;
+                            const hasCustomLandmark = GREENWOOD_BLOCKS.some(b => b.number === blockNum);
+                            
+                            return (
+                              <button
+                                key={blockNum}
+                                onClick={() => setSelectedBlockNum(blockNum)}
+                                className={`aspect-square rounded flex flex-col items-center justify-center font-mono transition-all text-[9.5px] cursor-pointer border ${
+                                  isSelected
+                                    ? "bg-gradient-to-br from-[#ca8a04] to-yellow-500 text-black border-[#eab308] font-black scale-[1.05] shadow-[0_0_12px_rgba(234,179,8,0.3)]"
+                                    : hasCustomLandmark
+                                    ? "bg-[#ca8a04]/10 hover:bg-[#ca8a04]/20 border-[#ca8a04]/30 text-[#eab308] font-bold"
+                                    : "bg-zinc-950 hover:bg-zinc-900 border-zinc-900 text-zinc-500"
+                                }`}
+                                title={hasCustomLandmark ? getBlockProfile(blockNum).name : `Block ${blockNum}`}
+                              >
+                                <span>B{blockNum.toString().padStart(2, '0')}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        <div className="flex justify-between items-center text-[7.5px] font-mono text-zinc-500 tracking-wider px-1">
+                          <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 bg-[#ca8a04]/10 border border-[#ca8a04]/30 rounded-sm" /> Landmark Block</span>
+                          <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 bg-[#ca8a04] rounded-sm" /> Active Block</span>
+                        </div>
+                      </div>
+
+                      {/* Detail inspection pane */}
+                      <div className="md:col-span-5 flex flex-col h-full justify-between">
+                        <div className="p-4 bg-black/50 border border-zinc-900 rounded-xl space-y-3.5 min-h-[180px] flex flex-col justify-between">
+                          {(() => {
+                            const profile = getBlockProfile(selectedBlockNum);
+                            return (
+                              <>
+                                <div className="space-y-1.5 flex-1 flex flex-col justify-between">
+                                  <div className="space-y-1.5">
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-[7.5px] font-mono text-[#ca8a04] uppercase font-bold tracking-widest leading-none">
+                                        Coordinates: {profile.coords}
+                                      </span>
+                                      <span className="text-[7.5px] font-mono text-zinc-500 font-bold uppercase leading-none">
+                                        Block #{profile.number}
+                                      </span>
+                                    </div>
+                                    
+                                    <h5 className="text-xs font-mono font-black text-white uppercase tracking-wider">
+                                      {profile.name}
+                                    </h5>
+                                    
+                                    <span className="inline-block text-[7.5px] bg-[#ca8a04]/10 border border-[#ca8a04]/25 px-1.5 py-0.5 rounded text-[#eab308] uppercase font-mono font-bold">
+                                      {profile.type}
+                                    </span>
+
+                                    <p className="text-[10px] text-zinc-300 font-light leading-normal pt-1.5 border-t border-zinc-900/60">
+                                      {profile.description}
+                                    </p>
+                                  </div>
+
+                                  <div className="pt-2 text-[8px] font-mono text-zinc-500 uppercase tracking-widest border-t border-zinc-900/40 mt-2">
+                                    Historic Trustee: <strong className="text-zinc-350">{profile.owner}</strong>
+                                  </div>
+                                </div>
+                              </>
+                            );
+                          })()}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+
                   {/* SOUNDTRACK PREVIEW MUSIC PLAYER */}
                   <div className="bg-zinc-950/80 border border-[#ca8a04]/40 p-5 rounded-2xl relative overflow-hidden shadow-xl text-left">
                     <div className="absolute top-0 right-0 w-24 h-24 bg-[#ca8a04]/5 blur-2xl rounded-full pointer-events-none" />
                     
-                    <div className="flex justify-between items-center pb-2 border-b border-zinc-900 mb-4">
+                    <div className="flex justify-between items-center pb-2 border-b border-zinc-900 mb-5">
                       <div>
                         <span className="text-[8px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-bold block">Soundtrack Preview</span>
                         <h4 className="text-xs font-mono font-black text-white uppercase tracking-wider mt-0.5">Listen to the Sound of BWS</h4>
@@ -3540,86 +3763,147 @@ export default function Page() {
                       <span className="text-[7px] text-yellow-500 font-mono bg-yellow-950/40 px-2 py-0.5 rounded border border-yellow-500/20 font-bold uppercase tracking-wider animate-pulse">Pre-Release</span>
                     </div>
 
-                    <p className="text-[10px] text-zinc-400 font-light leading-relaxed mb-4">
-                      Below are exclusive pre-release tracks from the upcoming **BWS Soundtrack** (releasing June 1st). Showcasing R&B, Neo Soul, Blues, and Rap detailing hidden truths of Greenwood. **Support the campaign below to download the full album!**
-                    </p>
-
-                    <div className="space-y-2.5">
-                      {/* Track 1 */}
-                      <div className={`p-3 rounded-lg border transition-all flex items-center justify-between gap-4 ${
-                        currentTrackPath === '/Thirty-Five Blocks.mp3'
-                          ? 'bg-zinc-900/40 border-[#ca8a04]/60'
-                          : 'bg-black/40 border-zinc-900 hover:border-zinc-800'
-                      }`}>
-                        <div className="flex items-center space-x-3 min-w-0">
-                          <button
-                            onClick={() => handlePlayTrack('/Thirty-Five Blocks.mp3')}
-                            className="w-8 h-8 rounded-full bg-gradient-to-r from-[#ca8a04] to-yellow-500 hover:from-yellow-500 hover:to-[#ca8a04] text-black flex items-center justify-center cursor-pointer shrink-0 transition-all shadow-[0_0_10px_rgba(202,138,4,0.2)]"
-                            title="Play/Pause Track"
-                          >
-                            {isPlayingMusic && currentTrackPath === '/Thirty-Five Blocks.mp3' ? (
-                              <Pause className="w-3.5 h-3.5 fill-black text-black" />
-                            ) : (
-                              <Play className="w-3.5 h-3.5 fill-black text-black ml-0.5" />
-                            )}
-                          </button>
-                          <div className="min-w-0 text-left">
-                            <span className="text-[10.5px] font-bold text-white block uppercase tracking-wide truncate">Thirty-Five Blocks</span>
-                            <span className="text-[8px] font-mono text-zinc-550 uppercase">Official Soundtrack Track 01</span>
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                      {/* Left: Vinyl Player Graphics */}
+                      <div className="md:col-span-4 flex flex-col items-center justify-center relative min-h-[140px] border-b md:border-b-0 md:border-r border-zinc-900 pb-5 md:pb-0 md:pr-5">
+                        <div className="relative w-32 h-32 flex items-center justify-center">
+                          {/* Vinyl Sleeve */}
+                          <div className="absolute left-1 w-28 h-28 bg-gradient-to-br from-zinc-950 to-zinc-900 border border-zinc-850 rounded-lg z-10 shadow-[5px_5px_15px_rgba(0,0,0,0.6)] flex items-center justify-center overflow-hidden">
+                            <div className="absolute w-12 h-12 rounded-full border border-[#ca8a04]/10 bg-[#09090b]/80 flex items-center justify-center">
+                              <span className="text-[9px] font-mono text-[#ca8a04]/40 font-black">BWS</span>
+                            </div>
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_45%,rgba(0,0,0,0.85)_46%)]" />
                           </div>
+
+                          {/* Vinyl Disc */}
+                          <motion.div 
+                            animate={{ 
+                              x: isPlayingMusic ? 32 : 0,
+                              rotate: isPlayingMusic ? 360 : 0
+                            }}
+                            transition={{ 
+                              x: { type: 'spring', stiffness: 100, damping: 15 },
+                              rotate: isPlayingMusic 
+                                ? { repeat: Infinity, ease: 'linear', duration: 5 } 
+                                : { duration: 0.8 }
+                            }}
+                            className="absolute w-26 h-26 rounded-full bg-[#0c0c0e] border border-zinc-850 shadow-2xl flex items-center justify-center z-0"
+                            style={{ 
+                              backgroundImage: 'repeating-radial-gradient(circle, #18181b, #09090b 2px, #18181b 4px)'
+                            }}
+                          >
+                            {/* Gold Label */}
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#ca8a04] via-yellow-500 to-[#ca8a04] flex items-center justify-center border-2 border-[#09090b] shadow-inner">
+                              <div className="w-2 h-2 rounded-full bg-[#09090b] border border-[#ca8a04]/50" />
+                            </div>
+                          </motion.div>
                         </div>
-                        <span className="text-[9px] font-mono text-zinc-550 shrink-0 font-bold uppercase tracking-wider text-yellow-500">Neo Soul / R&B</span>
+
+                        {/* Animated Visualizer Spectrum */}
+                        <div className="mt-4 w-full h-5 flex items-end justify-center gap-0.5 px-2">
+                          {Array.from({ length: 20 }).map((_, i) => (
+                            <motion.div
+                              key={i}
+                              className={`w-0.5 rounded-t-sm ${isPlayingMusic ? 'bg-[#ca8a04]' : 'bg-zinc-800'}`}
+                              style={{ height: '4px' }}
+                              animate={isPlayingMusic ? {
+                                height: [4, Math.random() * 16 + 4, 4]
+                              } : { height: 4 }}
+                              transition={{
+                                duration: 0.5 + Math.random() * 0.4,
+                                repeat: Infinity,
+                                ease: 'easeInOut',
+                                delay: i * 0.02
+                              }}
+                            />
+                          ))}
+                        </div>
                       </div>
 
-                      {/* Track 2 */}
-                      <div className={`p-3 rounded-lg border transition-all flex items-center justify-between gap-4 ${
-                        currentTrackPath === '/Thirty-Five Brick.mp3'
-                          ? 'bg-zinc-900/40 border-[#ca8a04]/60'
-                          : 'bg-black/40 border-zinc-900 hover:border-zinc-800'
-                      }`}>
-                        <div className="flex items-center space-x-3 min-w-0">
-                          <button
-                            onClick={() => handlePlayTrack('/Thirty-Five Brick.mp3')}
-                            className="w-8 h-8 rounded-full bg-gradient-to-r from-[#ca8a04] to-yellow-500 hover:from-yellow-500 hover:to-[#ca8a04] text-black flex items-center justify-center cursor-pointer shrink-0 transition-all shadow-[0_0_10px_rgba(202,138,4,0.2)]"
-                            title="Play/Pause Track"
-                          >
-                            {isPlayingMusic && currentTrackPath === '/Thirty-Five Brick.mp3' ? (
-                              <Pause className="w-3.5 h-3.5 fill-black text-black" />
-                            ) : (
-                              <Play className="w-3.5 h-3.5 fill-black text-black ml-0.5" />
-                            )}
-                          </button>
-                          <div className="min-w-0 text-left">
-                            <span className="text-[10.5px] font-bold text-white block uppercase tracking-wide truncate">Thirty-Five Brick</span>
-                            <span className="text-[8px] font-mono text-zinc-550 uppercase">Official Soundtrack Track 02</span>
+                      {/* Right: Tracks List & Info */}
+                      <div className="md:col-span-8 space-y-4">
+                        <p className="text-[10px] text-zinc-400 font-light leading-relaxed">
+                          Below are exclusive pre-release tracks from the upcoming **BWS Soundtrack** (releasing during the June 1st - 7th launch window). Showcasing R&B, Neo Soul, and Blues. **Support the campaign below to download the full album!**
+                        </p>
+
+                        <div className="space-y-2">
+                          {/* Track 1 */}
+                          <div className={`p-2.5 rounded-lg border transition-all flex items-center justify-between gap-4 ${
+                            currentTrackPath === '/Thirty-Five Blocks.mp3'
+                              ? 'bg-zinc-900/40 border-[#ca8a04]/60'
+                              : 'bg-black/40 border-zinc-900 hover:border-zinc-850'
+                          }`}>
+                            <div className="flex items-center space-x-3 min-w-0">
+                              <button
+                                onClick={() => handlePlayTrack('/Thirty-Five Blocks.mp3')}
+                                className="w-7 h-7 rounded-full bg-gradient-to-r from-[#ca8a04] to-yellow-500 hover:from-yellow-500 hover:to-[#ca8a04] text-black flex items-center justify-center cursor-pointer shrink-0 transition-all shadow-[0_0_8px_rgba(202,138,4,0.2)]"
+                                title="Play/Pause Track"
+                              >
+                                {isPlayingMusic && currentTrackPath === '/Thirty-Five Blocks.mp3' ? (
+                                  <Pause className="w-3 h-3 fill-black text-black" />
+                                ) : (
+                                  <Play className="w-3 h-3 fill-black text-black ml-0.5" />
+                                )}
+                              </button>
+                              <div className="min-w-0 text-left">
+                                <span className="text-[10px] font-bold text-white block uppercase tracking-wide truncate">Thirty-Five Blocks</span>
+                                <span className="text-[7.5px] font-mono text-zinc-550 uppercase">Track 01</span>
+                              </div>
+                            </div>
+                            <span className="text-[8px] font-mono text-zinc-550 shrink-0 font-bold uppercase tracking-wider text-yellow-500">Neo Soul / R&B</span>
+                          </div>
+
+                          {/* Track 2 */}
+                          <div className={`p-2.5 rounded-lg border transition-all flex items-center justify-between gap-4 ${
+                            currentTrackPath === '/Thirty-Five Brick.mp3'
+                              ? 'bg-zinc-900/40 border-[#ca8a04]/60'
+                              : 'bg-black/40 border-zinc-900 hover:border-zinc-850'
+                          }`}>
+                            <div className="flex items-center space-x-3 min-w-0">
+                              <button
+                                onClick={() => handlePlayTrack('/Thirty-Five Brick.mp3')}
+                                className="w-7 h-7 rounded-full bg-gradient-to-r from-[#ca8a04] to-yellow-500 hover:from-yellow-500 hover:to-[#ca8a04] text-black flex items-center justify-center cursor-pointer shrink-0 transition-all shadow-[0_0_8px_rgba(202,138,4,0.2)]"
+                                title="Play/Pause Track"
+                              >
+                                {isPlayingMusic && currentTrackPath === '/Thirty-Five Brick.mp3' ? (
+                                  <Pause className="w-3 h-3 fill-black text-black" />
+                                ) : (
+                                  <Play className="w-3 h-3 fill-black text-black ml-0.5" />
+                                )}
+                              </button>
+                              <div className="min-w-0 text-left">
+                                <span className="text-[10px] font-bold text-white block uppercase tracking-wide truncate">Thirty-Five Brick</span>
+                                <span className="text-[7.5px] font-mono text-zinc-550 uppercase">Track 02</span>
+                              </div>
+                            </div>
+                            <span className="text-[8px] font-mono text-zinc-550 shrink-0 font-bold uppercase tracking-wider text-yellow-500">Trap / Rap</span>
                           </div>
                         </div>
-                        <span className="text-[9px] font-mono text-zinc-550 shrink-0 font-bold uppercase tracking-wider text-yellow-500">Trap / Rap</span>
+
+                        {/* Active Track Progress Bar */}
+                        {currentTrackPath && (
+                          <div className="pt-2 border-t border-zinc-900/60 animate-in fade-in duration-200">
+                            <div className="flex justify-between items-center text-[8px] font-mono text-zinc-400 mb-1">
+                              <span className="truncate max-w-[150px] uppercase text-[#eab308] font-bold">
+                                Now Playing: {currentTrackPath.split('/').pop()?.replace('.mp3', '')}
+                              </span>
+                              <span>
+                                {Math.floor((musicProgress / 100) * musicDuration / 60)}:
+                                {String(Math.floor((musicProgress / 100) * musicDuration % 60)).padStart(2, '0')} / 
+                                {Math.floor(musicDuration / 60)}:
+                                {String(Math.floor(musicDuration % 60)).padStart(2, '0')}
+                              </span>
+                            </div>
+                            <div className="h-1 w-full bg-black rounded-full overflow-hidden border border-zinc-900 relative">
+                              <div 
+                                className="h-full bg-gradient-to-r from-[#ca8a04] to-yellow-500"
+                                style={{ width: `${musicProgress}%` }}
+                              />
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
-
-                    {/* Active Track Progress Bar */}
-                    {currentTrackPath && (
-                      <div className="mt-4 pt-3.5 border-t border-zinc-900/80 animate-in fade-in duration-200">
-                        <div className="flex justify-between items-center text-[8.5px] font-mono text-zinc-400 mb-1">
-                          <span className="truncate max-w-[180px] uppercase text-[#eab308] font-bold">
-                            Now Playing: {currentTrackPath.split('/').pop()?.replace('.mp3', '')}
-                          </span>
-                          <span>
-                            {Math.floor((musicProgress / 100) * musicDuration / 60)}:
-                            {String(Math.floor((musicProgress / 100) * musicDuration % 60)).padStart(2, '0')} / 
-                            {Math.floor(musicDuration / 60)}:
-                            {String(Math.floor(musicDuration % 60)).padStart(2, '0')}
-                          </span>
-                        </div>
-                        <div className="h-1.5 w-full bg-black rounded-full overflow-hidden border border-zinc-900 relative">
-                          <div 
-                            className="h-full bg-gradient-to-r from-[#ca8a04] to-yellow-500"
-                            style={{ width: `${musicProgress}%` }}
-                          />
-                        </div>
-                      </div>
-                    )}
                   </div>
 
                   {/* BWS SOUNDTRACK LAUNCH CAMPAIGN & PERKS */}
@@ -3702,7 +3986,7 @@ export default function Page() {
                           <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-[#eab308] transition-colors" />
                         </div>
                         <p className="text-[10px] text-zinc-500 font-light leading-normal">
-                          The official merch storefront launching June 1st. Supporters in the $50+ tiers can choose their free apparel directly here.
+                          The official merch storefront launching during the June 1st - 7th window. Supporters in the $50+ tiers can choose their free apparel directly here.
                         </p>
                         <span className="text-[8px] font-mono text-[#eab308] uppercase tracking-widest block mt-2.5">viralcartel.net →</span>
                       </a>
@@ -3719,7 +4003,7 @@ export default function Page() {
                     
                     <div className="flex justify-between items-center mb-4">
                       <span className="text-[8px] font-mono uppercase tracking-[0.25em] text-[#eab308] font-bold">Campaign Countdown</span>
-                      <span className="text-[8px] text-[#ca8a54] font-mono bg-[#ca8a04]/10 px-2 py-0.5 rounded border border-[#ca8a04]/20 font-bold">RELEASE_JUNE_1ST</span>
+                      <span className="text-[8px] text-[#ca8a54] font-mono bg-[#ca8a04]/10 px-2 py-0.5 rounded border border-[#ca8a04]/20 font-bold">RELEASE_JUNE_1ST_7TH</span>
                     </div>
 
                     <div className="grid grid-cols-4 gap-2 text-center mb-5">
@@ -3744,17 +4028,57 @@ export default function Page() {
                     <div className="space-y-4 pt-4 border-t border-zinc-900">
                       <h4 className="text-xs font-mono uppercase font-black tracking-widest text-[#eab308]">BWS Inc. Launch Goal</h4>
                       
-                      <div className="space-y-1 flex-1">
-                        <div className="flex justify-between items-center text-[10px] font-mono text-zinc-400">
-                          <span>Total Contributions Raised</span>
-                          <span className="text-white">${fundingTotal.toLocaleString()} of $5,000 Goal</span>
+                      <div className="flex items-center gap-6 pt-1">
+                        {/* Circular Progress Ring */}
+                        <div className="relative w-24 h-24 flex items-center justify-center shrink-0">
+                          <svg className="w-full h-full transform -rotate-90">
+                            {/* Track Circle */}
+                            <circle
+                              cx="48"
+                              cy="48"
+                              r="40"
+                              className="stroke-zinc-900 fill-none"
+                              strokeWidth="6"
+                            />
+                            {/* Progress Circle */}
+                            <motion.circle
+                              cx="48"
+                              cy="48"
+                              r="40"
+                              className="stroke-[#ca8a04] fill-none"
+                              strokeWidth="6"
+                              strokeLinecap="round"
+                              initial={{ strokeDasharray: 251.2, strokeDashoffset: 251.2 }}
+                              animate={{ strokeDashoffset: 251.2 - (251.2 * phase1Percent) / 100 }}
+                              transition={{ duration: 1.2, ease: 'easeOut' }}
+                            />
+                          </svg>
+                          <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                            <span className="text-base font-mono font-black text-white">{phase1Percent}%</span>
+                            <span className="text-[6.5px] font-mono text-zinc-550 uppercase tracking-widest font-bold">Secured</span>
+                          </div>
                         </div>
-                        <div className="h-2 w-full bg-black rounded-full overflow-hidden border border-zinc-900">
-                          <motion.div 
-                            className="h-full bg-gradient-to-r from-[#ca8a04] to-[#f59e0b]"
-                            animate={{ width: `${phase1Percent}%` }}
-                            transition={{ duration: 0.5 }}
-                          />
+
+                        {/* Goal Stats Info Panel */}
+                        <div className="flex-1 space-y-2 text-left">
+                          <div>
+                            <span className="text-[7.5px] font-mono uppercase text-zinc-500 tracking-wider block">Cooperative Ledger</span>
+                            <div className="flex items-baseline gap-1">
+                              <span className="text-xl font-mono font-black text-emerald-400">${fundingTotal.toLocaleString()}</span>
+                              <span className="text-[9px] font-mono text-zinc-400 uppercase">Raised</span>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[8.5px] font-mono border-t border-zinc-900 pt-2">
+                            <div>
+                              <span className="text-zinc-550 block leading-none">Target:</span>
+                              <span className="text-white font-bold leading-none">$5,000 USD</span>
+                            </div>
+                            <div>
+                              <span className="text-zinc-550 block leading-none">Founders:</span>
+                              <span className="text-white font-bold leading-none">24 Backers</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
 
@@ -3762,7 +4086,7 @@ export default function Page() {
                       <div className="bg-[#ca8a04]/5 border border-[#ca8a04]/20 p-4 rounded-xl space-y-2.5 text-left">
                         <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-[#eab308] block font-bold">Why We Need The Remaining $4,000</span>
                         <p className="text-[10px] text-zinc-300 font-light leading-relaxed">
-                          To successfully launch the official platform on June 1st, we need to secure the remaining funds for:
+                          To successfully launch the official platform during the June 1st - June 7th window, we need to secure the remaining funds for:
                         </p>
                         <ul className="space-y-1.5 font-mono text-[9px] text-zinc-400">
                           <li className="flex items-start gap-2">
@@ -6749,6 +7073,42 @@ export default function Page() {
         </AnimatePresence>
 
       </main>
+
+      {/* INFINITE SCROLLING COMMUNITY LEDGER TICKER */}
+      <div className="w-full bg-[#070709] border-t border-b border-zinc-900/60 py-2.5 overflow-hidden whitespace-nowrap text-[8.5px] font-mono text-[#eab308]/95 tracking-wider uppercase select-none relative z-10">
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+          }
+          .animate-marquee-custom {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
+          }
+        `}} />
+        <div className="animate-marquee-custom">
+          <span className="mx-6 text-zinc-500">⚡ SYSTEM: <span className="text-[#eab308]">SECURE</span></span>
+          <span className="mx-6 text-zinc-500">● REGISTRY: <span className="text-[#eab308]">ACTIVE</span></span>
+          <span className="mx-6 text-zinc-500">● CREDITS MINTED: <span className="text-emerald-400">12,450.00 BWSX</span></span>
+          <span className="mx-6 text-zinc-500">● ACTIVE NODES: <span className="text-[#eab308]">12 ONLINE</span></span>
+          <span className="mx-6 text-zinc-500">● MEMBERSHIP: <span className="text-emerald-400">24 FOUNDERS</span></span>
+          <span className="mx-6 text-zinc-500">● TARGET: <span className="text-emerald-400">JUNE 1ST - 7TH (20% FUNDED)</span></span>
+          <span className="mx-6 text-zinc-500">● CHAT CORE: <span className="text-emerald-400">SEER SANCTUARY ONLINE</span></span>
+          <span className="mx-6 text-zinc-500">● RECENT ACTIVITY: <span className="text-emerald-400">MEMBER_024 MINTED +100 BWSX</span></span>
+          <span className="mx-6 text-zinc-500">● ASSET LOG: <span className="text-[#eab308]">CARGO VAN BOOKED BY TRUSTEE</span></span>
+          
+          {/* Loop duplicates */}
+          <span className="mx-6 text-zinc-500">⚡ SYSTEM: <span className="text-[#eab308]">SECURE</span></span>
+          <span className="mx-6 text-zinc-500">● REGISTRY: <span className="text-[#eab308]">ACTIVE</span></span>
+          <span className="mx-6 text-zinc-500">● CREDITS MINTED: <span className="text-emerald-400">12,450.00 BWSX</span></span>
+          <span className="mx-6 text-zinc-500">● ACTIVE NODES: <span className="text-[#eab308]">12 ONLINE</span></span>
+          <span className="mx-6 text-zinc-500">● MEMBERSHIP: <span className="text-emerald-400">24 FOUNDERS</span></span>
+          <span className="mx-6 text-zinc-500">● TARGET: <span className="text-emerald-400">JUNE 1ST - 7TH (20% FUNDED)</span></span>
+          <span className="mx-6 text-zinc-500">● CHAT CORE: <span className="text-emerald-400">SEER SANCTUARY ONLINE</span></span>
+          <span className="mx-6 text-zinc-500">● RECENT ACTIVITY: <span className="text-emerald-400">MEMBER_024 MINTED +100 BWSX</span></span>
+          <span className="mx-6 text-zinc-500">● ASSET LOG: <span className="text-[#eab308]">CARGO VAN BOOKED BY TRUSTEE</span></span>
+        </div>
+      </div>
 
       {/* FOOTER METADATA CODES */}
       <footer className="border-t border-zinc-900 bg-black/40 py-10 px-6 sm:px-12 text-center text-zinc-500">
