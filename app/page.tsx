@@ -232,6 +232,87 @@ export default function Page() {
   const [countdown, setCountdown] = useState({ days: 10, hours: 0, minutes: 0, seconds: 0 });
   const [selectedTierIndex, setSelectedTierIndex] = useState<number>(1); // $25 as default
   const [customSupportAmount, setCustomSupportAmount] = useState<string>('');
+
+  // --- SARAH RECTOR VIDEO & INTRO STATES ---
+  const [showIntroVideo, setShowIntroVideo] = useState<boolean>(true);
+  const [isVideoMuted, setIsVideoMuted] = useState<boolean>(true);
+  const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(true);
+  const [isVideoEnded, setIsVideoEnded] = useState<boolean>(false);
+  const [videoProgress, setVideoProgress] = useState<number>(0);
+  const [videoDuration, setVideoDuration] = useState<number>(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleTogglePlay = () => {
+    if (!videoRef.current) return;
+    if (isVideoPlaying) {
+      videoRef.current.pause();
+      setIsVideoPlaying(false);
+    } else {
+      videoRef.current.play().catch(err => console.error("Play failed:", err));
+      setIsVideoPlaying(true);
+    }
+  };
+
+  const handleToggleMute = () => {
+    if (!videoRef.current) return;
+    
+    // Pause background music if unmuting video
+    if (isVideoMuted && isPlayingMusic) {
+      musicAudioRef.current?.pause();
+      setIsPlayingMusic(false);
+    }
+
+    videoRef.current.muted = !isVideoMuted;
+    setIsVideoMuted(!isVideoMuted);
+  };
+
+  const handleVideoTimeUpdate = () => {
+    if (!videoRef.current) return;
+    const current = videoRef.current.currentTime;
+    const dur = videoRef.current.duration || 1;
+    setVideoProgress((current / dur) * 100);
+  };
+
+  const handleVideoLoadedMetadata = () => {
+    if (!videoRef.current) return;
+    setVideoDuration(videoRef.current.duration);
+  };
+
+  const handleVideoEnded = () => {
+    setIsVideoEnded(true);
+    setIsVideoPlaying(false);
+  };
+
+  const handleSelectIntroSupport = (tierIdx: number) => {
+    setSelectedTierIndex(tierIdx);
+    setIsUsingCustomAmount(false);
+    setActiveTab('support');
+    setShowIntroVideo(false);
+    
+    // Smooth scroll to contribution form
+    setTimeout(() => {
+      const element = document.querySelector('form');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 150);
+  };
+
+  useEffect(() => {
+    if (showIntroVideo && videoRef.current) {
+      // Pause any ambient music when intro starts
+      if (isPlayingMusic) {
+        musicAudioRef.current?.pause();
+        setIsPlayingMusic(false);
+      }
+      
+      videoRef.current.play().catch(err => {
+        console.log("Autoplay prevented, user interaction required:", err);
+        setIsVideoPlaying(false);
+      });
+    }
+  }, [showIntroVideo]);
+
   const [isUsingCustomAmount, setIsUsingCustomAmount] = useState<boolean>(false);
   const [searchLedgerQuery, setSearchLedgerQuery] = useState('');
   const [ledgerStartDate, setLedgerStartDate] = useState('');
@@ -2780,7 +2861,216 @@ export default function Page() {
   return (
     <div className="flex flex-col min-h-screen bg-[#09090b] text-[#f4f4f5] font-sans antialiased selection:bg-[#ca8a04] selection:text-black relative overflow-x-hidden" id="bws-framework">
       
+      {/* Intro video popup first */}
+      <AnimatePresence>
+        {showIntroVideo && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="fixed inset-0 z-[200] bg-black/98 backdrop-blur-2xl flex items-center justify-center p-4 overflow-y-auto"
+          >
+            <div className="max-w-5xl w-full bg-[#0d0d11]/90 border border-amber-500/25 rounded-3xl p-6 md:p-8 shadow-[0_0_80px_rgba(202,138,4,0.18)] grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative overflow-hidden">
+              {/* Dynamic Aura background inside the modal */}
+              <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-gradient-to-br from-[#eab308]/10 to-transparent blur-[80px] rounded-full pointer-events-none" />
+              <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-gradient-to-tr from-[#ca8a04]/5 to-transparent blur-[80px] rounded-full pointer-events-none" />
+
+              {/* Close Button in corner */}
+              <button 
+                onClick={() => setShowIntroVideo(false)}
+                className="absolute top-4 right-4 p-2 bg-zinc-900/80 hover:bg-zinc-800 text-zinc-400 hover:text-white rounded-full border border-zinc-800/80 hover:border-zinc-700/80 transition-all z-20 cursor-pointer"
+                title="Skip Intro"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* LEFT SIDE: VIDEO PLAYER CONTAINER */}
+              <div className="lg:col-span-7 flex flex-col items-center">
+                <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-zinc-800/80 bg-black group shadow-2xl">
+                  <video 
+                    ref={videoRef}
+                    src="/sarahrector.mp4"
+                    autoPlay
+                    muted={isVideoMuted}
+                    playsInline
+                    onTimeUpdate={handleVideoTimeUpdate}
+                    onLoadedMetadata={handleVideoLoadedMetadata}
+                    onEnded={handleVideoEnded}
+                    onClick={handleTogglePlay}
+                    className="w-full h-full object-cover cursor-pointer"
+                  />
+                  
+                  {/* Big Play Overlay (appears when paused) */}
+                  {!isVideoPlaying && (
+                    <div 
+                      onClick={handleTogglePlay}
+                      className="absolute inset-0 flex items-center justify-center bg-black/45 cursor-pointer transition-opacity z-10"
+                    >
+                      <motion.div 
+                        whileHover={{ scale: 1.1 }}
+                        className="w-16 h-16 rounded-full bg-gradient-to-r from-[#ca8a04] to-yellow-500 flex items-center justify-center shadow-lg animate-pulse"
+                      >
+                        <Play className="w-6 h-6 fill-black text-black ml-1" />
+                      </motion.div>
+                    </div>
+                  )}
+
+                  {/* Top-right Volume Toggle Pill */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleToggleMute();
+                    }}
+                    className="absolute top-3 right-3 px-3 py-1.5 bg-black/80 hover:bg-black/90 text-white rounded-full border border-zinc-800 flex items-center gap-1.5 text-[9px] font-mono uppercase font-bold tracking-wider z-20 transition-all cursor-pointer shadow-lg hover:scale-105"
+                  >
+                    {isVideoMuted ? (
+                      <>
+                        <VolumeX className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
+                        <span>Tap to Unmute</span>
+                      </>
+                    ) : (
+                      <>
+                        <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>Mute Audio</span>
+                      </>
+                    )}
+                  </button>
+
+                  {/* Video Control Bar Overlay */}
+                  <div className="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/95 to-transparent z-10 flex items-center justify-between gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleTogglePlay();
+                      }}
+                      className="text-[#eab308] hover:text-white transition-colors cursor-pointer"
+                    >
+                      {isVideoPlaying ? <Pause className="w-4 h-4 fill-[#eab308]" /> : <Play className="w-4 h-4 fill-[#eab308]" />}
+                    </button>
+                    
+                    {/* Slider Progress */}
+                    <div className="flex-1 h-1 bg-zinc-800 rounded-full overflow-hidden relative">
+                      <div 
+                        className="h-full bg-gradient-to-r from-[#ca8a04] to-[#eab308]"
+                        style={{ width: `${videoProgress}%` }}
+                      />
+                    </div>
+
+                    <span className="text-[9px] font-mono text-zinc-400">
+                      {videoRef.current ? Math.floor(videoRef.current.currentTime) : 0}s / {Math.floor(videoDuration) || 0}s
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Micro-prompts below player */}
+                <p className="text-[10px] text-zinc-500 font-mono mt-2 tracking-wide uppercase">
+                  Click player to Pause/Play • Hover for controls progress
+                </p>
+              </div>
+
+              {/* RIGHT SIDE: TEXT & ACTIONS PANEL */}
+              <div className="lg:col-span-5 flex flex-col justify-between h-full space-y-6 text-left relative z-10">
+                <div className="space-y-4">
+                  <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 bg-[#ca8a04]/10 border border-[#ca8a04]/25 rounded-full font-mono text-[8px] tracking-widest text-[#eab308] uppercase font-bold">
+                    <Sparkles className="w-2.5 h-2.5 animate-pulse" /> <span>Heritage Legacy Centerpiece</span>
+                  </div>
+                  
+                  <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight leading-none text-white">
+                    SARAH RECTOR: <br />
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-[#ca8a04] to-[#eab308]">
+                      THE STORY OF WEALTH
+                    </span>
+                  </h2>
+
+                  <p className="text-[11px] text-zinc-300 font-light leading-relaxed">
+                    At just 11 years old in 1913, Sarah Rector (Muscogee Creek Nation) became the wealthiest colored girl in the world when oil was struck on her land allotment in Taft, Oklahoma. Her story represents the sovereign economic power and resilience we are keeping alive with **BWS Inc.**
+                  </p>
+
+                  <div className="p-3 bg-black/60 border border-zinc-900 rounded-xl space-y-1">
+                    <span className="text-[8.5px] font-mono uppercase text-[#eab308] font-bold block">Support the Legacy Campaign</span>
+                    <p className="text-[9.5px] text-zinc-400 font-light leading-snug">
+                      We are raising money to secure community tools, business setup classes, and release our free commemorative BWS Soundtrack. Support the campaign below and receive BWSX community credits.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Contribution Package Selector inside Intro Overlay */}
+                <div className="space-y-2">
+                  <span className="text-[8px] font-mono uppercase tracking-widest text-zinc-500 block">Choose a Level to Support</span>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button 
+                      onClick={() => handleSelectIntroSupport(0)}
+                      className="p-2 bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 hover:border-zinc-800 rounded-lg text-left transition-all group cursor-pointer"
+                    >
+                      <div className="flex justify-between items-center text-[10px] font-mono font-bold text-white uppercase">
+                        <span>Soundtrack</span>
+                        <span className="text-[#eab308] font-mono font-black">$10</span>
+                      </div>
+                      <span className="text-[8px] font-mono text-emerald-500 font-medium tracking-wide block uppercase mt-0.5">15 BWSX credits</span>
+                    </button>
+
+                    <button 
+                      onClick={() => handleSelectIntroSupport(1)}
+                      className="p-2 bg-zinc-950 hover:bg-zinc-900 border border-amber-500/20 hover:border-amber-500/40 rounded-lg text-left transition-all group cursor-pointer"
+                    >
+                      <div className="flex justify-between items-center text-[10px] font-mono font-bold text-white uppercase">
+                        <span>Patron</span>
+                        <span className="text-[#eab308] font-mono font-black">$50</span>
+                      </div>
+                      <span className="text-[8px] font-mono text-emerald-500 font-medium tracking-wide block uppercase mt-0.5">75 BWSX credits</span>
+                    </button>
+
+                    <button 
+                      onClick={() => handleSelectIntroSupport(2)}
+                      className="p-2 bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 hover:border-zinc-800 rounded-lg text-left transition-all group cursor-pointer"
+                    >
+                      <div className="flex justify-between items-center text-[10px] font-mono font-bold text-white uppercase">
+                        <span>Animator</span>
+                        <span className="text-[#eab308] font-mono font-black">$100</span>
+                      </div>
+                      <span className="text-[8px] font-mono text-emerald-500 font-medium tracking-wide block uppercase mt-0.5">150 BWSX credits</span>
+                    </button>
+
+                    <button 
+                      onClick={() => handleSelectIntroSupport(3)}
+                      className="p-2 bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 hover:border-zinc-800 rounded-lg text-left transition-all group cursor-pointer"
+                    >
+                      <div className="flex justify-between items-center text-[10px] font-mono font-bold text-white uppercase">
+                        <span>Resident</span>
+                        <span className="text-[#eab308] font-mono font-black">$250</span>
+                      </div>
+                      <span className="text-[8px] font-mono text-emerald-500 font-medium tracking-wide block uppercase mt-0.5">400 BWSX credits</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex items-center justify-between gap-4">
+                  <button 
+                    onClick={() => {
+                      setActiveTab('support');
+                      setShowIntroVideo(false);
+                    }}
+                    className="text-[10px] font-mono uppercase font-black text-amber-500 hover:text-amber-400 transition-colors flex items-center gap-1 cursor-pointer"
+                  >
+                    Custom Amount &rarr;
+                  </button>
+
+                  <button 
+                    onClick={() => setShowIntroVideo(false)}
+                    className="px-6 py-2 bg-gradient-to-r from-[#ca8a04] to-yellow-500 hover:from-yellow-400 hover:to-yellow-500 text-black text-xs font-mono uppercase font-black tracking-wider rounded-lg shadow-lg hover:scale-102 active:scale-98 transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    Enter Site <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {isProcessingPayment && (
+
         <div className="fixed inset-0 z-50 bg-[#09090b]/90 backdrop-blur-sm flex items-center justify-center">
           <div className="flex flex-col items-center space-y-4 text-center px-4">
             <Loader2 className="w-10 h-10 text-[#eab308] animate-spin" />
@@ -3081,6 +3371,20 @@ export default function Page() {
                   <p className="text-[10px] sm:text-xs text-zinc-300 font-light tracking-wide max-w-lg drop-shadow">
                     Honoring the 35 blocks of Black Wall Street in Tulsa, Oklahoma — built, funded, and protected by the people who lived there.
                   </p>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <button 
+                      onClick={() => setActiveTab('support')}
+                      className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-[#ca8a04] hover:from-yellow-400 hover:to-yellow-500 text-black text-xs font-mono uppercase font-black tracking-wider rounded-lg shadow-lg flex items-center gap-1.5 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
+                    >
+                      <Coins className="w-3.5 h-3.5" /> Support the Fund
+                    </button>
+                    <button 
+                      onClick={() => setShowIntroVideo(true)}
+                      className="px-4 py-2 bg-black/60 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-white text-xs font-mono uppercase font-bold tracking-wider rounded-lg flex items-center gap-1.5 transition-all cursor-pointer"
+                    >
+                      <Video className="w-3.5 h-3.5 text-[#eab308]" /> Watch Sarah Rector Story
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -6827,6 +7131,42 @@ export default function Page() {
 
       {/* FIXED ANCESTOR CHAT WIDGET - FEATURING THE OLDER WOMAN SEER */}
       <AncestorChatWidget />
+
+      {/* FLOATING SUPPORT WIDGET - PULSING PILL ON THE BOTTOM LEFT */}
+      {!showIntroVideo && (
+        <div className="fixed bottom-6 left-6 z-50 font-sans">
+          <motion.button
+            whileHover={{ 
+              scale: 1.05,
+              boxShadow: "0 0 25px rgba(234, 179, 8, 0.45)" 
+            }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              setActiveTab('support');
+              // Smooth scroll to support form
+              setTimeout(() => {
+                const element = document.querySelector('form');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+              }, 150);
+            }}
+            className="px-4 py-2.5 rounded-full bg-zinc-950/95 border border-[#eab308]/40 hover:border-[#eab308] text-[#eab308] hover:text-white flex items-center gap-2 shadow-[0_0_15px_rgba(0,0,0,0.7)] cursor-pointer text-xs font-mono uppercase font-black tracking-widest relative group focus:outline-none"
+            initial={{ opacity: 0, scale: 0.8, x: -20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20, delay: 1 }}
+          >
+            {/* Pulsing gold dot */}
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ca8a04]"></span>
+            </span>
+            
+            <Coins className="w-4 h-4 text-[#eab308] group-hover:rotate-12 transition-transform duration-300" />
+            <span>Support BWS Fund 💛</span>
+          </motion.button>
+        </div>
+      )}
 
       {/* Main audio player element for soundtrack previews */}
       <audio ref={musicAudioRef} />
